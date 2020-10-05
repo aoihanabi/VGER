@@ -19,3 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [ProductController::class, 'show_data']);
+Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
+    return view('dashboard');
+})->name('dashboard');
