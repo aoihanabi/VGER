@@ -19,6 +19,11 @@ Route::get('/', function () {
 });
 
 Route::get('/test', [ProductController::class, 'show_data']);
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::resource('products', ProductController::class);
+
+//Route::get('/productos', [ProductController::class, 'index']);

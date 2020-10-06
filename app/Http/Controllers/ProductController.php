@@ -20,7 +20,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        $products = Product::where('prd_status', 'D')->get();        
+        
+        $mains = array();
+        foreach ($products as $p) {
+            $image = Product::find($p->prd_id)->images()->where('img_type', 'PR')->first();
+            array_push($mains, $image->img_url);
+            //array_push($mains, $p->prd_id);
+        }
+        //return $images;
+        return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
     }
 
     /**
@@ -52,7 +61,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        return view('product.show', ['prod' => $product]);
     }
 
     /**
