@@ -16,6 +16,11 @@ class Product extends Model
    */
   public function images()
   {
-      return $this->hasMany('App\Models\Image', 'prod_id');
+      return $this->hasMany(Image::Class, 'prod_id');
+  }
+
+  public function main_image() 
+  {
+    return $this->hasMany(Image::Class, 'prod_id')->where('img_type', 'PR');
   }
 }

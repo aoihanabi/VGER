@@ -9,7 +9,7 @@
   
   @foreach($products as $key => $prod)
     <div>
-      <img src="{{ url($main_imgs[$key]) }}" style="width: 200px; height: 200px;"></img>
+      <img src="{{ url($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
       <br>
       <a href="products/{{ $prod->prd_id }}"><b>{{ $prod->prd_name }}</b> <br></a>
     </div>
