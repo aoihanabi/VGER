@@ -6,7 +6,7 @@
 <body>
   <h1>Productos Disponibles</h1>
   <hr>
-  
+  <a href="products/create">Create a new product</a>
   @foreach($products as $key => $prod)
     <div>
       <img src="{{ url($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
@@ -15,6 +15,6 @@
     </div>
     <hr>
   @endforeach
-
+  <br>
 </body>
 </html>

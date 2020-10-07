@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Image;
 
 class ProductController extends Controller
 {
@@ -20,13 +21,14 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('prd_status', 'D')->get();        
+        $products = Product::where('prd_status', 'D')->get();
         
         $mains = array();
         foreach ($products as $p) {
             $image = Product::find($p->prd_id)->main_image->first();
             array_push($mains, $image->img_url);
         }
+
         return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
     }
 
@@ -37,7 +39,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('product.create');
     }
 
     /**
@@ -48,7 +50,22 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $product = new Product;
+        $product->prd_name = $request->name;
+        $product->prd_description = $request->description;
+        $product->prd_quantity = $request->quantity;
+        $product->prd_price = $request->price;
+        $product->save();
+
+        //$prod = App\Models\P::find(1);
+
+        $product->images()->saveMany([
+            new Image(['img_url' => 'false_image'], ['img_type' => 'PR']),
+            new Image(['img_url' => 'false_image2'], ['img_type' => 'SC']),
+        ]);
+        $product->refresh();
+        
+        return redirect()->action([ProductController::class, 'index']);;
     }
 
     /**
