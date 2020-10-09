@@ -21,12 +21,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::where('prd_status', 'D')->get();
+        $products = Product::where('status', 'D')->get();
         
         $mains = array();
         foreach ($products as $p) {
-            $image = Product::find($p->prd_id)->main_image->first();
-            array_push($mains, $image->img_url);
+            $image = Product::find($p->id)->main_image->first();
+            array_push($mains, $image->url);
         }
 
         return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
@@ -50,30 +50,29 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-
         /*request()->validate([
             'name' => 'required',
             'author' => 'required',
         ]);*/
         $product = new Product;
-        $product->prd_name = $request->name;
-        $product->prd_description = $request->description;
-        $product->prd_quantity = $request->quantity;
-        $product->prd_price = $request->price;
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
         $product->save();
 
         if($request->hasfile('main_image') && $request->hasfile('sec_images'))
-        {   
+        {
             $path_main = $request->file('main_image')->store('images/products');
             #$path_main = str_replace('public/products', 'prods', $path_main);
-            $im_main = new Image(['img_url' => $path_main, 'img_type' => 'PR']);
-            echo $im_main;
+            $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
+            #echo $im_main;
             $product->images()->save($im_main);
             
             foreach($request->file('sec_images') as $file)
             { 
                 $path_sec = $file->store('images/products');#$request->file('sec_images')->store('products');
-                $im_sec = new Image(['img_url' => $path_sec, 'img_type' => 'SC']);
+                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
                 echo $im_sec;
                 $product->images()->save($im_sec);
             }

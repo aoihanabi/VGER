@@ -11,7 +11,7 @@
     <div>
       <img src="{{ asset($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
       <br>
-      <a href="products/{{ $prod->prd_id }}"><b>{{ $prod->prd_name }}</b> <br></a>
+      <a href="products/{{ $prod->id }}"><b>{{ $prod->name }}</b> <br></a>
     </div>
     <hr>
   @endforeach

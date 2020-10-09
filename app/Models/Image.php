@@ -9,8 +9,7 @@ use App\Models\Product;
 class Image extends Model
 {
   use HasFactory;
-  protected $primaryKey = 'img_id';
-  protected $fillable = ['img_url', 'img_type'];
+  protected $fillable = ['url', 'type'];
 
 
   /**
@@ -18,6 +17,6 @@ class Image extends Model
    */
   public function product()
   {
-      return $this->belongsTo(Product::class, 'prod_id');
+      return $this->belongsTo(Product::class);
   }
 }
