@@ -50,6 +50,11 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+
+        /*request()->validate([
+            'name' => 'required',
+            'author' => 'required',
+        ]);*/
         $product = new Product;
         $product->prd_name = $request->name;
         $product->prd_description = $request->description;
@@ -57,12 +62,21 @@ class ProductController extends Controller
         $product->prd_price = $request->price;
         $product->save();
 
-        //$prod = App\Models\P::find(1);
-
-        $product->images()->saveMany([
-            new Image(['img_url' => 'false_image'], ['img_type' => 'PR']),
-            new Image(['img_url' => 'false_image2'], ['img_type' => 'SC']),
-        ]);
+        if($request->hasfile('main_image') && $request->hasfile('sec_images'))
+        {   
+            $path_main = $request->file('main_image')->store('products');
+            $im_main = new Image(['img_url' => $path_main, 'img_type' => 'PR']);
+            echo $im_main;
+            $product->images()->save($im_main);
+            
+            foreach($request->file('sec_images') as $file)
+            { 
+                $path_sec = $file->store('products');#$request->file('sec_images')->store('products');
+                $im_sec = new Image(['img_url' => $path_sec, 'img_type' => 'SC']);
+                echo $im_sec;
+                $product->images()->save($im_sec);
+            }
+        }
         $product->refresh();
         
         return redirect()->action([ProductController::class, 'index']);;
