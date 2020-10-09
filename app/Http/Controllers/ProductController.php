@@ -64,14 +64,15 @@ class ProductController extends Controller
 
         if($request->hasfile('main_image') && $request->hasfile('sec_images'))
         {   
-            $path_main = $request->file('main_image')->store('products');
+            $path_main = $request->file('main_image')->store('images/products');
+            #$path_main = str_replace('public/products', 'prods', $path_main);
             $im_main = new Image(['img_url' => $path_main, 'img_type' => 'PR']);
             echo $im_main;
             $product->images()->save($im_main);
             
             foreach($request->file('sec_images') as $file)
             { 
-                $path_sec = $file->store('products');#$request->file('sec_images')->store('products');
+                $path_sec = $file->store('images/products');#$request->file('sec_images')->store('products');
                 $im_sec = new Image(['img_url' => $path_sec, 'img_type' => 'SC']);
                 echo $im_sec;
                 $product->images()->save($im_sec);
