@@ -15,7 +15,7 @@ class AddRemembertokenToUsers extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->rememberToken();
-            $table->string('usr_password', 255)->change();
+            $table->string('password', 255)->change();
         });
     }
 
