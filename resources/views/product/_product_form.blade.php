@@ -7,11 +7,20 @@
   <label>Description</label><br>
   <input type="text-area" name="description" value="{{ $product==null ? '' : $product->description }}"><br><br>
   
-  <label>Quantity</label><br>
-  <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
-  
-  <label>Price</label><br>
-  <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+  @if($product == null )
+    <label>Quantity</label><br>
+    <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+
+    <label>Price</label><br>
+    <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+    
+  @elseif(Auth::user()->role === 'admin')
+    <label>Quantity</label><br>
+    <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+
+    <label>Price</label><br>
+    <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+  @endif
 
   <div class="form-group">
     <label for="main_image">Main Image:</label><br>

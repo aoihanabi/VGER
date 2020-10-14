@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Image;
 
@@ -39,7 +40,13 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create', ['product' => null] );
+        $user = Auth::user();
+        if ($user->can('create', Product::class)) {
+            return view('product.create', ['product' => null] );
+        } else {
+            return "Not authorized";
+        }
+        
     }
 
     /**

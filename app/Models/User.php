@@ -10,6 +10,8 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
+use Illuminate\Support\Facades\Auth;
+
 class User extends Authenticatable
 {
     use HasApiTokens;
@@ -58,4 +60,31 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    /**
+      * Returns true if the authenticated user's role is admin
+      *
+      */
+    public function isAdmin() {
+
+        return $this->role === 'admin';
+    }
+
+    /**
+      * Returns true if the authenticated user's role is employee
+      *
+      */    
+    public function isEmployee() {
+
+        return $this->role === 'employee';
+    }
+
+    /**
+      * Returns true if the authenticated user's role is user
+      *
+      */
+    public function isUser() {
+
+        return $this->role === 'user';
+    }
 }
