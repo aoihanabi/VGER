@@ -39,7 +39,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('product.create');
+        return view('product.create', ['product' => null] );
     }
 
     /**
@@ -61,22 +61,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->save();
 
-        if($request->hasfile('main_image') && $request->hasfile('sec_images'))
-        {
-            $path_main = $request->file('main_image')->store('images/products');
-            #$path_main = str_replace('public/products', 'prods', $path_main);
-            $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
-            #echo $im_main;
-            $product->images()->save($im_main);
-            
-            foreach($request->file('sec_images') as $file)
-            { 
-                $path_sec = $file->store('images/products');#$request->file('sec_images')->store('products');
-                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
-                echo $im_sec;
-                $product->images()->save($im_sec);
-            }
-        }
+        $this->upload_product_images($request, $product);
         $product->refresh();
         
         return redirect()->action([ProductController::class, 'index']);;
@@ -91,9 +76,8 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        #$imgs = array();
         $imgs = Product::find($id)->images;
-        return view('product.show', ['prod' => $product, 'imgs' => $imgs]);
+        return view('product.show', ['product' => $product, 'imgs' => $imgs]);
     }
 
     /**
@@ -104,7 +88,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $product = Product::find($id);
+        return view('product.edit', ['product' => $product]);
     }
 
     /**
@@ -116,7 +101,19 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Product::find($id);
+        $product->name = $request->name;
+        $product->description = $request->description;
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+        $product->save();
+
+        $old_main = $product->images()->where('type', 'MN')->first();
+        $old_main->delete();
+        $this->upload_product_images($request, $product);
+        
+        $product->refresh();
+        return redirect()->action([ProductController::class, 'index']);;
     }
 
     /**
@@ -127,6 +124,33 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+        $product->delete();
+        return redirect()->action([ProductController::class, 'index']);
+    }
+
+    /*
+     * Upload image to the server and saves its url to DB
+     */
+    public function upload_product_images($request, $product) {
+
+        if($request->hasfile('main_image'))
+        {
+            $path_main = $request->file('main_image')->store('images/products');
+            $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
+            
+            $product->images()->save($im_main);
+        }
+
+        if($request->hasfile('sec_images')) {
+            foreach($request->file('sec_images') as $file)
+            { 
+                $path_sec = $file->store('images/products');
+                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
+
+                $product->images()->save($im_sec);
+            }    
+        }
+        
     }
 }

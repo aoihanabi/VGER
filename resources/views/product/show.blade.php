@@ -1,8 +1,8 @@
-<h1>{{ $prod->name }}</h1>
+<h1>{{ $product->name }}</h1>
 <div>
-  <li>{{ $prod->description }}</li>
-  <li>{{ $prod->quantity }}</li>
-  <li>{{ $prod->price }}</li>  
+  <li>{{ $product->description }}</li>
+  <li>{{ $product->quantity }}</li>
+  <li>{{ $product->price }}</li>  
 </div>
 
 <div>
@@ -12,6 +12,10 @@
     @else 
       <img src="{{ url($m->url) }}" style="width: 150px; height: 150px;"></img>
     @endif
-
   @endforeach
 </div>
+<form action="{{ route('products.destroy', $product->id) }}" method="POST">
+  @method('DELETE')
+  @csrf
+  <input type="submit" name="delete" value="Eliminar producto">
+</form>
