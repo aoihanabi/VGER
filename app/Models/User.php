@@ -63,7 +63,7 @@ class User extends Authenticatable
 
     /**
       * Returns true if the authenticated user's role is admin
-      *
+      * @return boolean value
       */
     public function isAdmin() {
 
@@ -72,7 +72,7 @@ class User extends Authenticatable
 
     /**
       * Returns true if the authenticated user's role is employee
-      *
+      * @return boolean value
       */    
     public function isEmployee() {
 
@@ -81,7 +81,7 @@ class User extends Authenticatable
 
     /**
       * Returns true if the authenticated user's role is user
-      *
+      * @return boolean value
       */
     public function isUser() {
 

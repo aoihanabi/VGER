@@ -1,12 +1,11 @@
 @extends('layouts.application')
+
 @section('content')
-  <h1>{{ $product->name }}</h1>
   <div>
+    <h1>{{ $product->name }}</h1>
     <li>{{ $product->description }}</li>
-    
     <li>{{ $product->quantity }}</li>
     <li>{{ $product->price }}</li>  
-
   </div>
 
   <div>
@@ -20,16 +19,16 @@
   </div>
 
   @can('update', $product)
-  <button>
-    <a href="{{ route('products.edit', $product->id) }}">Editar producto</a>
-  </button>
+    <button>
+      <a href="{{ route('products.edit', $product->id) }}">Editar producto</a>
+    </button>
   @endcan
 
   @can('delete', $product)
-  <form action="{{ route('products.destroy', $product->id) }}" method="POST">
-    @method('DELETE')
-    @csrf
-    <input type="submit" name="delete" value="Eliminar producto">
-  </form>
+    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+      @method('DELETE')
+      @csrf
+      <input type="submit" name="delete" value="Eliminar producto">
+    </form>
   @endcan
 @endsection

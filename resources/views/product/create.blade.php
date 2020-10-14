@@ -1,3 +1,6 @@
-<h2>Create a Product</h2>
+@extends('layouts.application')
 
-@include('product._product_form', ['action' => 'products.store', 'method' => null])
+@section('content')
+  <h2>Create a Product</h2>
+  @include('product._product_form', ['action' => 'products.store', 'method' => null])
+@endsection

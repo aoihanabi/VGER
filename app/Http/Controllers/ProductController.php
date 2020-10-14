@@ -115,8 +115,10 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->save();
 
-        $old_main = $product->images()->where('type', 'MN')->first();
-        $old_main->delete();
+        if ($request->hasfile('main_image')) {
+            $old_main = $product->images()->where('type', 'MN')->first();
+            $old_main->delete();
+        }
         $this->upload_product_images($request, $product);
         
         $product->refresh();

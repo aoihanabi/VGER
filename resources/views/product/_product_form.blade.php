@@ -8,18 +8,9 @@
   <input type="text-area" name="description" value="{{ $product==null ? '' : $product->description }}"><br><br>
   
   @if($product == null )
-    <label>Quantity</label><br>
-    <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
-
-    <label>Price</label><br>
-    <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
-    
+    @yield('price_quantity_fields')
   @elseif(Auth::user()->role === 'admin')
-    <label>Quantity</label><br>
-    <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
-
-    <label>Price</label><br>
-    <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+    @yield('price_quantity_fields')
   @endif
 
   <div class="form-group">
@@ -31,3 +22,11 @@
 
   <input type="submit" name="btn_create_prod">
 </form>
+
+@section('price_quantity_fields')
+  <label>Quantity</label><br>
+    <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+
+    <label>Price</label><br>
+    <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+@endsection
