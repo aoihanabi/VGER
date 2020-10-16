@@ -18,6 +18,13 @@
           <li><a href="">Profile</a></li>
         </ul>
       </nav>
+
+      <div id="navbarExampleTransparentExample" class="navbar-menu"> 
+        <div class="navbar-end">
+          <cart-component />
+        </div>
+      </div>
+
       <div>
         @yield('content')
         <example-component />
