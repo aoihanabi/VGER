@@ -7,17 +7,21 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!--Styles-->
     <!--Scripts-->
+    <script src="{{ asset('js/app.js') }}" defer></script>
   </head>
   <body>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="{{ route('products.index') }}">Products</a></li>
-        <li><a href="">Profile</a></li>
-      </ul>
-    </nav>
-    <div>
-      @yield('content')
+    <div id="app">
+      <nav>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="{{ route('products.index') }}">Products</a></li>
+          <li><a href="">Profile</a></li>
+        </ul>
+      </nav>
+      <div>
+        @yield('content')
+        <example-component />
+      </div>
     </div>
   </body>
 </html>
