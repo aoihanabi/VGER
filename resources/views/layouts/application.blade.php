@@ -6,6 +6,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!--Styles-->
+    
     <!--Scripts-->
     <script src="{{ asset('js/app.js') }}" defer></script>
   </head>
@@ -21,13 +22,13 @@
 
       <div id="navbarExampleTransparentExample" class="navbar-menu"> 
         <div class="navbar-end">
-          <cart-component />
+          <order-component />
         </div>
       </div>
 
       <div>
         @yield('content')
-        <example-component />
+        <product-list />
       </div>
     </div>
   </body>

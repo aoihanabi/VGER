@@ -1,23 +1,23 @@
 <template>
   <div class="navbar-item has-dropdown is-hoverable">
     <a class="navbar-link" href="">
-      Cart ({{ $store.state.cartCount }})
+      Pedido ({{ $store.state.productCount }})
     </a>
 
-    <div v-if="$store.state.cart.length > 0" class="navbar-dropdown">
-        <a v-for="item in $store.state.cart"
+    <div v-if="$store.state.order.length > 0" class="navbar-dropdown">
+        <a v-for="item in $store.state.order"
           :key="item.id"
           class="navbar-item" 
           href=""
         >
           <span class="removeBtn"
-          title="Remove from cart"
-          @click.prevent="removeFromCart(item)">X</span>
+            title="Remove from cart"
+            @click.prevent="removeFromOrder(item)">X</span>
           
-          {{item.title}} x {{item.quantity}} - ${{ item.totalPrice }}
-        </a>
+          {{item.title}} x {{item.quantity}} = ${{ item.totalPrice }}
+        </a><br>
         <a class="navbar-item" href="">
-          Total: ${{ totalPrice }}
+          Total: ${{ totalPriceAll }}
         </a>
         <hr class="navbar-divider">
 
@@ -37,16 +37,16 @@
 <script>
   export default {
     methods: {
-      removeFromCart(item) {
-        this.$store.commit('removeFromCart', item);
+      removeFromOrder(item) {
+        this.$store.commit('removeFromOrder', item);
       }
     },
 
     computed: {
-      totalPrice() {
+      totalPriceAll() {
         let total = 0;
 
-        for (let item of this.$store.state.cart) {
+        for (let item of this.$store.state.order) {
           total += item.totalPrice;
         }
 

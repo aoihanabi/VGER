@@ -2,10 +2,10 @@ require('./bootstrap');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
 
-import store from './store/index.js'
+import store from './store/calculation.js'
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
-Vue.component('cart-component', require('./components/CartComponent.vue').default);
+Vue.component('product-list', require('./components/ProductList.vue').default);
+Vue.component('order-component', require('./components/OrderComponent.vue').default);
 
 const app = new Vue({
   el: '#app',

@@ -7,7 +7,7 @@
         <td> ${{ item.price.toFixed(2) }} </td>
 
         <td> 
-          <button class="button is-success" @click="addToCart(item)">Add to Cart</button>
+          <button class="button is-success" @click="addToOrder(item)">Add to Order</button>
         </td>
       </tr>
     </tbody>
@@ -38,12 +38,9 @@
       };
     },
     methods: {
-      addToCart(item) {
-        this.$store.commit('addToCart', item)
+      addToOrder(item) {
+        this.$store.commit('addToOrder', item)
       }
     }
-    /*mounted() {
-      console.log("Example component mounted");
-    }*/
   }
 </script>
