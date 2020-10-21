@@ -4,8 +4,10 @@
   <div>
     <h1>{{ $product->name }}</h1>
     <li>{{ $product->description }}</li>
-    <li>{{ $product->quantity }}</li>
-    <li>{{ $product->price }}</li>  
+    @foreach ($attrs as $attr)
+      <li>{{$attr->name}}: {{$attr->pivot->value}} Cantidad: {{$attr->pivot->quantity}}</li>
+      <li>{{ $attr->pivot->price }}</li>  
+    @endforeach
   </div>
 
   <div>
