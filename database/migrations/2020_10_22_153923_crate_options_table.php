@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DeleteColumnsFromProducts extends Migration
+class CrateOptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,11 @@ class DeleteColumnsFromProducts extends Migration
      */
     public function up()
     {
-        Schema::table('products', function (Blueprint $table) {
-            $table->dropColumn(['quantity', 'price', 'status']);
+        Schema::create('options', function (Blueprint $table) {
+            $table->id();
+            $table->integer('attribute_id');
+            $table->string('option', 20);
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ class DeleteColumnsFromProducts extends Migration
      */
     public function down()
     {
-        Schema::table('products', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('options');
     }
 }

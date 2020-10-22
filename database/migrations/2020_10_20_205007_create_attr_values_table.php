@@ -19,9 +19,7 @@ class CreateAttrValuesTable extends Migration
             $table->foreign('product_id')->references('id')->on('products');
             $table->foreignId('attribute_id');
             $table->foreign('attribute_id')->references('id')->on('attributes');
-            $table->string('value', 20);
-            $table->integer('quantity');
-            $table->decimal('price', 8, 2);
+            $table->integer('option_id');
             $table->timestamps();
         });
     }
