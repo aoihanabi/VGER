@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Image;
+use App\Models\Attribute;
 
 class ProductController extends Controller
 {
@@ -25,13 +26,12 @@ class ProductController extends Controller
         $products = Product::all();
         
         $mains = array();
-        $test = array();
         foreach ($products as $p) {
             $image = Product::find($p->id)->main_image->first();
             array_push($mains, $image->url);
         }
 
-        return view('product.index', ['products' => $products, 'main_imgs' => $mains, 'test_val' => $test]);
+        return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
     }
 
     /**
@@ -43,7 +43,8 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if ($user->can('create', Product::class)) {
-            return view('product.create', ['product' => null] );
+            $attrs = Attribute::all();
+            return view('product.create', ['product' => null, 'attrs' => $attrs] );
         } else {
             return "Not authorized";
         }
@@ -65,14 +66,23 @@ class ProductController extends Controller
         $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
-        $product->quantity = $request->quantity;
-        $product->price = $request->price;
-        $product->save();
-
-        $this->upload_product_images($request, $product);
+        //$product->save();
+        foreach ($attrs as $attr) {
+            $n = $attr->name
+            foreach ($request->color as $key => $col) {
+                echo $col ."|". $request->quantity[$key]."|". $request->price[$key];
+                /*$product->values()->attach($attr->id, 
+                                          ['value' => $col, 
+                                           'quantity' => $request->quantity[$key], 
+                                           'price' => $request->price[$key]]);*/
+            }
+        }
+        
+        
+        //$this->upload_product_images($request, $product);
         $product->refresh();
         
-        return redirect()->action([ProductController::class, 'index']);;
+        //return redirect()->action([ProductController::class, 'index']);;
     }
 
     /**

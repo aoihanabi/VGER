@@ -1,14 +1,25 @@
 @section('price_quantity_fields')
-  <label>Quantity</label><br>
-  <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+  @foreach($attrs as $attr)
+    <hr>
+    
+    <label>{{ Str::lower($attr->name)}} </label>
+    <dynamic-input input_name='{{ Str::lower($attr->name) }}'></dynamic-input>
 
-  <label>Price</label><br>
-  <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
+    <!--<input type="text" name="{{Str::lower($attr->name)}}[0]" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+    
+    <label>Quantity </label>
+    <input type="text" name="quantity[0]" value="{{ $product==null ? '' : $product->quantity }}"><br><br>    
+
+    <label>Price </label>
+    <input type="text" name="price[0]" value="{{ $product==null ? '' : $product->price }}"><br><br>-->
+  @endforeach
 @endsection
 
 <form method="POST" action="{{ route($action, $product==null ? '' : $product->id) }}" enctype="multipart/form-data">
   @method($method)
   @csrf
+
+
   <label>Product Name</label> <br>
   <input type="text" name="name" value="{{ $product==null ? '' : $product->name }}"> <br><br>
 
