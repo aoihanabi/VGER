@@ -1,11 +1,18 @@
 @section('price_quantity_fields')
   @foreach($attrs as $attr)
-    <hr>
-    
-    <label>{{ Str::lower($attr->name)}} </label>
-    <dynamic-input input_name='{{ Str::lower($attr->name) }}'></dynamic-input>
+    <label> {{ $attr->name }} </label><br>
+    @foreach ($options as $k => $opt)
+      @if ($attr->id == $opt->attribute_id)
 
-    <!--<input type="text" name="{{Str::lower($attr->name)}}[0]" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
+        <input type="checkbox" value="{{ $opt->attribute_id }},{{ $opt->id }}" name="opt_checks[{{$k}}]">
+        <label for="opt_checks[{{$k}}]">{{ $opt->option }}</label>
+
+      @endif
+    @endforeach
+
+    <!--<dynamic-input input_name='{{ Str::lower($attr->name) }}'></dynamic-input>
+
+    <input type="text" name="{{Str::lower($attr->name)}}[0]" value="{{ $product==null ? '' : $product->quantity }}"><br><br>
     
     <label>Quantity </label>
     <input type="text" name="quantity[0]" value="{{ $product==null ? '' : $product->quantity }}"><br><br>    
@@ -26,6 +33,11 @@
   <label>Description</label><br>
   <input type="text-area" name="description" value="{{ $product==null ? '' : $product->description }}"><br><br>
 
+  <label>Quantity </label>
+  <input type="text" name="quantity" value="{{ $product==null ? '' : $product->quantity }}"><br><br>    
+
+  <label>Price </label>
+  <input type="text" name="price" value="{{ $product==null ? '' : $product->price }}"><br><br>
   @if($product == null )
     @yield('price_quantity_fields')
   @elseif(Auth::user()->role === 'admin')

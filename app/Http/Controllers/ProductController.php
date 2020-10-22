@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Product;
 use App\Models\Image;
 use App\Models\Attribute;
@@ -44,7 +45,12 @@ class ProductController extends Controller
         $user = Auth::user();
         if ($user->can('create', Product::class)) {
             $attrs = Attribute::all();
-            return view('product.create', ['product' => null, 'attrs' => $attrs] );
+            $opciones = DB::table('options')->select('option', 'attribute_id', 'id')->get();
+            /*$opciones = DB::table('attributes')
+                            ->join('options', 'attributes.id', '=', 'options.attribute_id')
+                            ->select('attributes.name', 'options.*')
+                            ->get();*/
+            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $opciones] );
         } else {
             return "Not authorized";
         }
@@ -66,23 +72,21 @@ class ProductController extends Controller
         $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
-        //$product->save();
-        foreach ($attrs as $attr) {
-            $n = $attr->name
-            foreach ($request->color as $key => $col) {
-                echo $col ."|". $request->quantity[$key]."|". $request->price[$key];
-                /*$product->values()->attach($attr->id, 
-                                          ['value' => $col, 
-                                           'quantity' => $request->quantity[$key], 
-                                           'price' => $request->price[$key]]);*/
-            }
-        }
+        $product->quantity = $request->quantity;
+        $product->price = $request->price;
+        $product->save();
+
+        foreach ($request->opt_checks as $key => $checked) {
+            $ids = explode(',', $checked); // ids[0]=attribute_id  ids[1]=option_id
+            #print_r($ids);
+            $product->values()->attach($ids[0], 
+                                      ['option_id' => $ids[1]]);
+        }        
         
-        
-        //$this->upload_product_images($request, $product);
+        $this->upload_product_images($request, $product);
         $product->refresh();
         
-        //return redirect()->action([ProductController::class, 'index']);;
+        return redirect()->action([ProductController::class, 'index']);;
     }
 
     /**
