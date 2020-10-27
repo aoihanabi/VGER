@@ -28,6 +28,6 @@ class Product extends Model
 
   public function values() 
   {
-    return $this->belongsToMany(Attribute::Class, 'values')->withPivot('value', 'quantity', 'price')->withTimestamps();
+    return $this->belongsToMany(Attribute::Class, 'values')->withPivot('option_id');
   }
 }

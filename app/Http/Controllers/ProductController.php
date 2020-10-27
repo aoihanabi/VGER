@@ -45,12 +45,12 @@ class ProductController extends Controller
         $user = Auth::user();
         if ($user->can('create', Product::class)) {
             $attrs = Attribute::all();
-            $opciones = DB::table('options')->select('option', 'attribute_id', 'id')->get();
+            $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
             /*$opciones = DB::table('attributes')
                             ->join('options', 'attributes.id', '=', 'options.attribute_id')
                             ->select('attributes.name', 'options.*')
                             ->get();*/
-            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $opciones] );
+            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $options] );
         } else {
             return "Not authorized";
         }
@@ -86,7 +86,7 @@ class ProductController extends Controller
         $this->upload_product_images($request, $product);
         $product->refresh();
         
-        return redirect()->action([ProductController::class, 'index']);;
+        return redirect()->action([ProductController::class, 'index']);
     }
 
     /**
@@ -112,7 +112,12 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        return view('product.edit', ['product' => $product]);
+        $attrs = Attribute::all();
+        $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
+        
+        
+        //echo $product->values;
+        return view('product.edit', ['product' => $product, 'attrs' => $attrs, 'options' => $options]);
     }
 
     /**
@@ -176,6 +181,10 @@ class ProductController extends Controller
                 $product->images()->save($im_sec);
             }    
         }
+        
+    }
+
+    private function get_attributes() {
         
     }
 }
