@@ -50,7 +50,7 @@ class ProductController extends Controller
                             ->join('options', 'attributes.id', '=', 'options.attribute_id')
                             ->select('attributes.name', 'options.*')
                             ->get();*/
-            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $options] );
+            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $options, 'prod_options' => null] );
         } else {
             return "Not authorized";
         }
@@ -77,10 +77,9 @@ class ProductController extends Controller
         $product->save();
 
         foreach ($request->opt_checks as $key => $checked) {
-            $ids = explode(',', $checked); // ids[0]=attribute_id  ids[1]=option_id
-            #print_r($ids);
-            $product->values()->attach($ids[0], 
-                                      ['option_id' => $ids[1]]);
+        
+            $ids = explode(',', $checked); 
+            $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
         }        
         
         $this->upload_product_images($request, $product);
@@ -114,10 +113,14 @@ class ProductController extends Controller
         $product = Product::find($id);
         $attrs = Attribute::all();
         $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
-        
-        
-        //echo $product->values;
-        return view('product.edit', ['product' => $product, 'attrs' => $attrs, 'options' => $options]);
+        $prod_options = array();
+        foreach ($product->values as $val) {
+            $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
+            array_push($prod_options, $prod_opt);
+        }
+        //print_r($prod_options);
+        //echo $product->values; <input type="checkbox" value="{{ $opt->attribute_id }},{{ $opt->id }}" name="opt_checks[{{$k}}]">
+        return view('product.edit', ['product' => $product, 'attrs' => $attrs, 'options' => $options, 'prod_options' => $prod_options]);
     }
 
     /**
@@ -168,7 +171,6 @@ class ProductController extends Controller
         {
             $path_main = $request->file('main_image')->store('images/products');
             $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
-            
             $product->images()->save($im_main);
         }
 
@@ -177,14 +179,9 @@ class ProductController extends Controller
             { 
                 $path_sec = $file->store('images/products');
                 $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
-
                 $product->images()->save($im_sec);
             }    
         }
-        
-    }
-
-    private function get_attributes() {
         
     }
 }

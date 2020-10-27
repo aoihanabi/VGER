@@ -10,7 +10,7 @@
               @foreach ($product->values as $option)
                 @if( $option->pivot->option_id == $opt->id)
                   checked
-                @endif                
+                @endif
               @endforeach
             @endif
           >
