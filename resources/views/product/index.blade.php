@@ -11,7 +11,15 @@
     <div>
       <img src="{{ asset($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
       <br>
-      <a href="products/{{ $prod->id }}"><b>{{ $prod->name }}</b> <br></a>
+      {{ link_to("products/$prod->id", $prod->name, $attributes = [], $secure = null) }}
+      @can('create', App\Models\Product::class)
+        <div>
+          {{ Form::label('quantity', 'Disponible') }}
+          {{ Form::number('quantity', "$prod->quantity", ['min' => '0']) }}
+          {{ Form::label('price', 'Precio') }}
+          {{ Form::number('price', "$prod->price", ['min' => '0']) }}
+        </div>
+      @endcan
     </div>
     <hr>
   @endforeach
