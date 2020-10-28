@@ -1,6 +1,7 @@
 @extends('layouts.application')
 
 @section('content')
+  
   <h1>Productos Disponibles</h1>
   <hr>
   @can('create', App\Models\Product::class)
@@ -15,9 +16,10 @@
       @can('create', App\Models\Product::class)
         <div>
           {{ Form::label('quantity', 'Disponible') }}
-          {{ Form::number('quantity', "$prod->quantity", ['min' => '0']) }}
+          {{ Form::number('quantity', "$prod->quantity", ['class' => 'quantity-modifier', 'id' => "$prod->quantity", 'min' => '0']) }}
           {{ Form::label('price', 'Precio') }}
-          {{ Form::number('price', "$prod->price", ['min' => '0']) }}
+          {{ Form::number('price', "$prod->price", ['class' => 'quantity-modifier', 'id' => "$prod->price", 'min' => '0']) }}
+          {{ Form::button('Save', ['class' => 'save-quantity-changes', 'hidden']) }}
         </div>
       @endcan
     </div>
