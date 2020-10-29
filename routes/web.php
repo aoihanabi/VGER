@@ -25,3 +25,4 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 })->name('dashboard');
 
 Route::resource('products', ProductController::class);
+Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);

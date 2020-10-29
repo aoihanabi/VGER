@@ -182,6 +182,23 @@ class ProductController extends Controller
                 $product->images()->save($im_sec);
             }    
         }
-        
+    }
+
+    /**
+     * Method to update product's quantity only from index page using ajax
+     */
+    public function update_quantity_only() {
+        $new_quantity = $_POST['new_quantity'];
+        $prod_id = $_POST['id'];
+
+        $product = Product::find($prod_id);
+        $product->quantity = $new_quantity;
+        $product->save();
+
+        $response = array(
+            'status' => 'success',
+            'message' => $prod_id, //change to a success/error message
+        );
+        return response()->json($response);
     }
 }
