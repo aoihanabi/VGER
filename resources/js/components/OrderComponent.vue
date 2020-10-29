@@ -14,7 +14,7 @@
             title="Remove from cart"
             @click.prevent="removeFromOrder(item)">X</span>
           
-          {{item.title}} x {{item.quantity}} = ${{ item.totalPrice }}
+          {{item.name}} x {{item.quantity}} = ${{ item.totalPrice }}
         </a><br>
         <a class="navbar-item" href="">
           Total: ${{ totalPriceAll }}
@@ -50,7 +50,7 @@
           total += item.totalPrice;
         }
 
-        return total.toFixed(2);
+        return parseFloat(total).toFixed(2);
       }
     }
   }

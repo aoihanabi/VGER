@@ -29,7 +29,7 @@
 
       <div>
         @yield('content')
-        <product-list />
+        
       </div>
     </div>
   </body>

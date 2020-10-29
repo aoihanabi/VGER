@@ -22,7 +22,7 @@ let store = {
         prod_found.totalPrice = prod_found.quantity * prod_found.price;
       } else {
         state.order.push(item);
-
+        
         Vue.set(item, 'quantity', 1);
         Vue.set(item, 'totalPrice', item.price);
       }

@@ -2021,7 +2021,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
 
-      return total.toFixed(2);
+      return parseFloat(total).toFixed(2);
     }
   }
 });
@@ -2053,18 +2053,30 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    product: {
+      type: Object
+    }
+  },
   data: function data() {
     return {
-      items: [{
+      items: [
+      /*{
         id: 1,
         title: 'Prod 1 test',
         price: 9.99
-      }, {
+      },
+      {
         id: 2,
         title: 'Prod 2 test',
         price: 9.99
-      }, {
+      },*/
+      {
         id: 3,
         title: 'Manzana test',
         price: 5.99
@@ -31390,7 +31402,7 @@ var render = function() {
                   ),
                   _vm._v(
                     "\n        \n        " +
-                      _vm._s(item.title) +
+                      _vm._s(item.name) +
                       " x " +
                       _vm._s(item.quantity) +
                       " = $" +
@@ -31445,32 +31457,49 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("table", [
-    _c(
-      "tbody",
-      _vm._l(_vm.items, function(item) {
-        return _c("tr", { key: item.id }, [
-          _c("td", { domProps: { textContent: _vm._s(item.title) } }),
-          _vm._v(" "),
-          _c("td", [_vm._v(" $" + _vm._s(item.price.toFixed(2)) + " ")]),
-          _vm._v(" "),
-          _c("td", [
-            _c(
-              "button",
-              {
-                staticClass: "button is-success",
-                on: {
-                  click: function($event) {
-                    return _vm.addToOrder(item)
+  return _c("div", [
+    _c("table", [
+      _c(
+        "tbody",
+        _vm._l(_vm.items, function(item) {
+          return _c("tr", { key: item.id }, [
+            _c("td", { domProps: { textContent: _vm._s(_vm.product.name) } }),
+            _vm._v(" "),
+            _c("td", [_vm._v(" $" + _vm._s(item.price.toFixed(2)) + " ")]),
+            _vm._v(" "),
+            _c("td", [
+              _c(
+                "button",
+                {
+                  staticClass: "button is-success",
+                  on: {
+                    click: function($event) {
+                      return _vm.addToOrder(item)
+                    }
                   }
-                }
-              },
-              [_vm._v("Add to Order")]
-            )
+                },
+                [_vm._v("Add to Order")]
+              )
+            ])
           ])
-        ])
-      }),
-      0
+        }),
+        0
+      )
+    ]),
+    _vm._v(" "),
+    _c("p", [_vm._v(_vm._s(_vm.product.name + " & " + _vm.product.price))]),
+    _vm._v(" "),
+    _c(
+      "button",
+      {
+        staticClass: "button",
+        on: {
+          click: function($event) {
+            return _vm.addToOrder(_vm.product)
+          }
+        }
+      },
+      [_vm._v("Add product to order")]
     )
   ])
 }

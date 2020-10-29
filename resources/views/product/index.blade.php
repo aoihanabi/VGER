@@ -23,8 +23,11 @@
           {{ Form::hidden('prod_id', null, ['id' => "$prod->id"])}}
         </div>
       @endcan
+      <product-list :product="{{ $prod }}"/>
     </div>
     <hr>
   @endforeach
   <br>
+  <hr>
+  
 @endsection
