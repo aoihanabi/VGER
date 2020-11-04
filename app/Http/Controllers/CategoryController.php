@@ -26,10 +26,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-        #if ($user->can('create', Category::class)) {
-            return view('category.create');
-        #}
+        return view('category.create');
     }
 
     /**
@@ -44,17 +41,6 @@ class CategoryController extends Controller
         $category->name = $request->name;
         $category->save();
         return redirect()->action([CategoryController::class, 'index']);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -89,7 +75,7 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::find($id);
-        $product->delete();
+        $category->delete();
         return redirect()->action([CategoryController::class, 'index']);
     }
 }
