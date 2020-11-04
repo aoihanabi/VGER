@@ -8,7 +8,7 @@
           {{ Form::checkbox("opt_checks[$k]", "$opt->attribute_id,$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options)) }}
           {{ Form::label("opt_checks[$k]","$opt->option") }}
         @endif
-      @endforeach  
+      @endforeach
     </div>
   @endforeach
 @endsection
@@ -30,7 +30,6 @@
         @elseif(Auth::user()->role === 'admin')
             @yield('options_field')
         @endif
-    
     </div>
     <div id="product_images">
         {{ Form::label("Main Image:") }}<br>
@@ -38,6 +37,12 @@
         <br><br>
         {{ Form::label("Secondary Images:") }} <br>
         {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
+    </div>
+    <div id="product_categories">
+      @foreach ($categories as $k => $category)
+        {{ Form::checkbox("categ_checks[$k]", "$category->id", $prod_categs==null ? '' : in_array($category->id, $prod_categs)) }}
+        {{ Form::label("categ_checks[$k]","$category->name") }}        
+      @endforeach
     </div>
     <br><br>
     {{ Form::submit('Guardar cambios') }}

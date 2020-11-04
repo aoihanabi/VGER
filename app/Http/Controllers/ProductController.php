@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Product;
-use App\Models\Image;
 use App\Models\Attribute;
+use App\Models\Category;
+use App\Models\Image;
+use App\Models\Product;
 
 class ProductController extends Controller
 {
@@ -46,11 +47,17 @@ class ProductController extends Controller
         if ($user->can('create', Product::class)) {
             $attrs = Attribute::all();
             $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
+            $categories = Category::all();
             /*$opciones = DB::table('attributes')
                             ->join('options', 'attributes.id', '=', 'options.attribute_id')
                             ->select('attributes.name', 'options.*')
                             ->get();*/
-            return view('product.create', ['product' => null, 'attrs' => $attrs, 'options' => $options, 'prod_options' => null] );
+            return view('product.create', ['product' => null, 
+                                           'attrs' => $attrs, 
+                                           'options' => $options, 
+                                           'prod_options' => null, 
+                                           'categories' => $categories,
+                                           'prod_categs' => null]);
         } else {
             return "Not authorized";
         }
@@ -76,12 +83,16 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->save();
 
-        foreach ($request->opt_checks as $key => $checked) {
-        
-            $ids = explode(',', $checked); 
+        foreach ($request->opt_checks as $key => $checked_opt) 
+        {
+            $ids = explode(',', $checked_opt); 
             $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
-        }        
-        
+        }
+
+        foreach ($request->categ_checks as $key => $checked_categ) 
+        {
+            $product->categories()->attach($checked_categ);
+        }
         $this->upload_product_images($request, $product);
         $product->refresh();
         
@@ -112,15 +123,27 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $attrs = Attribute::all();
+        
         $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
         $prod_options = array();
         foreach ($product->values as $val) {
             $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
             array_push($prod_options, $prod_opt);
         }
+
+        $categories = Category::all();
+        $prod_categs = array();
+        foreach ($product->categories as $key => $category) {
+            array_push($prod_categs, $category->id);
+        }
         //print_r($prod_options);
         //echo $product->values; <input type="checkbox" value="{{ $opt->attribute_id }},{{ $opt->id }}" name="opt_checks[{{$k}}]">
-        return view('product.edit', ['product' => $product, 'attrs' => $attrs, 'options' => $options, 'prod_options' => $prod_options]);
+        return view('product.edit', ['product' => $product, 
+                                     'attrs' => $attrs, 
+                                     'options' => $options, 
+                                     'prod_options' => $prod_options,
+                                     'categories' => $categories,
+                                     'prod_categs' => $prod_categs]);
     }
 
     /**
