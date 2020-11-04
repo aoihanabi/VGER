@@ -12,12 +12,12 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    public function show_data() {
+    // public function show_data() 
+    // {
+    //     $products = Product::get_all_products(); 
 
-        $products = Product::all();
-
-        return view('test', ['products' => $products]);
-    }
+    //     return view('test', ['products' => $products]);
+    // }
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +25,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
+        $products = Product::get_all_products(); 
         
         $mains = array();
         foreach ($products as $p) {
@@ -45,13 +45,10 @@ class ProductController extends Controller
     {
         $user = Auth::user();
         if ($user->can('create', Product::class)) {
-            $attrs = Attribute::all();
-            $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
-            $categories = Category::all();
-            /*$opciones = DB::table('attributes')
-                            ->join('options', 'attributes.id', '=', 'options.attribute_id')
-                            ->select('attributes.name', 'options.*')
-                            ->get();*/
+            $attrs = Attribute::get_all_attributes();
+            $options = Product::get_product_properties();
+            $categories = Category::get_all_categories();
+
             return view('product.create', ['product' => null, 
                                            'attrs' => $attrs, 
                                            'options' => $options, 
@@ -122,22 +119,21 @@ class ProductController extends Controller
     public function edit($id)
     {
         $product = Product::find($id);
-        $attrs = Attribute::all();
-        
-        $options = DB::table('options')->select('option', 'attribute_id', 'id')->get();
+        $attrs = Attribute::get_all_attributes();
+        $options = Product::get_product_properties();
+        $categories = Category::get_all_categories();
+
         $prod_options = array();
         foreach ($product->values as $val) {
             $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
             array_push($prod_options, $prod_opt);
         }
 
-        $categories = Category::all();
         $prod_categs = array();
         foreach ($product->categories as $key => $category) {
             array_push($prod_categs, $category->id);
         }
-        //print_r($prod_options);
-        //echo $product->values; <input type="checkbox" value="{{ $opt->attribute_id }},{{ $opt->id }}" name="opt_checks[{{$k}}]">
+
         return view('product.edit', ['product' => $product, 
                                      'attrs' => $attrs, 
                                      'options' => $options, 
@@ -163,7 +159,7 @@ class ProductController extends Controller
         $product->save();
 
         if ($request->hasfile('main_image')) {
-            $old_main = $product->images()->where('type', 'MN')->first();
+            $old_main = $product->images()->main_image(); //$product->images()->where('type', 'MN')->first();
             $old_main->delete();
         }
         $this->upload_product_images($request, $product);

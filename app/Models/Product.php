@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Attribute;
@@ -44,5 +45,21 @@ class Product extends Model
   public function values() 
   {
     return $this->belongsToMany(Attribute::Class, 'values')->withPivot('option_id')->withTimestamps();
+  }
+  
+  /**
+   * Retrieve all products from the DB
+   */
+  public static function get_all_products() 
+  {
+    return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
+  }
+
+  /**
+   * Retrieve all available properties
+   */
+  public static function get_product_properties() 
+  {
+    return DB::table('options')->select('option', 'attribute_id', 'id')->get();
   }
 }

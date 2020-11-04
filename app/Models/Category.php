@@ -19,4 +19,12 @@ class Category extends Model
     {
         return $this->belongsToMany(Product::Class, 'prodxcateg')->withTimestamps();
     }
+
+    /**
+     * Retrieve all categories, id and name columns
+     */
+    public static function get_all_categories() 
+    {
+        return Category::select('id', 'name')->get();
+    }
 }
