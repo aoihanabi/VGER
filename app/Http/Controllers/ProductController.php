@@ -146,7 +146,7 @@ class ProductController extends Controller
         $this->upload_product_images($request, $product);
         
         $product->refresh();
-        return redirect()->action([ProductController::class, 'index']);;
+        return redirect()->action([ProductController::class, 'index']);
     }
 
     /**
