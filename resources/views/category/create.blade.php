@@ -6,5 +6,6 @@
         {{ Form::open(['route' => 'categories.store']) }}
             @include('category._category')
         {{ Form::close() }}
+        <a href="/categories">Ver todas</a>
     </div>
 @endsection

@@ -5,9 +5,10 @@
   <h1>Productos Disponibles</h1>
   <hr>
   <meta name="csrf-token" content="{{ csrf_token() }}" />
-
+  
   @can('create', App\Models\Product::class)
-    <a href="products/create">Create a new product</a>
+    <a href="products/create">Crear nuevo producto</a>
+    <a href="categories/create">Crear nueva categoría</a>
   @endcan
 
   @foreach($products as $key => $prod)

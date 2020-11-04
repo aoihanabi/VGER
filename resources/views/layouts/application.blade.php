@@ -17,7 +17,7 @@
         <ul>
           <li><a href="/">Home</a></li>
           <li><a href="{{ route('products.index') }}">Products</a></li>
-          <li><a href="">Profile</a></li>
+          <li><a href="{{ route('login') }}">Login</a></li>
         </ul>
       </nav>
 
@@ -28,8 +28,7 @@
       </div>
 
       <div>
-        @yield('content')
-        
+        @yield('content')        
       </div>
     </div>
   </body>

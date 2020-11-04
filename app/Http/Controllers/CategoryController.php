@@ -88,6 +88,8 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+        $product->delete();
+        return redirect()->action([CategoryController::class, 'index']);
     }
 }
