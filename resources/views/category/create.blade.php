@@ -2,7 +2,7 @@
 
 @section('content')
     <div>
-        <h2>Create a new category</h2>
+        <h2>Crear nueva categoría</h2>
         {{ Form::open(['route' => 'categories.store']) }}
             @include('category._category')
         {{ Form::close() }}

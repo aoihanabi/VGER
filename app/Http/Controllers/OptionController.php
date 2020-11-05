@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Attribute;
+use App\Models\Option;
 
 class OptionController extends Controller
 {
@@ -13,7 +15,9 @@ class OptionController extends Controller
      */
     public function index()
     {
-        //
+        $options = Option::all();
+        $attributes = Attribute::get_all_attributes();
+        return view('option.index', ['options' => $options, 'attributes' => $attributes]);
     }
 
     /**
@@ -23,7 +27,11 @@ class OptionController extends Controller
      */
     public function create()
     {
-        //
+        $attributes = Attribute::get_all_attributes()->pluck('name', 'id');
+        return view('option.create', [
+                                    'attributes' => $attributes,
+                                    'option' => null
+                                    ]);
     }
 
     /**
@@ -34,18 +42,11 @@ class OptionController extends Controller
      */
     public function store(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        $option = new Option;
+        $option->attribute_id = $request->attribute_id;
+        $option->option = $request->option;
+        $option->save();
+        return redirect()->action([OptionController::class, 'index']);
     }
 
     /**
@@ -56,7 +57,12 @@ class OptionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $option = Option::find($id);
+        $attributes = Attribute::get_all_attributes()->pluck('name', 'id');
+        return view('option.edit', [
+                                    'attributes' => $attributes,
+                                    'option' => $option
+                                    ]);
     }
 
     /**
@@ -68,7 +74,11 @@ class OptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $option = Option::find($id);
+        $option->option = $request->option;
+        $option->attribute_id = $request->attribute_id;        
+        $option->save();
+        return redirect()->action([OptionController::class, 'index']);
     }
 
     /**
@@ -79,6 +89,8 @@ class OptionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $option = Option::find($id);
+        $option->delete();
+        return redirect()->action([OptionController::class, 'index']);
     }
 }

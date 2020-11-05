@@ -9,6 +9,7 @@
   @can('create', App\Models\Product::class)
     <a href="products/create">Crear nuevo producto</a>
     {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}
+    {{ link_to(route('options.create'), $title = 'Crear nueva característica') }}
   @endcan
 
   @foreach($products as $key => $prod)

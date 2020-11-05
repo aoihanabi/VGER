@@ -14,6 +14,6 @@ class Attribute extends Model
      */
     public static function get_all_attributes() 
     {
-        return Category::select('id', 'name')->get();
+        return Attribute::select('id', 'name')->get();
     }
 }

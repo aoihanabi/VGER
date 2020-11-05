@@ -2,7 +2,7 @@
 
 @section('content')
     <div>
-        <h2>Create a new category</h2>
+        <h2>Editar categoría</h2>
         {{ Form::model($category, ['route' => ['categories.update', $category], 'method' => 'PUT']) }}
             @include('category._category')
         {{ Form::close() }}
