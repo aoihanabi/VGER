@@ -56,9 +56,9 @@ class Product extends Model
   }
 
   /**
-   * Retrieve all available properties
+   * Retrieve all available options/properties
    */
-  public static function get_product_properties() 
+  public static function get_product_options() 
   {
     return DB::table('options')->select('option', 'attribute_id', 'id')->get();
   }

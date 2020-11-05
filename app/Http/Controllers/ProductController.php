@@ -46,7 +46,7 @@ class ProductController extends Controller
         $user = Auth::user();
         if ($user->can('create', Product::class)) {
             $attrs = Attribute::get_all_attributes();
-            $options = Product::get_product_properties();
+            $options = Product::get_product_options();
             $categories = Category::get_all_categories();
 
             return view('product.create', ['product' => null, 
@@ -120,7 +120,7 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $attrs = Attribute::get_all_attributes();
-        $options = Product::get_product_properties();
+        $options = Product::get_product_options();
         $categories = Category::get_all_categories();
 
         $prod_options = array();
