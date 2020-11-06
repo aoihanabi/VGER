@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <table>
+  <div class="flex items-center">
+    <!-- <table>
       <tbody>
         <tr v-for="item in items" :key="item.id">
           <td v-text="product.name"></td>
@@ -12,9 +12,9 @@
           </td>
         </tr>
       </tbody>
-    </table>
-    <p>{{product.name + ' & ' + product.price}}</p>
-    <button class="button" @click="addToOrder(product)">Add product to order</button>
+    </table> 
+    <p>{{product.name + ' & ' + product.price}}</p>-->
+    <button class="flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded" @click="addToOrder(product)">Add product to order</button>
   </div>
 </template>
 

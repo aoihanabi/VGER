@@ -14,16 +14,15 @@
     @endcan
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       @foreach($products as $key => $prod)
-        <div class="border-solid border border-gray-300 rounded">
+        <div class="border-solid border border-gray-300 rounded shadow-md">
           <div class="m-5">
             <img src="{{ asset($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
-            <br>
-            {{ link_to("products/$prod->id", $prod->name, $attributes = [], $secure = null) }}
+            {{ link_to("products/$prod->id", $prod->name, $attributes = ['class' => 'hover:underline text-blue-700 text-lg '], $secure = null) }}
             @can('create', App\Models\Product::class)
-              <div class="prod_quantity_update">
-                {{ Form::label('quantity', 'Disponible') }}
-                {{ Form::number('quantity', "$prod->quantity", ['class' => 'quantity-modifier', 'id' => "$prod->quantity", 'min' => '0']) }}
-                {{ Form::button('Save', ['class' => 'save-quantity-changes', 'hidden']) }}
+              <div class="prod_quantity_update py-2 grid grid-cols-2">
+                {{ Form::label('quantity', 'Disponible', ['class' => 'col-span-1']) }}
+                {{ Form::number('quantity', "$prod->quantity", ['class' => 'quantity-modifier py-1 border-solid border border-gray-500 rounded', 'id' => "$prod->quantity", 'min' => '0']) }}
+                {{ Form::button('Guardar', ['class' => 'save-quantity-changes my-2 p-2 col-end-3 text-white bg-blue-700 hover:bg-blue-800 rounded', 'hidden']) }}
                 {{ Form::hidden('prod_id', null, ['id' => "$prod->id"])}}
               </div>
             @endcan

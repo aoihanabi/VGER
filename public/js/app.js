@@ -31457,42 +31457,12 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("table", [
-      _c(
-        "tbody",
-        _vm._l(_vm.items, function(item) {
-          return _c("tr", { key: item.id }, [
-            _c("td", { domProps: { textContent: _vm._s(_vm.product.name) } }),
-            _vm._v(" "),
-            _c("td", [_vm._v(" $" + _vm._s(item.price.toFixed(2)) + " ")]),
-            _vm._v(" "),
-            _c("td", [
-              _c(
-                "button",
-                {
-                  staticClass: "button is-success",
-                  on: {
-                    click: function($event) {
-                      return _vm.addToOrder(item)
-                    }
-                  }
-                },
-                [_vm._v("Add to Order")]
-              )
-            ])
-          ])
-        }),
-        0
-      )
-    ]),
-    _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.product.name + " & " + _vm.product.price))]),
-    _vm._v(" "),
+  return _c("div", { staticClass: "flex items-center" }, [
     _c(
       "button",
       {
-        staticClass: "button",
+        staticClass:
+          "flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded",
         on: {
           click: function($event) {
             return _vm.addToOrder(_vm.product)
