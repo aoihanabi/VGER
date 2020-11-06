@@ -17,8 +17,10 @@
       <div class="grid grid-cols-2">
         <h1 class="pb-5 text-4xl font-semibold">{{ $product->name }}</h1>
         <div class="col-end-3 items-end">
+          
           @can('update', $product)
             <button>
+              <span class="fas fa-star">ugh</span>
               <a href="{{ route('products.edit', $product->id) }}">Editar producto</a>
             </button>
           @endcan
