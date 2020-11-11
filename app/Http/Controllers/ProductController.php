@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\Option;
 use App\Models\Product;
 
 class ProductController extends Controller
@@ -106,8 +107,19 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $imgs = Product::find($id)->images;
-        $attrs = Product::find($id)->values;
-        return view('product.show', ['product' => $product, 'imgs' => $imgs, 'attrs' => $attrs]);
+        $attrs = Attribute::select('attributes.name', 'attributes.id')
+                    ->join('values', 'attributes.id', '=', 'values.attribute_id')
+                    ->where('values.product_id','=',$id)->distinct()->get();
+        #print_r($attrs->toArray());
+        $opts = Option::select('options.attribute_id', 'options.option')
+                        ->join('values', 'options.id', '=', 'values.option_id')
+                        ->where('values.product_id', '=', $id)->get();
+        #print_r($opts->toArray());
+
+        #DB::enableQueryLog();
+        #Product::find($id)->values()->distinct()->get(['attribute_id']);
+        #dd(DB::getQueryLog());
+        return view('product.show', ['product' => $product, 'imgs' => $imgs, 'attrs' => $attrs, 'opts' => $opts]);
     }
 
     /**

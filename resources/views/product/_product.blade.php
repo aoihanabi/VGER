@@ -3,11 +3,7 @@
     <div class="{{$attr->name}}-attributes">
       {{ Form::label("$attr->name") }}
       <br>
-      @foreach ($options as $k => $opt)        
-        @if ($attr->id == $opt->attribute_id)
-          {{ Form::checkbox("opt_checks[$k]", "$opt->attribute_id,$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options)) }}
-          {{ Form::label("opt_checks[$k]","$opt->option") }}
-        @endif
+      @foreach ($options as $k => $opt)    
       @endforeach
     </div>
   @endforeach
