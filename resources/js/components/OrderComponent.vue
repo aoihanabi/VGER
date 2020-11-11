@@ -47,10 +47,10 @@
         let total = 0;
 
         for (let item of this.$store.state.order) {
-          total += item.totalPrice;
+          total += parseFloat(item.totalPrice);
         }
 
-        return parseFloat(total).toFixed(2);
+        return total.toFixed(2);
       }
     }
   }

@@ -51,8 +51,9 @@
               @endif
             @endforeach
           @endforeach
-        </div>        
-      </div>  
+        </div>
+        <product-list :product="{{ $product }}"/>
+      </div>
     </div>
 
   </div>

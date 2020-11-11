@@ -2013,7 +2013,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var item = _step.value;
-          total += item.totalPrice;
+          total += parseFloat(item.totalPrice);
+          console.log(item.totalPrice + " + " + total);
         }
       } catch (err) {
         _iterator.e(err);
@@ -2021,7 +2022,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
 
-      return parseFloat(total).toFixed(2);
+      return total.toFixed(2); //parseFloat(total).toFixed(2);
     }
   }
 });

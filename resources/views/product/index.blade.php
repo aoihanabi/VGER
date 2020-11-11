@@ -26,7 +26,7 @@
                 {{ Form::hidden('prod_id', null, ['id' => "$prod->id"])}}
               </div>
             @endcan
-            <product-list :product="{{ $prod }}"/>
+            <!-- <product-list :product="{{ $prod }}"/> -->
           </div>
           
         </div>
