@@ -2014,7 +2014,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var item = _step.value;
           total += parseFloat(item.totalPrice);
-          console.log(item.totalPrice + " + " + total);
         }
       } catch (err) {
         _iterator.e(err);
@@ -2022,7 +2021,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         _iterator.f();
       }
 
-      return total.toFixed(2); //parseFloat(total).toFixed(2);
+      return total.toFixed(2);
     }
   }
 });
@@ -31405,7 +31404,7 @@ var render = function() {
                     "\n        \n        " +
                       _vm._s(item.name) +
                       " x " +
-                      _vm._s(item.quantity) +
+                      _vm._s(item.cart_quantity) +
                       " = $" +
                       _vm._s(item.totalPrice) +
                       "\n      "
@@ -45213,21 +45212,30 @@ var store = {
   },
   mutations: {
     addToOrder: function addToOrder(state, item) {
-      //console.log(item.title);
+      var max_quantity = item.quantity;
       var prod_found = state.order.find(function (product) {
         return product.id == item.id;
       });
 
       if (prod_found) {
-        prod_found.quantity++;
-        prod_found.totalPrice = prod_found.quantity * prod_found.price;
+        //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity);
+        if (prod_found.cart_quantity + 1 <= max_quantity) {
+          prod_found.cart_quantity++;
+          prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
+          state.productCount++;
+          console.log(productCount);
+        }
       } else {
-        state.order.push(item);
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(item, 'quantity', 1);
-        vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(item, 'totalPrice', item.price);
+        //console.log(max_quantity + '>= 1');
+        if (max_quantity >= 1) {
+          state.order.push(item);
+          vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(item, 'cart_quantity', 1);
+          vue__WEBPACK_IMPORTED_MODULE_0___default.a.set(item, 'totalPrice', item.price);
+          state.productCount++;
+          console.log(productCount);
+        }
       }
 
-      state.productCount++;
       this.commit('saveOrder');
     },
     removeFromOrder: function removeFromOrder(state, item) {
@@ -45235,7 +45243,7 @@ var store = {
 
       if (index > -1) {
         var product = state.order[index];
-        state.productCount -= product.quantity;
+        state.productCount -= product.cart_quantity;
         state.order.splice(index, 1);
       }
 

@@ -14,20 +14,34 @@ let store = {
 
   mutations: {
     addToOrder(state, item) {
-      //console.log(item.title);
+
+      let max_quantity = item.quantity;
       let prod_found = state.order.find(product => product.id == item.id);
       
       if (prod_found) {
-        prod_found.quantity ++;
-        prod_found.totalPrice = prod_found.quantity * prod_found.price;
+        //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity);
+        if ((prod_found.cart_quantity + 1) <= max_quantity)
+        {
+          prod_found.cart_quantity ++;
+          prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
+
+          state.productCount++;
+          console.log(productCount);
+        }        
       } else {
-        state.order.push(item);
+        //console.log(max_quantity + '>= 1');
+        if (max_quantity >= 1) {
+          
+          state.order.push(item);
         
-        Vue.set(item, 'quantity', 1);
-        Vue.set(item, 'totalPrice', item.price);
+          Vue.set(item, 'cart_quantity', 1);
+          Vue.set(item, 'totalPrice', item.price);
+          
+          state.productCount++;
+          console.log(productCount);
+        }
       }
 
-      state.productCount++;
       this.commit('saveOrder');
     },
     removeFromOrder(state, item) {
@@ -35,7 +49,7 @@ let store = {
 
       if (index > -1) {
         let product = state.order[index];
-        state.productCount -= product.quantity;
+        state.productCount -= product.cart_quantity;
 
         state.order.splice(index, 1);
       }
