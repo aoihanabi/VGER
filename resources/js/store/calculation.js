@@ -1,3 +1,4 @@
+import Axios from "axios";
 import Vue from "vue"
 import Vuex from "vuex"
 
@@ -58,6 +59,20 @@ let store = {
     saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('productCount', state.productCount);
+    },
+    processOrder(state) {
+      let data = {
+        order: JSON.stringify(state.order)
+      }
+      
+      axios.post("http://localhost:8000/orders", data)
+            .then(response => {
+                if (response.status === 200) {
+                  //console.log('responseURL: ' + response.request.responseURL);
+                  window.location.href = response.request.responseURL;
+                }
+            })
+            .catch(error => {console.log(error)});
     }
   }
 };

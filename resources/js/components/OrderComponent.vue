@@ -22,7 +22,9 @@
         <hr class="navbar-divider">
 
         <a class="navbar-item" href="">
-          Checkout
+          
+          <span @click.prevent="processOrder()">Checkout</span>
+          
         </a>
     </div>
     
@@ -38,7 +40,12 @@
   export default {
     methods: {
       removeFromOrder(item) {
-        this.$store.commit('removeFromOrder', item);
+        console.log(this.$store);
+        this.$store.commit('removeFromOrder', item);        
+      },
+      processOrder() {
+        console.log(this.$store);
+        this.$store.commit('processOrder');
       }
     },
 
