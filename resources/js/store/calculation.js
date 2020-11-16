@@ -67,10 +67,12 @@ let store = {
       
       axios.post("http://localhost:8000/orders", data)
             .then(response => {
-                if (response.status === 200) {
-                  //console.log('responseURL: ' + response.request.responseURL);
-                  window.location.href = response.request.responseURL;
-                }
+              if (response.status === 200) {
+                //console.log('responseURL: ' + response.request.responseURL);
+                window.localStorage.setItem('order', []);
+                window.localStorage.setItem('productCount', 0);
+                window.location.href = response.request.responseURL;
+              }
             })
             .catch(error => {console.log(error)});
     }
@@ -82,4 +84,6 @@ export default store;
   modules: {
 
   }
-})*/
+})
+
+*/

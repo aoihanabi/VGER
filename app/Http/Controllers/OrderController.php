@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
+use App\Http\Controllers\ProductController;
+use App\Models\Order;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -13,7 +17,7 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return 'store being called';
+        return 'orders index being called';
     }
 
     /**
@@ -35,12 +39,33 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $full_order = (array)json_decode($request->order);
+        #print_r($full_order);
         
-        foreach($full_order as $prod) {
-            
-            echo($cac->id);
-            echo('<br />');
+        if(!empty($full_order)) {
+            $total = 0;
+            $order = new Order;
+            $order->total = $total;
+            $order->date = now();
+            $order->user_id = 1;
+            $order->save();
+
+            $ord_id = Order::latest()->first();
+            #echo('ord id: ' . $ord_id);
+            foreach($full_order as $prod) {
+
+                $product = Product::find($prod->id, ['id', 'name', 'quantity', 'price']);
+                $subtotal = $product->price * $prod->cart_quantity;
+                $total += $subtotal;
+                $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal]);
+
+                #echo('Eem:'.$product->price . ' * ' . $prod->cart_quantity);
+                #echo('Subtotal:'.$subtotal . '-> ' . $total);
+                #echo('<br />');
+            }
+            $order->total = $total;
+            $order->save();
         }
+        
         return redirect()->action([ProductController::class, 'index']);//not really reloading from this one, it's doing it from calculation.js after post
     }
 

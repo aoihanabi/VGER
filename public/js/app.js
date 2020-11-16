@@ -44849,14 +44849,7 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //  Custom
 //************************************************************************
 
-window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js"); //for axios
-// let token = document.head.querySelector('meta[name="csrf-token"]');
-// console.log(token);
-// if (token) {
-//     window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
-// } else {
-//     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-// }
+window.$ = window.jQuery = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 /***/ }),
 
@@ -45089,8 +45082,11 @@ var store = {
         order: JSON.stringify(state.order)
       };
       axios.post("http://localhost:8000/orders", data).then(function (response) {
-        if (response.status === 200) {//console.log('responseURL: ' + response.request.responseURL);
-          //window.location.href = response.request.responseURL;
+        if (response.status === 200) {
+          //console.log('responseURL: ' + response.request.responseURL);
+          window.localStorage.setItem('order', []);
+          window.localStorage.setItem('productCount', 0);
+          window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {
         console.log(error);
@@ -45103,7 +45099,9 @@ var store = {
   modules: {
 
   }
-})*/
+})
+
+*/
 
 /***/ }),
 

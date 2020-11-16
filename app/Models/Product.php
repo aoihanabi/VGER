@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\Image;
+use App\Models\Order;
 
 class Product extends Model
 {
@@ -47,6 +48,14 @@ class Product extends Model
     return $this->belongsToMany(Attribute::Class, 'values')->withPivot('option_id')->withTimestamps();
   }
   
+  /**
+   * The orders that belong to the product
+   */
+  public function orders()
+  {
+    return $this->belongsToMany(Order::Class, 'orderdetails')->withPivot('subtotal')->withTimestamps();
+  }
+
   /**
    * Retrieve all products from the DB
    */
