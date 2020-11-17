@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductController;
 use App\Models\Order;
 use App\Models\Product;
@@ -65,8 +66,9 @@ class OrderController extends Controller
             $order->total = $total;
             $order->save();
         }
+        $this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
         
-        return redirect()->action([ProductController::class, 'index']);//not really reloading from this one, it's doing it from calculation.js after post
+        return redirect()->action([ProductController::class, 'index']); //not really reloading from this one, it's doing it from calculation.js after post
     }
 
     /**
@@ -112,5 +114,17 @@ class OrderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Sends an email to a hardcoded destinatary
+     * @param string $body 
+     */
+    public function send_email($body) {
+        $details = [
+            'title' => 'Su pedido se realizó con éxito!',
+            'body' => $body #'Nos complace informarle que su pedido fue recibido, se encuentra en proceso y se lo enviaremos en los próximos 2 días'
+        ];
+        Mail::to('abii98cm@gmail.com')->send(new \App\Mail\Mailer($details));
     }
 }
