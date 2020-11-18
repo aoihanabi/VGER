@@ -16,7 +16,7 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
-window.Vue = Vue;
+//window.Vue = Vue;
 
 Vue.component('product-list', require('./components/ProductList.vue').default);
 Vue.component('order-component', require('./components/OrderComponent.vue').default);

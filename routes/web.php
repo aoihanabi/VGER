@@ -32,3 +32,15 @@ Route::post('update-quantity', [ProductController::class, 'update_quantity_only'
 Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
 Route::resource('orders', OrderController::class);
+
+// Route::group(['prefix' => 'general',  'middleware' => ['jwt.verify','admin']], function()
+// {
+//     Route::get('eav_dropdowns', 'GeneralController@eavDropdowns');
+//     Route::get('account_dropdowns', 'GeneralController@accountDropdowns');
+
+//     Route::get('equipment_form_dropdowns', 'GeneralController@equipmentFormDropdowns');
+
+//     Route::get('equipment_dropdowns', 'GeneralController@equipmentDropdowns');
+
+//     Route::get('units_dropdowns', 'GeneralController@unitsDropdowns');
+// });
