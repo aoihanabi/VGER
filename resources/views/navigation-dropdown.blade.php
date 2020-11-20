@@ -21,7 +21,10 @@
                     </x-jet-nav-link>
                     @if (!Auth::check())
                         <x-jet-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
-                            {{ __('Login') }}
+                            {{ __('Iniciar Sesión') }}
+                        </x-jet-nav-link>
+                        <x-jet-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')">
+                            {{ __('Registrarme') }}
                         </x-jet-nav-link>
                     @endif
                 </div>
