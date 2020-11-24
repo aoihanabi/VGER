@@ -18,7 +18,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return 'orders index being called';
+        $process_orders = Order::get_in_process_orders();
+        //print_r($process_orders);
+        return view('order.index', ['p_orders' => $process_orders]);
     }
 
     /**
