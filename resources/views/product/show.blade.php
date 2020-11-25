@@ -3,11 +3,16 @@
 @section('content')
   <div class="my-10 mx-20 grid grid-cols-2">
     
-    <div>
+    <div id="images">
+      
       @foreach ($imgs as $m)
         @if ($m->type == 'MN')
-          <img src="{{ url($m->url) }}" style="width: 400px; height: 300px;"></img><br>
-        @else 
+          <div class="box-border h-300 w-400 border-4">
+            <img src="{{ url($m->url) }}" style="width: 400px; height: 300px;"></img>
+          </div>
+        @endif
+
+        @if ($m->type == 'SC') 
           <img src="{{ url($m->url) }}" style="width: 150px; height: 150px;"></img>
         @endif
       @endforeach

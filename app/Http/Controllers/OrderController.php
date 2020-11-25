@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -50,26 +51,21 @@ class OrderController extends Controller
             $order = new Order;
             $order->total = $total;
             $order->date = now();
-            $order->user_id = 1;
+            $order->user_id = Auth::user()->id;
             $order->save();
 
             $ord_id = Order::latest()->first();
-            #echo('ord id: ' . $ord_id);
             foreach($full_order as $prod) {
 
                 $product = Product::find($prod->id, ['id', 'name', 'quantity', 'price']);
                 $subtotal = $product->price * $prod->cart_quantity;
                 $total += $subtotal;
-                $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal]);
-
-                #echo('Eem:'.$product->price . ' * ' . $prod->cart_quantity);
-                #echo('Subtotal:'.$subtotal . '-> ' . $total);
-                #echo('<br />');
+                $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $prod->cart_quantity]);
             }
             $order->total = $total;
             $order->save();
         }
-        $this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
+        #$this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
         
         return redirect()->action([ProductController::class, 'index']); //not really reloading from this one, it's doing it from calculation.js after post
     }
