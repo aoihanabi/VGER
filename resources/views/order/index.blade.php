@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2>Órdenes en proceso</h2>
+        <h2 class="text-xl">Órdenes en proceso</h2>
         <div class="py-10">
             @foreach($p_orders as $order)
                 <a href="">

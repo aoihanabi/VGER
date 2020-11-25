@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductController;
 use App\Models\Order;
@@ -81,7 +82,13 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        //
+        
+        $order = Order::find($id);
+        $details = Order::get_order_details($order->id);
+        
+        //DB::enableQueryLog();
+        //dd(DB::getQueryLog());
+        return view('order.show', ['order' => $order, 'details' => $details]);
     }
 
     /**
