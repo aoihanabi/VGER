@@ -33,6 +33,14 @@ class Product extends Model
   }
 
   /**
+   * Scope to retrieve a product's secondary image.
+   */
+  public function secondary_images() 
+  {
+    return $this->hasMany(Image::Class)->where('type', 'SC');
+  }
+
+  /**
    * The categories that belong to the product
    */
   public function categories()

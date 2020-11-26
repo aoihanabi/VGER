@@ -106,7 +106,8 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::find($id);
-        $imgs = Product::find($id)->images;
+        $main_img = $product->main_image->first();
+        $secondary_imgs = $product->secondary_images;
         $attrs = Attribute::select('attributes.name', 'attributes.id')
                     ->join('values', 'attributes.id', '=', 'values.attribute_id')
                     ->where('values.product_id','=',$id)->distinct()->get();
@@ -119,7 +120,7 @@ class ProductController extends Controller
         #DB::enableQueryLog();
         #Product::find($id)->values()->distinct()->get(['attribute_id']);
         #dd(DB::getQueryLog());
-        return view('product.show', ['product' => $product, 'imgs' => $imgs, 'attrs' => $attrs, 'opts' => $opts]);
+        return view('product.show', ['product' => $product, 'main_img' => $main_img, 'secondary_imgs' => $secondary_imgs, 'attrs' => $attrs, 'opts' => $opts]);
     }
 
     /**
