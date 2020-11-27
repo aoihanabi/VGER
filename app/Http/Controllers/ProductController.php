@@ -109,17 +109,15 @@ class ProductController extends Controller
         $main_img = $product->main_image->first();
         $secondary_imgs = $product->secondary_images;
         $attrs = Attribute::select('attributes.name', 'attributes.id')
-                    ->join('values', 'attributes.id', '=', 'values.attribute_id')
-                    ->where('values.product_id','=',$id)->distinct()->get();
-        #print_r($attrs->toArray());
-        $opts = Option::select('options.attribute_id', 'options.option')
+                            ->join('values', 'attributes.id', '=', 'values.attribute_id')
+                            ->where('values.product_id','=',$id)->distinct()->get();
+        #DB::enableQueryLog();
+        $opts = Option::select('options.id', 'options.option', 'options.attribute_id')
                         ->join('values', 'options.id', '=', 'values.option_id')
                         ->where('values.product_id', '=', $id)->get();
-        #print_r($opts->toArray());
-
-        #DB::enableQueryLog();
-        #Product::find($id)->values()->distinct()->get(['attribute_id']);
+        
         #dd(DB::getQueryLog());
+        #print_r($opts . '<br \>');
         return view('product.show', ['product' => $product, 'main_img' => $main_img, 'secondary_imgs' => $secondary_imgs, 'attrs' => $attrs, 'opts' => $opts]);
     }
 
