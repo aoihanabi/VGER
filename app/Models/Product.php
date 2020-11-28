@@ -77,6 +77,6 @@ class Product extends Model
    */
   public static function get_product_options() 
   {
-    return DB::table('options')->select('option', 'attribute_id', 'id')->get();
+    return DB::table('options')->select('option', 'attribute_id', 'id')->where('deleted_at', '=', null)->get();
   }
 }
