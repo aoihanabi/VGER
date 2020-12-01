@@ -44803,9 +44803,9 @@ if (token) {
   window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
 } else {
   console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
-}
+} //window.Vue = Vue;
 
-window.Vue = Vue;
+
 Vue.component('product-list', __webpack_require__(/*! ./components/ProductList.vue */ "./resources/js/components/ProductList.vue")["default"]);
 Vue.component('order-component', __webpack_require__(/*! ./components/OrderComponent.vue */ "./resources/js/components/OrderComponent.vue")["default"]); //Vue.component('dynamic-input', require('./components/DynamicInput.vue').default);
 
@@ -45081,7 +45081,7 @@ var store = {
       var data = {
         order: JSON.stringify(state.order)
       };
-      axios.post("http://localhost:8000/orders", data).then(function (response) {
+      axios.post("/orders", data).then(function (response) {
         if (response.status === 200) {
           //console.log('responseURL: ' + response.request.responseURL);
           window.localStorage.setItem('order', []);
@@ -45089,7 +45089,14 @@ var store = {
           window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {
-        console.log(error);
+        //When user is not logged in
+        if (error.response.status === 401) {
+          //console.log(error.response.data.url);
+          window.location.href = error.response.data.url; //response.request.responseURL;
+        } else {
+          console.log(error);
+          console.log(error.response);
+        }
       });
     }
   }

@@ -8,6 +8,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Models\Order;
 use App\Models\Product;
 
@@ -43,31 +44,37 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        $full_order = (array)json_decode($request->order);
-        #print_r($full_order);
-        
-        if(!empty($full_order)) {
-            $total = 0;
-            $order = new Order;
-            $order->total = $total;
-            $order->date = now();
-            $order->user_id = Auth::user()->id;
-            $order->save();
+        if (Auth::check()) {
+            $full_order = (array)json_decode($request->order);
+            #print_r($full_order);
+            
+            if(!empty($full_order)) {
+                $total = 0;
+                $order = new Order;
+                $order->total = $total;
+                $order->date = now();
+                $order->user_id = Auth::user()->id;
+                $order->save();
 
-            $ord_id = Order::latest()->first();
-            foreach($full_order as $prod) {
+                $ord_id = Order::latest()->first();
+                foreach($full_order as $prod) {
 
-                $product = Product::find($prod->id, ['id', 'name', 'quantity', 'price']);
-                $subtotal = $product->price * $prod->cart_quantity;
-                $total += $subtotal;
-                $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $prod->cart_quantity]);
+                    $product = Product::find($prod->id, ['id', 'name', 'quantity', 'price']);
+                    $subtotal = $product->price * $prod->cart_quantity;
+                    $total += $subtotal;
+                    $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $prod->cart_quantity]);
+                }
+                $order->total = $total;
+                $order->save();
             }
-            $order->total = $total;
-            $order->save();
+            $this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
+            
+            return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
+        } else {
+            session(['url.intended' => url()->previous()]);
+            return response()->json(["url" => "/login"], 401);
         }
-        #$this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
         
-        return redirect()->action([ProductController::class, 'index']); //not really reloading from this one, it's doing it from calculation.js after post
     }
 
     /**
@@ -126,10 +133,11 @@ class OrderController extends Controller
      * @param string $body 
      */
     public function send_email($body) {
+        
         $details = [
             'title' => 'Su pedido se realizó con éxito!',
             'body' => $body #'Nos complace informarle que su pedido fue recibido, se encuentra en proceso y se lo enviaremos en los próximos 2 días'
         ];
-        Mail::to('abii98cm@gmail.com')->send(new \App\Mail\Mailer($details));
+        Mail::to(Auth::user()->email)->send(new \App\Mail\Mailer($details));
     }
 }

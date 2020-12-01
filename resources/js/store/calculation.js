@@ -65,7 +65,7 @@ let store = {
         order: JSON.stringify(state.order)
       }
       
-      axios.post("http://localhost:8000/orders", data)
+      axios.post("/orders", data)
             .then(response => {
               if (response.status === 200) {
                 //console.log('responseURL: ' + response.request.responseURL);
@@ -74,7 +74,19 @@ let store = {
                 window.location.href = response.request.responseURL;
               }
             })
-            .catch(error => {console.log(error)});
+            .catch(
+              error => {
+                //When user is not logged in
+                if(error.response.status === 401) {
+                  //console.log(error.response.data.url);
+                  window.location.href = error.response.data.url;//response.request.responseURL;
+                  
+                } else {
+                  console.log(error);
+                  console.log(error.response);
+                }
+                
+              });
     }
   }
 };
