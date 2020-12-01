@@ -95,6 +95,32 @@ class OrderController extends Controller
     }
 
     /**
+     * Show all orders (only admins or employees)
+     */
+    public function all_orders() {
+        return view('order.all-orders');
+    }
+    
+    /**
+     * Sort orders by user, date or status
+     */
+    public function sort_orders(Request $request){
+        return view('order.all-orders');
+    }
+
+    /**
+     * Sends an email to a hardcoded destinatary
+     * @param string $body 
+     */
+    public function send_email($body) {
+        
+        $details = [
+            'title' => 'Su pedido se realizó con éxito!',
+            'body' => $body #'Nos complace informarle que su pedido fue recibido, se encuentra en proceso y se lo enviaremos en los próximos 2 días'
+        ];
+        Mail::to(Auth::user()->email)->send(new \App\Mail\Mailer($details));
+    }
+    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -128,16 +154,5 @@ class OrderController extends Controller
         //
     }
 
-    /**
-     * Sends an email to a hardcoded destinatary
-     * @param string $body 
-     */
-    public function send_email($body) {
-        
-        $details = [
-            'title' => 'Su pedido se realizó con éxito!',
-            'body' => $body #'Nos complace informarle que su pedido fue recibido, se encuentra en proceso y se lo enviaremos en los próximos 2 días'
-        ];
-        Mail::to(Auth::user()->email)->send(new \App\Mail\Mailer($details));
-    }
+    
 }

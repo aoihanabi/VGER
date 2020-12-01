@@ -21,21 +21,18 @@ Route::get('/', function () {
     return view('home');
 });
 
-Route::get('/test', [ProductController::class, 'show_data']);
-
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::group(['middleware' => 'auth.vip'], function() 
-{
-    Route::resource('products', ProductController::class, ['only' => ['index']]);
-});
-#Route::resource('products', ProductController::class);
+Route::resource('products', ProductController::class);
 Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
 Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
+Route::get('/orders/all', [OrderController::class, 'all_orders']);
+Route::post('/orders/sort', [OrderController::class, 'sort_orders']);//add params
 Route::resource('orders', OrderController::class);
+
 
 // Route::group(['prefix' => 'general',  'middleware' => ['jwt.verify','admin']], function()
 // {

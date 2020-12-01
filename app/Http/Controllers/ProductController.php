@@ -13,12 +13,16 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    // public function show_data() 
-    // {
-    //     $products = Product::get_all_products(); 
-
-    //     return view('test', ['products' => $products]);
-    // }
+    /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth.vip')->except(['index', 'show']);
+    }
+    
     /**
      * Display a listing of the resource.
      *
