@@ -27,7 +27,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('products', ProductController::class);
+Route::group(['middleware' => 'auth.vip'], function() 
+{
+    Route::resource('products', ProductController::class, ['only' => ['index']]);
+});
+#Route::resource('products', ProductController::class);
 Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
 Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
