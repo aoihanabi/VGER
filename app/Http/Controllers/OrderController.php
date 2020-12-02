@@ -15,6 +15,15 @@ use App\Models\Product;
 class OrderController extends Controller
 {
     /**
+     * Instantiate a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth.vip')->only(['all_orders', 'sort_orders']);
+    }
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

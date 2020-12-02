@@ -89,4 +89,12 @@ class User extends Authenticatable
 
         return $this->role === 'user';
     }
+
+    /**
+     * Returns all users with their main information from the DB
+     */
+    public static function get_all_users() {
+
+        return User::select('id', 'name', 'email', 'phone', 'address', 'role')->get();
+    }
 }

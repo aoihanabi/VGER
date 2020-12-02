@@ -5,6 +5,8 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,8 +29,11 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 
 Route::resource('products', ProductController::class);
 Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
+
 Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
+Route::resource('users', UserController::class)->except('show');
+
 Route::get('/orders/all', [OrderController::class, 'all_orders']);
 Route::post('/orders/sort', [OrderController::class, 'sort_orders']);//add params
 Route::resource('orders', OrderController::class);
