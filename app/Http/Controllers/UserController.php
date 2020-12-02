@@ -31,7 +31,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = ['user' => 'Usuario', 'admin' => 'Administrador', 'employee' => 'Empleado'];
+        $roles = user_roles();//['user' => 'Usuario', 'admin' => 'Administrador', 'employee' => 'Empleado'];
         
         #echo("<br> <br>" . $roles);
         
