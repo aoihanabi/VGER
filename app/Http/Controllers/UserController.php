@@ -37,4 +37,23 @@ class UserController extends Controller
         
         return view('user.edit', ['user' => $user, 'roles' => $roles]);
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id) 
+    {
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->role = $request->role;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->save();
+
+        return redirect()->action([UserController::class, 'index']);
+    }
 }
