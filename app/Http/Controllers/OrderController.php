@@ -70,17 +70,19 @@ class OrderController extends Controller
 
                     $product = Product::find($prod->id, ['id', 'name', 'quantity', 'price']);
                     $subtotal = $product->price * $prod->cart_quantity;
+                    //$description = $prod->option;
                     $total += $subtotal;
-                    $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $prod->cart_quantity]);
+                    $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $prod->cart_quantity/*, 'description' = $prod->chosen_option*/]);
                 }
                 $order->total = $total;
                 $order->save();
-            }
-            send_email('Su pedido se realizó con éxito!',
+
+                send_email('Su pedido se realizó con éxito!',
                         'El total de su compra es ' . $total . ' haha. Gracias',
                         Auth::user()->email);
-            
+            }      
             return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
+            
         } else {
             session(['url.intended' => url()->previous()]);
             return response()->json(["url" => "/login"], 401);
