@@ -10,7 +10,7 @@
                 {{ Form::select('role', $roles, $user->role ?? 'user', ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
                 <br>
                 {{ Form::label('email', 'Correo', ['class' => 'block font-medium text-sm text-gray-700']) }}
-                {{ Form::text('email', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full disabled:opacity-50', 'disabled']) }}
+                {{ Form::text('email', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full disabled:opacity-50',  $lock_field ]) }}
                 <br>                            
                 {{ Form::label('phone', 'Teléfono', ['class' => 'block font-medium text-sm text-gray-700']) }}
                 {{ Form::text('phone', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}

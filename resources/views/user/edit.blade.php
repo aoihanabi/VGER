@@ -10,7 +10,7 @@
 
       <div class="mt-5 md:mt-0 md:col-span-2">
         {{ Form::model($user, ['route' => ['users.update', $user], 'method' => 'PUT']) }}
-            @include('user._user')
+            @include('user._user', ['lock_field' => 'disabled'])
         {{ Form::close() }}
       </div>
     </div>

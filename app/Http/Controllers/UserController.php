@@ -23,6 +23,36 @@ class UserController extends Controller
     }
 
     /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $roles = user_roles();
+        return view('user.create', ['user' => null, 'roles' => $roles]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        $user = new User;
+        $user->name = $request->name;
+        $user->role = $request->role;
+        $user->email = $request->email;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->save();
+        
+        return redirect()->action([UserController::class, 'index']);
+    }
+
+    /**
      * Show the form for editing the specified resource..
      *
      * @param  int  $id
