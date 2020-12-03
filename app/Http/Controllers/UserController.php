@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
 
@@ -30,6 +31,8 @@ class UserController extends Controller
     public function create()
     {
         $roles = user_roles();
+        unset($roles['user']);
+        
         return view('user.create', ['user' => null, 'roles' => $roles]);
     }
 
@@ -47,7 +50,15 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->phone = $request->phone;
         $user->address = $request->address;
+        $pass = string_generator(10);
+        $user->password = Hash::make($pass);
+        
         $user->save();
+
+        send_email('Usuario de Ventas Gerizim disponible',
+                    'Tu usuario para Ventas Gerizim está listo, puedes acceder usando la contraseña '. $pass .' 
+                    Asegúrate de cambiarla tras el primer ingreso para garantizar la seguridad de la cuenta.',
+                    $request->email);
         
         return redirect()->action([UserController::class, 'index']);
     }
@@ -61,10 +72,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = user_roles();//['user' => 'Usuario', 'admin' => 'Administrador', 'employee' => 'Empleado'];
+        $roles = user_roles();
         
-        #echo("<br> <br>" . $roles);
-        
+        #print_r($roles);
         return view('user.edit', ['user' => $user, 'roles' => $roles]);
     }
 
@@ -83,7 +93,20 @@ class UserController extends Controller
         $user->phone = $request->phone;
         $user->address = $request->address;
         $user->save();
+        
+        return redirect()->action([UserController::class, 'index']);
+    }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        $user->delete();
         return redirect()->action([UserController::class, 'index']);
     }
 }

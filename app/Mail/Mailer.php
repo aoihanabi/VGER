@@ -29,7 +29,7 @@ class Mailer extends Mailable
      */
     public function build()
     {
-        return $this->subject('Comprobante de Pedido')
+        return $this->subject('Actualización')
                     ->view('emails.testemail');
     }
 }

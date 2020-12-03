@@ -76,7 +76,9 @@ class OrderController extends Controller
                 $order->total = $total;
                 $order->save();
             }
-            $this->send_email('El total de su compra es ' . $total . ' haha. Gracias');
+            send_email('Su pedido se realizó con éxito!',
+                        'El total de su compra es ' . $total . ' haha. Gracias',
+                        Auth::user()->email);
             
             return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
         } else {
@@ -117,18 +119,6 @@ class OrderController extends Controller
         return view('order.all-orders');
     }
 
-    /**
-     * Sends an email to a hardcoded destinatary
-     * @param string $body 
-     */
-    public function send_email($body) {
-        
-        $details = [
-            'title' => 'Su pedido se realizó con éxito!',
-            'body' => $body #'Nos complace informarle que su pedido fue recibido, se encuentra en proceso y se lo enviaremos en los próximos 2 días'
-        ];
-        Mail::to(Auth::user()->email)->send(new \App\Mail\Mailer($details));
-    }
     /**
      * Show the form for editing the specified resource.
      *
