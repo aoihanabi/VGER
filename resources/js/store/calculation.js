@@ -14,29 +14,30 @@ let store = {
   },
 
   mutations: {
-    addToOrder(state, item) {
-
-      let max_quantity = item.quantity;
-      let prod_found = state.order.find(product => product.id == item.id);
+    addToOrder(state, param) {
       
+      let max_quantity = param.item.quantity;
+      let prod_found = state.order.find(product => product.id == param.item.id);
+      console.log(param.opt);
       if (prod_found) {
         //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity);
+        //if(canti != prod_fund.cart_quantity) then replace it and calculate again
         if ((prod_found.cart_quantity + 1) <= max_quantity)
         {
           prod_found.cart_quantity ++;
           prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
 
           state.productCount++;
-          console.log(productCount);
+          //console.log(productCount);
         }        
       } else {
         //console.log(max_quantity + '>= 1');
         if (max_quantity >= 1) {
           
-          state.order.push(item);
+          state.order.push(param.item);
         
-          Vue.set(item, 'cart_quantity', 1);
-          Vue.set(item, 'totalPrice', item.price);
+          Vue.set(param.item, 'cart_quantity', 1);// canti wanted
+          Vue.set(param.item, 'totalPrice', param.item.price);
           
           state.productCount++;
           console.log(productCount);

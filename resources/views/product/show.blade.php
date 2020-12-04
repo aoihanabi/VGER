@@ -70,10 +70,10 @@
           <div>
             @auth
               @if(Auth::user()->role === 'user')
-                <product-list :product="{{ $product }}"/>
+                <product-list :product="{{ $product }}" options="BLACK FLORAL"/>
               @endif
             @else
-              <product-list :product="{{ $product }}"/>
+              <product-list :product="{{ $product }}" options="BLACK FLORAL"/>
             @endauth
           </div>
         </div>
