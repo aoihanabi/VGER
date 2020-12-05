@@ -65,15 +65,18 @@
                 @include('product._options_dropdown', ['attr' => $attr])
                 
               @endauth
+              <!-- Agarrar los nombres de atributo y enviarlos en un array al vue -->
             @endforeach
           </div>
           <div>
+            <input type="number" id="numerito">
             @auth
               @if(Auth::user()->role === 'user')
-                <product-list :product="{{ $product }}" options="BLACK FLORAL"/>
+                <product-list :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
+                
               @endif
             @else
-              <product-list :product="{{ $product }}" options="BLACK FLORAL"/>
+              <product-list :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
             @endauth
           </div>
         </div>

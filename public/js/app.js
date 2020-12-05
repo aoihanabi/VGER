@@ -2005,26 +2005,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     product: {
       type: Object
     },
-    options: String
+    attributes: {
+      type: Array
+    }
   },
   data: function data() {
     return {
@@ -2036,10 +2024,11 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
-    addToOrder: function addToOrder(item, opt) {
+    addToOrder: function addToOrder(item, attrs) {
+      //this.$store.commit('addToOrder', item);
       this.$store.commit('addToOrder', {
         item: item,
-        opt: opt
+        attrs: attrs
       });
     }
   }
@@ -31326,8 +31315,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "flex items-center" }, [
-    _c("p", [_vm._v(_vm._s(_vm.options))]),
-    _vm._v(" "),
     _c(
       "button",
       {
@@ -31335,7 +31322,7 @@ var render = function() {
           "flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded ",
         on: {
           click: function($event) {
-            return _vm.addToOrder(_vm.product, _vm.options)
+            return _vm.addToOrder(_vm.product, _vm.attributes)
           }
         }
       },
@@ -45032,12 +45019,21 @@ var store = {
     productCount: productCount ? parseInt(productCount) : 0
   },
   mutations: {
-    addToOrder: function addToOrder(state, param) {
-      var max_quantity = param.item.quantity;
+    addToOrder: function addToOrder(state, params) {
+      var num = $('#numerito').val();
+
+      for (var i in params.attrs) {
+        //write the name of each '_selected' input to grab it's values
+        console.log(params.attrs[i]);
+        console.log(params.attrs[i].name);
+      } //let options = $('#color_selected').val();
+      //console.log(num);
+
+
+      var max_quantity = params.item.quantity;
       var prod_found = state.order.find(function (product) {
-        return product.id == param.item.id;
-      });
-      console.log(param.opt);
+        return product.id == params.item.id;
+      }); //let prod_found = state.order.find(product => product.opcion == item.opcion);
 
       if (prod_found) {
         //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity);
@@ -45050,12 +45046,11 @@ var store = {
       } else {
         //console.log(max_quantity + '>= 1');
         if (max_quantity >= 1) {
-          state.order.push(param.item);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(param.item, 'cart_quantity', 1); // canti wanted
+          state.order.push(params.item);
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'cart_quantity', 1); // canti wanted
 
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(param.item, 'totalPrice', param.item.price);
-          state.productCount++;
-          console.log(productCount);
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalPrice', params.item.price);
+          state.productCount++; //console.log(productCount);
         }
       }
 

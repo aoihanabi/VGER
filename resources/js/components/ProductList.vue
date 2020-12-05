@@ -2,7 +2,7 @@
   <div class="flex items-center">
     
     <button class="flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded " 
-            @click="addToOrder(product, options)">Add product to order</button>
+            @click="addToOrder(product, attributes)">Add product to order</button>
   </div>
 </template>
 
@@ -12,7 +12,9 @@
       product: {
         type: Object,
       },
-      options: String,
+      attributes: {
+        type: Array,
+      }
     },
     data() {
       return {
@@ -26,8 +28,9 @@
       };
     },
     methods: {
-      addToOrder(item, opt) {
-        this.$store.commit('addToOrder', { item, opt });
+      addToOrder(item, attrs) {
+        //this.$store.commit('addToOrder', item);
+        this.$store.commit('addToOrder', { item, attrs });
       }
     }
   }
