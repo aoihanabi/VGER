@@ -6,7 +6,6 @@ Vue.use(Vuex);
 
 let order = window.localStorage.getItem('order');
 let productCount = window.localStorage.getItem('productCount');
-//let productOption = window.localStorage.getItem('options');
 function isEqual(obj1, obj2) {
   
   let obj1Keys = Object.keys(obj1);
@@ -26,11 +25,19 @@ function isEqual(obj1, obj2) {
   return true;
 }
 
+function getOptionValues(params, arr) {
+  for (let i in params.attrs) {
+    let attr_name = (params.attrs[i].name).toLowerCase();
+    let temp_opt = $('#'+ attr_name + '_selected').val();
+    arr[attr_name] = temp_opt; 
+    console.log(arr[attr_name]);
+  }
+}
+
 let store = {
   state: {
     order: order ? JSON.parse(order) : [],
     productCount: productCount ? parseInt(productCount) : 0,
-    //productOption : productOption ? JSON.parse(productOption) : [],
   },
 
   mutations: {
@@ -44,23 +51,22 @@ let store = {
         //Get options from input
         console.log("prod_found");
         let temp_descrip = new Object;
-        for (let i in params.attrs) {
-          let attr_name = (params.attrs[i].name).toLowerCase();
-          let temp_opt = $('#'+ attr_name + '_selected').val();
-          temp_descrip[attr_name] = temp_opt; 
-        }
-        // si no son iguales, agrega
+        getOptionValues(params, temp_descrip);
+        
+        //Check all details of the product
         for (let h in prod_found.details) {
+          //If those aren't equal with the one coming, it can be added
           if(!isEqual(prod_found.details[h].description, temp_descrip)) {
-            console.log("no son iguales so here they are together: ")
+            
             let options = {description: temp_descrip, cart_amount: 0};
             options.cart_amount = purchase_quantity;
             prod_found.details.push(options);
+            console.log("No equal detail found, so here they are looking nice together: ")
             console.log(prod_found);
           } else {
-            // sino solo aumenta la cantidad
+            // Just add up to that product's quantity in cart
             console.log("Aumentar cantidad");
-  
+            break;
           }
         }
         
@@ -86,23 +92,14 @@ let store = {
         // }
         
       } else {
-        console.log('No encontró ese producto en la lista de compras');
         if (max_quantity >= 1) {
 
           let details = [];      
           let options = {description: new Object, cart_amount: 0};
-          for (let i in params.attrs) {
-            // let temp_opt = $('#'+ (params.attrs[i].name).toLowerCase() + '_selected').val();
-            // options.description[(params.attrs[i].name).toLowerCase()] = temp_opt;
-
-            let attr_name = (params.attrs[i].name).toLowerCase();
-            let temp_opt = $('#'+ attr_name + '_selected').val();
           
-            options.description[attr_name] = temp_opt; 
-          }
+          getOptionValues(params, options.description);
           options.cart_amount = purchase_quantity;
           details.push(options);
-          
           state.order.push(params.item); 
           console.log("*************** COMPLETELY NEW **************")
           
@@ -131,7 +128,6 @@ let store = {
     saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('productCount', state.productCount);
-      window.localStorage.setItem('options', JSON.stringify(state.productOption));
     },
     processOrder(state) {
       let data = {
@@ -144,7 +140,6 @@ let store = {
                 //console.log('responseURL: ' + response.request.responseURL);
                 window.localStorage.setItem('order', []);
                 window.localStorage.setItem('productCount', 0);
-                window.localStorage.setItem('options', []);
                 window.location.href = response.request.responseURL;
               }
             })
