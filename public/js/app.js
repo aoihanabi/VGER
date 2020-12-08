@@ -45012,45 +45012,120 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var order = window.localStorage.getItem('order');
-var productCount = window.localStorage.getItem('productCount');
+var productCount = window.localStorage.getItem('productCount'); //let productOption = window.localStorage.getItem('options');
+
+function isEqual(obj1, obj2) {
+  var obj1Keys = Object.keys(obj1);
+  var obj2Keys = Object.keys(obj2);
+
+  if (obj1Keys.length !== obj2Keys.length) {
+    console.log("no son los mismos attributos");
+    return false;
+  }
+
+  for (var _i = 0, _obj1Keys = obj1Keys; _i < _obj1Keys.length; _i++) {
+    var i = _obj1Keys[_i];
+
+    if (obj1[i] !== obj2[i]) {
+      console.log("no son los mismos valores");
+      return false;
+    }
+  }
+
+  console.log("son iguales");
+  return true;
+}
+
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
-    productCount: productCount ? parseInt(productCount) : 0
+    productCount: productCount ? parseInt(productCount) : 0 //productOption : productOption ? JSON.parse(productOption) : [],
+
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
-      var num = $('#numerito').val();
-
-      for (var i in params.attrs) {
-        //write the name of each '_selected' input to grab it's values
-        console.log(params.attrs[i]);
-        console.log(params.attrs[i].name);
-      } //let options = $('#color_selected').val();
-      //console.log(num);
-
-
       var max_quantity = params.item.quantity;
+      var purchase_quantity = $('#purchase_quantity').val();
       var prod_found = state.order.find(function (product) {
         return product.id == params.item.id;
-      }); //let prod_found = state.order.find(product => product.opcion == item.opcion);
+      });
 
       if (prod_found) {
-        //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity);
-        //if(canti != prod_fund.cart_quantity) then replace it and calculate again
-        if (prod_found.cart_quantity + 1 <= max_quantity) {
-          prod_found.cart_quantity++;
-          prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
-          state.productCount++; //console.log(productCount);
-        }
-      } else {
-        //console.log(max_quantity + '>= 1');
-        if (max_quantity >= 1) {
-          state.order.push(params.item);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'cart_quantity', 1); // canti wanted
+        //Get options from input
+        console.log("prod_found");
+        var temp_descrip = new Object();
 
+        for (var i in params.attrs) {
+          var attr_name = params.attrs[i].name.toLowerCase();
+          var temp_opt = $('#' + attr_name + '_selected').val();
+          temp_descrip[attr_name] = temp_opt;
+        } // si no son iguales, agrega
+
+
+        console.log("-------detailss-----------");
+        console.log(prod_found.details);
+
+        for (var h in prod_found.details) {
+          if (!isEqual(prod_found.details[h].description, temp_descrip)) {
+            console.log("no son iguales so: ");
+            var options = {
+              description: temp_descrip,
+              cart_amount: 0
+            };
+            options.cart_amount = purchase_quantity;
+            prod_found.details.push(options);
+            console.log(prod_found);
+          } else {
+            // sino solo aumenta la cantidad
+            console.log("Aumentar cantidad");
+          }
+        } // options.cart_amount = purchase_quantity;
+        // prod_found.details.push(options);
+        // console.log(prod_found);
+        // console.log("prod_found");
+        // console.log(prod_found);
+        //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity); CHECK THIS!!!
+        //if(canti != prod_fund.cart_quantity) then replace it and calculate again
+        // if(prod_opt) {
+        //   if((prod_found.cart_quantity + purchase_quantity) <= max_quantity)
+        //   {
+        //     prod_found.cart_quantity += purchase_quantity; // ++;
+        //     prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
+        //     state.productCount += purchase_quantity;//++;
+        //     //console.log(productCount);
+        //   }
+        // } else {
+        //   console.log("Found but diff options");
+        //   state.order.push(params.item);
+        // }
+
+      } else {
+        console.log('No los encontró');
+
+        if (max_quantity >= 1) {
+          var details = []; //let options = {description: "", cart_amount: 0};          
+
+          var _options = {
+            description: new Object(),
+            cart_amount: 0
+          };
+
+          for (var _i2 in params.attrs) {
+            var _temp_opt = $('#' + params.attrs[_i2].name.toLowerCase() + '_selected').val();
+
+            _options.description[params.attrs[_i2].name.toLowerCase()] = _temp_opt;
+          }
+
+          _options.cart_amount = purchase_quantity;
+          details.push(_options);
+          state.order.push(params.item);
+          console.log("*************** COMPLETELY NEW **************");
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'details', details);
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'cart_quantity', purchase_quantity);
           vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalPrice', params.item.price);
-          state.productCount++; //console.log(productCount);
+          console.log(params.item);
+          state.productCount = purchase_quantity; //++;
+          //console.log(productCount);
         }
       }
 
@@ -45070,6 +45145,7 @@ var store = {
     saveOrder: function saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('productCount', state.productCount);
+      window.localStorage.setItem('options', JSON.stringify(state.productOption));
     },
     processOrder: function processOrder(state) {
       var data = {
@@ -45080,6 +45156,7 @@ var store = {
           //console.log('responseURL: ' + response.request.responseURL);
           window.localStorage.setItem('order', []);
           window.localStorage.setItem('productCount', 0);
+          window.localStorage.setItem('options', []);
           window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {

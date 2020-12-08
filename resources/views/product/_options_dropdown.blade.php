@@ -2,7 +2,7 @@
     <option selected="selected" value="">{{ $attr->name }}</option>
     @foreach ($opts as $opt) 
         @if ($opt->attribute_id == $attr->id)
-        <option value="{{ $opt->option }}">{{ $opt->option }}</option>
+        <option value="{{ $opt->id }}">{{ $opt->option }}</option>
         @endif
     @endforeach
 </select>
