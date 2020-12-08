@@ -34,6 +34,9 @@ Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
 Route::resource('users', UserController::class)->except('show');
 
+Route::get('/cart', function () {
+    return view('order.cart');
+});
 Route::get('/orders/all', [OrderController::class, 'all_orders']);
 Route::post('/orders/sort', [OrderController::class, 'sort_orders']);//add params
 Route::resource('orders', OrderController::class);

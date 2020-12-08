@@ -17,16 +17,19 @@
   </head>
   <body>
     @livewire('navigation-dropdown')
-
     <div id="app">
+      
 
       <div  class="">
         @yield('content')        
       </div>
       
       <div id="navbarExampleTransparentExample" class="navbar-menu"> 
-        <div class="navbar-end">
+        <!-- <div class="navbar-end">
           <order-component />
+        </div> -->
+        <div class="rounded-full border-2 h-24 w-24 flex items-center justify-center">
+          <order-counter />
         </div>
       </div>
     </div>

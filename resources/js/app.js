@@ -18,9 +18,9 @@ if (token) {
 }
 //window.Vue = Vue;
 
-Vue.component('product-list', require('./components/ProductList.vue').default);
+Vue.component('purchase-button', require('./components/PurchaseButtonComponent.vue').default);
+Vue.component('order-counter', require('./components/OrderCounterComponent.vue').default);
 Vue.component('order-component', require('./components/OrderComponent.vue').default);
-//Vue.component('dynamic-input', require('./components/DynamicInput.vue').default);
 
 const app = new Vue({
   el: '#app',

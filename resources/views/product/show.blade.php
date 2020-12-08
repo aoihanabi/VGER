@@ -72,11 +72,11 @@
             <input type="number" id="purchase_quantity">
             @auth
               @if(Auth::user()->role === 'user')
-                <product-list :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
+                <purchase-button :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
                 
               @endif
             @else
-              <product-list :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
+              <purchase-button :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
             @endauth
           </div>
         </div>
