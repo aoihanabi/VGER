@@ -24,6 +24,8 @@ Vue.component('order-component', require('./components/OrderComponent.vue').defa
 
 const app = new Vue({
   el: '#app',
-
+  data: {
+    modal_showing: false,
+  },
   store: new Vuex.Store(store)
 });

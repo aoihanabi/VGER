@@ -15,7 +15,7 @@
     <script src="{{ asset('js/product.js') }}" defer></script>
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.7.0/dist/alpine.js" defer></script>
   </head>
-  <body>
+  <body class="relative">
     @livewire('navigation-dropdown')
     <div id="app">
       
@@ -24,13 +24,20 @@
         @yield('content')        
       </div>
       
-      <div id="navbarExampleTransparentExample" class="navbar-menu"> 
-        <!-- <div class="navbar-end">
-          <order-component />
-        </div> -->
-        <div class="rounded-full border-2 h-24 w-24 flex items-center justify-center">
+      <div class=""> 
+        
+        <!-- Show cart modal button -->
+        <button  
+          class="rounded-full border-2 h-24 w-24 flex items-center justify-center"
+          @click="modal_showing = true"
+        >
           <order-counter />
+        </button>
+
+        <div class="">
+          <order-component :showing="modal_showing" @close="modal_showing = false"/>
         </div>
+        
       </div>
     </div>
     
