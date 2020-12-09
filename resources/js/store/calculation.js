@@ -63,16 +63,19 @@ let store = {
         
         //Check all details of the product
         for (let h in prod_found.details) {
-          //If those options coming are equal to the existing ones
+          //If those options coming are equal to the existing ones just add up to that product's quantity in cart
           if(isEqual(prod_found.details[h].description, temp_descrip)) {
-            // Just add up to that product's quantity in cart
-            console.log("........... SAME PROD, ADDING MORE OF IT ...............");
+            
+            console.log("............. SAME PROD, ADDING MORE OF IT ...............");
             let prod_details = prod_found.details[h];
             let new_amount = (parseInt(prod_details.cart_amount) + parseInt(purchase_quantity));
             
             if (new_amount <=  max_quantity) {
               prod_details.cart_amount = new_amount;
-              prod_found.totalPrice = prod_details.cart_amount * prod_found.price;
+
+              prod_found.totalProdPrice = prod_found.totalProdPrice - prod_details.total_price; //le resto el total_price viejo
+              prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
+              prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
             }
 
             state.allProdsCount += parseInt(purchase_quantity);
@@ -85,33 +88,14 @@ let store = {
           console.log("------------- SAME PROD, DIFF DETAILS -----------")
           let options = {
             description: temp_descrip, 
-            cart_amount: purchase_quantity
+            cart_amount: purchase_quantity,
+            total_price: (purchase_quantity * prod_found.price)
           };
           prod_found.details.push(options);
+          prod_found.totalProdPrice += options.total_price;
 
           state.allProdsCount += parseInt(purchase_quantity);
         }
-        // options.cart_amount = purchase_quantity;
-        // prod_found.details.push(options);
-        // console.log(prod_found);
-        // console.log("prod_found");
-        // console.log(prod_found);
-
-        //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity); CHECK THIS!!!
-        //if(canti != prod_fund.cart_quantity) then replace it and calculate again
-        // if(prod_opt) {
-        //   if((prod_found.cart_quantity + purchase_quantity) <= max_quantity)
-        //   {
-        //     prod_found.cart_quantity += purchase_quantity; // ++;
-        //     prod_found.totalPrice = prod_found.cart_quantity * prod_found.price;
-
-        //     state.productCount += purchase_quantity;//++;
-        //     //console.log(productCount);
-        //   }
-        // } else {
-        //   console.log("Found but diff options");
-        //   state.order.push(params.item);
-        // }
 
         //If product is not in the order list
       } else {
@@ -121,20 +105,21 @@ let store = {
           let details = [];
           let options = {
             description: new Object, 
-            cart_amount: purchase_quantity
+            cart_amount: purchase_quantity,
+            total_price: (purchase_quantity * params.item.price)
           };
           getOptionValues(params, options.description);
           details.push(options);
           
           Vue.set(params.item, 'details', details);
-          Vue.set(params.item, 'totalPrice', (params.item.price * parseInt(options.cart_amount)));
+          Vue.set(params.item, 'totalProdPrice', options.total_price);
           //Vue.set(params.item, 'cart_quantity', purchase_quantity);
           
           state.allProdsCount += parseInt(purchase_quantity);
           state.order.push(params.item);
         }
       }
-      console.log(params.item);
+      //console.log(params.item);
       this.commit('saveOrder');
     },
     removeFromOrder(state, item) {
@@ -150,7 +135,7 @@ let store = {
     }, 
     saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
-      window.localStorage.setItem('productCount', state.productCount);
+      window.localStorage.setItem('allProdsCount', state.allProdsCount);
     },
     processOrder(state) {
       let data = {
@@ -160,7 +145,7 @@ let store = {
       axios.post("/orders", data)
             .then(response => {
               if (response.status === 200) {
-                //console.log('responseURL: ' + response.request.responseURL);
+                
                 window.localStorage.setItem('order', []);
                 window.localStorage.setItem('allProdsCount', 0);
                 window.location.href = response.request.responseURL;
@@ -170,9 +155,8 @@ let store = {
               error => {
                 //When user is not logged in
                 if(error.response.status === 401) {
-                  //console.log(error.response.data.url);
+
                   window.location.href = error.response.data.url;//response.request.responseURL;
-                  
                 } else {
                   console.log(error);
                   console.log(error.response);
@@ -184,10 +168,3 @@ let store = {
 };
 
 export default store;
-/*export default new Vuex.Store({
-  modules: {
-
-  }
-})
-
-*/

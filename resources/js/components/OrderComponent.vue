@@ -36,13 +36,13 @@
                   :key="index"
                   class="flex flex-row"
               >
-                <div>{{ item.name }} - &nbsp;</div>
+                <div>{{ item.name }} - </div>
                 <div v-for="description_item in item.details[index].description"
                   :key="description_item.id"  
                 >
                   {{ description_item.label }}&nbsp;
                 </div>
-                <div> x {{item.details[index].cart_amount}} = {{ item.totalPrice }}</div>
+                <div> x {{item.details[index].cart_amount}} = {{ item.details[index].total_price }}</div>
               </div>
             </a>
             <br>
@@ -95,7 +95,7 @@
         let total = 0;
 
         for (let item of this.$store.state.order) {
-          total += parseFloat(item.totalPrice);
+          total += parseFloat(item.totalProdPrice);
         }
 
         return total.toFixed(2);
