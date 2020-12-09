@@ -31339,7 +31339,7 @@ var render = function() {
                 _c("a", { attrs: { href: "" } }, [
                   _vm._v(
                     "\n        Pedido (" +
-                      _vm._s(_vm.$store.state.productCount) +
+                      _vm._s(_vm.$store.state.allProdsCount) +
                       ")\n      "
                   )
                 ]),
@@ -31401,7 +31401,8 @@ var render = function() {
                                           _vm._s(
                                             item.details[index].cart_amount
                                           ) +
-                                          " "
+                                          " = " +
+                                          _vm._s(item.totalPrice)
                                       )
                                     ])
                                   ],
@@ -31478,7 +31479,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", {}, [
     _c("span", [
-      _vm._v("\n    Pedido (" + _vm._s(_vm.$store.state.productCount) + ")\n  ")
+      _vm._v(
+        "\n    Pedido (" + _vm._s(_vm.$store.state.allProdsCount) + ")\n  "
+      )
     ])
   ])
 }
@@ -45274,29 +45277,27 @@ __webpack_require__.r(__webpack_exports__);
 
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var order = window.localStorage.getItem('order');
-var productCount = window.localStorage.getItem('productCount');
+var allProdsCount = window.localStorage.getItem('allProdsCount');
 
 function isEqual(obj1, obj2) {
   var obj1Keys = Object.keys(obj1);
   var obj2Keys = Object.keys(obj2);
 
   if (obj1Keys.length !== obj2Keys.length) {
-    console.log("no son los mismos attributos");
+    //console.log("no son los mismos attributos");
     return false;
   }
-
-  console.log(obj1Keys);
 
   for (var _i = 0, _obj1Keys = obj1Keys; _i < _obj1Keys.length; _i++) {
     var i = _obj1Keys[_i];
 
     if (obj1[i].id !== obj2[i].id) {
-      console.log("no son los mismos valores");
+      //console.log("no son los mismos valores");
       return false;
     }
-  }
+  } //console.log("son iguales");
 
-  console.log("son iguales");
+
   return true;
 }
 
@@ -45315,7 +45316,7 @@ function getOptionValues(params, descrip) {
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
-    productCount: productCount ? parseInt(productCount) : 0
+    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
@@ -45326,33 +45327,38 @@ var store = {
       });
 
       if (prod_found) {
-        console.log("prod_found"); //Get options from input
+        var prod_amount_updated = false;
+        var temp_descrip = new Object(); //Get options from input
 
-        var prod_updated = false;
-        var temp_descrip = new Object();
         getOptionValues(params, temp_descrip); //Check all details of the product
 
         for (var h in prod_found.details) {
           //If those options coming are equal to the existing ones
           if (isEqual(prod_found.details[h].description, temp_descrip)) {
             // Just add up to that product's quantity in cart
-            console.log("Aumentar cantidad"); //state.productCount += purchase_quantity;??
+            console.log("........... SAME PROD, ADDING MORE OF IT ...............");
+            var prod_details = prod_found.details[h];
+            var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
 
-            prod_updated = true;
+            if (new_amount <= max_quantity) {
+              prod_details.cart_amount = new_amount;
+              prod_found.totalPrice = prod_details.cart_amount * prod_found.price;
+            }
+
+            state.allProdsCount += parseInt(purchase_quantity);
+            prod_amount_updated = true;
             break;
           }
         }
 
-        if (!prod_updated) {
+        if (!prod_amount_updated) {
+          console.log("------------- SAME PROD, DIFF DETAILS -----------");
           var options = {
             description: temp_descrip,
-            cart_amount: 0
+            cart_amount: purchase_quantity
           };
-          options.cart_amount = purchase_quantity;
           prod_found.details.push(options);
-          state.productCount += parseInt(purchase_quantity);
-          console.log("No equal detail found, so here they are looking nice together: ");
-          console.log(prod_found);
+          state.allProdsCount += parseInt(purchase_quantity);
         } // options.cart_amount = purchase_quantity;
         // prod_found.details.push(options);
         // console.log(prod_found);
@@ -45372,28 +45378,27 @@ var store = {
         //   console.log("Found but diff options");
         //   state.order.push(params.item);
         // }
+        //If product is not in the order list
 
       } else {
         if (max_quantity >= 1) {
+          console.log("*************** COMPLETELY NEW PROD **************");
           var details = [];
           var _options = {
             description: new Object(),
-            cart_amount: 0
+            cart_amount: purchase_quantity
           };
           getOptionValues(params, _options.description);
-          _options.cart_amount = purchase_quantity;
           details.push(_options);
-          state.order.push(params.item);
-          console.log("*************** COMPLETELY NEW **************");
           vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'details', details);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'cart_quantity', purchase_quantity);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalPrice', params.item.price);
-          console.log(params.item);
-          state.productCount += parseInt(purchase_quantity); //++;
-          //console.log(productCount);
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalPrice', params.item.price * parseInt(_options.cart_amount)); //Vue.set(params.item, 'cart_quantity', purchase_quantity);
+
+          state.allProdsCount += parseInt(purchase_quantity);
+          state.order.push(params.item);
         }
       }
 
+      console.log(params.item);
       this.commit('saveOrder');
     },
     removeFromOrder: function removeFromOrder(state, item) {
@@ -45419,7 +45424,7 @@ var store = {
         if (response.status === 200) {
           //console.log('responseURL: ' + response.request.responseURL);
           window.localStorage.setItem('order', []);
-          window.localStorage.setItem('productCount', 0);
+          window.localStorage.setItem('allProdsCount', 0);
           window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {

@@ -5,7 +5,7 @@ import Vuex from "vuex"
 Vue.use(Vuex);
 
 let order = window.localStorage.getItem('order');
-let productCount = window.localStorage.getItem('productCount');
+let allProdsCount = window.localStorage.getItem('allProdsCount');
 
 function isEqual(obj1, obj2) {
   
@@ -13,17 +13,17 @@ function isEqual(obj1, obj2) {
   let obj2Keys = Object.keys(obj2);
   
   if(obj1Keys.length !== obj2Keys.length) {
-    console.log("no son los mismos attributos");
+    //console.log("no son los mismos attributos");
     return false;
   }
-  console.log(obj1Keys);
+  
   for (let i of obj1Keys) { 
     if(obj1[i].id !== obj2[i].id) {
-      console.log("no son los mismos valores");
+      //console.log("no son los mismos valores");
       return false;
     }
   }
-  console.log("son iguales");
+  //console.log("son iguales");
   return true;
 }
 
@@ -44,7 +44,7 @@ function getOptionValues(params, descrip) {
 let store = {
   state: {
     order: order ? JSON.parse(order) : [],
-    productCount: productCount ? parseInt(productCount) : 0,
+    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0,
   },
 
   mutations: {
@@ -54,11 +54,11 @@ let store = {
       let prod_found = state.order.find(product => product.id == params.item.id);
       
       if (prod_found) {
-        console.log("prod_found");
         
-        //Get options from input
-        let prod_updated = false;
+        let prod_amount_updated = false;
         let temp_descrip = new Object;
+
+        //Get options from input
         getOptionValues(params, temp_descrip);
         
         //Check all details of the product
@@ -66,30 +66,37 @@ let store = {
           //If those options coming are equal to the existing ones
           if(isEqual(prod_found.details[h].description, temp_descrip)) {
             // Just add up to that product's quantity in cart
-            console.log("Aumentar cantidad");
+            console.log("........... SAME PROD, ADDING MORE OF IT ...............");
+            let prod_details = prod_found.details[h];
+            let new_amount = (parseInt(prod_details.cart_amount) + parseInt(purchase_quantity));
+            
+            if (new_amount <=  max_quantity) {
+              prod_details.cart_amount = new_amount;
+              prod_found.totalPrice = prod_details.cart_amount * prod_found.price;
+            }
 
-
-            //state.productCount += purchase_quantity;??
-            prod_updated = true;
+            state.allProdsCount += parseInt(purchase_quantity);
+            prod_amount_updated = true;
             break;
           }
         }
         
-        if(!prod_updated) {
-          let options = {description: temp_descrip, cart_amount: 0};
-          options.cart_amount = purchase_quantity;
+        if(!prod_amount_updated) {
+          console.log("------------- SAME PROD, DIFF DETAILS -----------")
+          let options = {
+            description: temp_descrip, 
+            cart_amount: purchase_quantity
+          };
           prod_found.details.push(options);
 
-          state.productCount += parseInt(purchase_quantity);
-
-          console.log("No equal detail found, so here they are looking nice together: ")
-          console.log(prod_found);
+          state.allProdsCount += parseInt(purchase_quantity);
         }
         // options.cart_amount = purchase_quantity;
         // prod_found.details.push(options);
         // console.log(prod_found);
         // console.log("prod_found");
         // console.log(prod_found);
+
         //console.log((prod_found.cart_quantity + 1) + '<=' + max_quantity); CHECK THIS!!!
         //if(canti != prod_fund.cart_quantity) then replace it and calculate again
         // if(prod_opt) {
@@ -105,28 +112,29 @@ let store = {
         //   console.log("Found but diff options");
         //   state.order.push(params.item);
         // }
-        
+
+        //If product is not in the order list
       } else {
         if (max_quantity >= 1) {
-
-          let details = [];      
-          let options = {description: new Object, cart_amount: 0};
+          console.log("*************** COMPLETELY NEW PROD **************")
           
+          let details = [];
+          let options = {
+            description: new Object, 
+            cart_amount: purchase_quantity
+          };
           getOptionValues(params, options.description);
-          options.cart_amount = purchase_quantity;
           details.push(options);
-          state.order.push(params.item); 
-          console.log("*************** COMPLETELY NEW **************")
           
           Vue.set(params.item, 'details', details);
-          Vue.set(params.item, 'cart_quantity', purchase_quantity);
-          Vue.set(params.item, 'totalPrice', params.item.price);
-          console.log(params.item);
-          state.productCount += parseInt(purchase_quantity);//++;
-          //console.log(productCount);
+          Vue.set(params.item, 'totalPrice', (params.item.price * parseInt(options.cart_amount)));
+          //Vue.set(params.item, 'cart_quantity', purchase_quantity);
+          
+          state.allProdsCount += parseInt(purchase_quantity);
+          state.order.push(params.item);
         }
       }
-
+      console.log(params.item);
       this.commit('saveOrder');
     },
     removeFromOrder(state, item) {
@@ -154,7 +162,7 @@ let store = {
               if (response.status === 200) {
                 //console.log('responseURL: ' + response.request.responseURL);
                 window.localStorage.setItem('order', []);
-                window.localStorage.setItem('productCount', 0);
+                window.localStorage.setItem('allProdsCount', 0);
                 window.location.href = response.request.responseURL;
               }
             })

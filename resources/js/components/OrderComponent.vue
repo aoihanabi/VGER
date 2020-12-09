@@ -18,7 +18,7 @@
 
         <!-- Content -->
         <a class="" href="">
-          Pedido ({{ $store.state.productCount }})
+          Pedido ({{ $store.state.allProdsCount }})
         </a>
         
         <div v-if="$store.state.order.length > 0" class="">
@@ -42,7 +42,7 @@
                 >
                   {{ description_item.label }}&nbsp;
                 </div>
-                <div> x {{item.details[index].cart_amount}} </div>
+                <div> x {{item.details[index].cart_amount}} = {{ item.totalPrice }}</div>
               </div>
             </a>
             <br>
