@@ -1972,6 +1972,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -31356,16 +31368,48 @@ var render = function() {
                                 },
                                 [_vm._v("X")]
                               ),
-                              _vm._v(
-                                "\n            \n            " +
-                                  _vm._s(item.name) +
-                                  " x " +
-                                  _vm._s(item.cart_quantity) +
-                                  " = $" +
-                                  _vm._s(item.totalPrice) +
-                                  "\n          "
-                              )
-                            ]
+                              _vm._v(" "),
+                              _vm._l(item.details, function(detail, index) {
+                                return _c(
+                                  "div",
+                                  { key: index, staticClass: "flex flex-row" },
+                                  [
+                                    _c("div", [
+                                      _vm._v(_vm._s(item.name) + " -  ")
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(
+                                      item.details[index].description,
+                                      function(description_item) {
+                                        return _c(
+                                          "div",
+                                          { key: description_item.id },
+                                          [
+                                            _vm._v(
+                                              "\n                " +
+                                                _vm._s(description_item.label) +
+                                                " \n              "
+                                            )
+                                          ]
+                                        )
+                                      }
+                                    ),
+                                    _vm._v(" "),
+                                    _c("div", [
+                                      _vm._v(
+                                        " x " +
+                                          _vm._s(
+                                            item.details[index].cart_amount
+                                          ) +
+                                          " "
+                                      )
+                                    ])
+                                  ],
+                                  2
+                                )
+                              })
+                            ],
+                            2
                           )
                         }),
                         _vm._v(" "),
@@ -45241,10 +45285,12 @@ function isEqual(obj1, obj2) {
     return false;
   }
 
+  console.log(obj1Keys);
+
   for (var _i = 0, _obj1Keys = obj1Keys; _i < _obj1Keys.length; _i++) {
     var i = _obj1Keys[_i];
 
-    if (obj1[i] !== obj2[i]) {
+    if (obj1[i].id !== obj2[i].id) {
       console.log("no son los mismos valores");
       return false;
     }
@@ -45254,12 +45300,15 @@ function isEqual(obj1, obj2) {
   return true;
 }
 
-function getOptionValues(params, arr) {
+function getOptionValues(params, descrip) {
   for (var i in params.attrs) {
     var attr_name = params.attrs[i].name.toLowerCase();
-    var temp_opt = $('#' + attr_name + '_selected').val();
-    arr[attr_name] = temp_opt;
-    console.log(arr[attr_name]);
+    var temp_opt_id = $('#' + attr_name + '_selected').val();
+    var temp_opt_name = $('#' + attr_name + '_selected option:selected').text();
+    var attribute_values = new Object();
+    attribute_values["id"] = temp_opt_id;
+    attribute_values["label"] = temp_opt_name;
+    descrip[attr_name] = attribute_values;
   }
 }
 
@@ -45277,27 +45326,33 @@ var store = {
       });
 
       if (prod_found) {
-        //Get options from input
-        console.log("prod_found");
+        console.log("prod_found"); //Get options from input
+
+        var prod_updated = false;
         var temp_descrip = new Object();
         getOptionValues(params, temp_descrip); //Check all details of the product
 
         for (var h in prod_found.details) {
-          //If those aren't equal with the one coming, it can be added
-          if (!isEqual(prod_found.details[h].description, temp_descrip)) {
-            var options = {
-              description: temp_descrip,
-              cart_amount: 0
-            };
-            options.cart_amount = purchase_quantity;
-            prod_found.details.push(options);
-            console.log("No equal detail found, so here they are looking nice together: ");
-            console.log(prod_found);
-          } else {
+          //If those options coming are equal to the existing ones
+          if (isEqual(prod_found.details[h].description, temp_descrip)) {
             // Just add up to that product's quantity in cart
-            console.log("Aumentar cantidad");
+            console.log("Aumentar cantidad"); //state.productCount += purchase_quantity;??
+
+            prod_updated = true;
             break;
           }
+        }
+
+        if (!prod_updated) {
+          var options = {
+            description: temp_descrip,
+            cart_amount: 0
+          };
+          options.cart_amount = purchase_quantity;
+          prod_found.details.push(options);
+          state.productCount += parseInt(purchase_quantity);
+          console.log("No equal detail found, so here they are looking nice together: ");
+          console.log(prod_found);
         } // options.cart_amount = purchase_quantity;
         // prod_found.details.push(options);
         // console.log(prod_found);
@@ -45334,7 +45389,7 @@ var store = {
           vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'cart_quantity', purchase_quantity);
           vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalPrice', params.item.price);
           console.log(params.item);
-          state.productCount = purchase_quantity; //++;
+          state.productCount += parseInt(purchase_quantity); //++;
           //console.log(productCount);
         }
       }
