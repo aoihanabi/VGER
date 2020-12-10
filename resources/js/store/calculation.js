@@ -6,6 +6,7 @@ Vue.use(Vuex);
 
 let order = window.localStorage.getItem('order');
 let allProdsCount = window.localStorage.getItem('allProdsCount');
+let total = window.localStorage.getItem('total');
 
 function isEqual(obj1, obj2) {
   
@@ -41,10 +42,20 @@ function getOptionValues(params, descrip) {
   }
 }
 
+function calcTotal(order) {
+  
+  let total = 0;
+  for(let prod in order) {
+    total += parseFloat(prod.totalProdPrice);
+  }
+  console.log("total: " + total.toFixed());
+  return total.toFixed();
+}
 let store = {
   state: {
     order: order ? JSON.parse(order) : [],
     allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0,
+    total: total ? parseFloat(total) : 0.00,
   },
 
   mutations: {
@@ -72,8 +83,9 @@ let store = {
             
             if (new_amount <=  max_quantity) {
               prod_details.cart_amount = new_amount;
-
-              prod_found.totalProdPrice = prod_found.totalProdPrice - prod_details.total_price; //le resto el total_price viejo
+              prod_found.totalProdAmount = new_amount;
+              
+              prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
               prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
               prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
             }
@@ -92,11 +104,13 @@ let store = {
             total_price: (purchase_quantity * prod_found.price)
           };
           prod_found.details.push(options);
+
+          prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
           prod_found.totalProdPrice += options.total_price;
 
           state.allProdsCount += parseInt(purchase_quantity);
         }
-
+        console.log(params.item);
         //If product is not in the order list
       } else {
         if (max_quantity >= 1) {
@@ -112,30 +126,48 @@ let store = {
           details.push(options);
           
           Vue.set(params.item, 'details', details);
+          Vue.set(params.item, 'totalProdAmount', parseInt(options.cart_amount)); //cart_quantity
           Vue.set(params.item, 'totalProdPrice', options.total_price);
-          //Vue.set(params.item, 'cart_quantity', purchase_quantity);
-          
+
           state.allProdsCount += parseInt(purchase_quantity);
           state.order.push(params.item);
         }
+        console.log(params.item);
       }
-      //console.log(params.item);
+      
+      console.log("####### Order #######");
+      console.log(state.order);
+      console.log("From Add");
       this.commit('saveOrder');
     },
-    removeFromOrder(state, item) {
-      let index = state.order.indexOf(item);
+    removeFromOrder(state, params) {
+      let index = state.order.indexOf(params.item);
 
-      if (index > -1) {
+      if (index > -1 && params.detail_index > -1) {
         let product = state.order[index];
-        state.productCount -= product.cart_quantity;
-
-        state.order.splice(index, 1);
+        let detail = product.details[params.detail_index];
+        
+        if(product.details.length <= 1) {
+          //remove the whole product
+          state.order.splice(index, 1);
+          state.allProdsCount -= detail.cart_amount;
+          state.allProdsCount -= detail.cart_amount;
+        } else {
+          //remove each detail
+          state.order[index].details.splice(params.detail_index, 1);
+          state.allProdsCount -= detail.cart_amount;
+        }
+        //ARRREGLAR PRECIO QUE NO SE RESTA AL ELIMINAR UN PRODUCTO
       }
+      console.log("From Remove");
       this.commit('saveOrder');
-    }, 
+    },
     saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('allProdsCount', state.allProdsCount);
+      let chach = calcTotal(state.order);
+      console.log("local total: " + chach);
+      window.localStorage.setItem('total', calcTotal(state.order));
     },
     processOrder(state) {
       let data = {

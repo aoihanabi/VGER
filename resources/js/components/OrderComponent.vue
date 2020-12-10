@@ -27,26 +27,25 @@
               class="" 
               href=""
             >
-              <span class="removeBtn"
-                title="Remove from cart"
-                @click.prevent="removeFromOrder(item)">X</span>
-              
-              <!-- {{item.name}} x {{item.cart_quantity}} = ${{ item.totalPrice }} -->
               <div v-for="(detail, index) in item.details"
                   :key="index"
                   class="flex flex-row"
               >
-                <div>{{ item.name }} - </div>
+                <div>{{ item.name }} -&nbsp;</div>
                 <div v-for="description_item in item.details[index].description"
                   :key="description_item.id"  
                 >
                   {{ description_item.label }}&nbsp;
                 </div>
                 <div> x {{item.details[index].cart_amount}} = {{ item.details[index].total_price }}</div>
+                <span class="removeBtn"
+                title="Remove from cart"
+                @click.prevent="removeFromOrder(item, index)">X</span>
               </div>
             </a>
             <br>
             <a class="" href="">
+              {{ $store.state.order.total }}
               Total: ${{ totalPriceAll }}
             </a>
             <hr class="">
@@ -77,9 +76,9 @@
       }
     },
     methods: {
-      removeFromOrder(item) {
+      removeFromOrder(item, detail_index) {
         console.log(this.$store);
-        this.$store.commit('removeFromOrder', item);        
+        this.$store.commit('removeFromOrder', { item, detail_index });        
       },
       processOrder() {
         console.log(this.$store);

@@ -1983,7 +1983,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -1992,9 +1991,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
-    removeFromOrder: function removeFromOrder(item) {
+    removeFromOrder: function removeFromOrder(item, detail_index) {
       console.log(this.$store);
-      this.$store.commit('removeFromOrder', item);
+      this.$store.commit('removeFromOrder', {
+        item: item,
+        detail_index: detail_index
+      });
     },
     processOrder: function processOrder() {
       console.log(this.$store);
@@ -31353,66 +31355,65 @@ var render = function() {
                           return _c(
                             "a",
                             { key: item.id, attrs: { href: "" } },
-                            [
-                              _c(
-                                "span",
-                                {
-                                  staticClass: "removeBtn",
-                                  attrs: { title: "Remove from cart" },
-                                  on: {
-                                    click: function($event) {
-                                      $event.preventDefault()
-                                      return _vm.removeFromOrder(item)
-                                    }
-                                  }
-                                },
-                                [_vm._v("X")]
-                              ),
-                              _vm._v(" "),
-                              _vm._l(item.details, function(detail, index) {
-                                return _c(
-                                  "div",
-                                  { key: index, staticClass: "flex flex-row" },
-                                  [
-                                    _c("div", [
-                                      _vm._v(_vm._s(item.name) + " - ")
-                                    ]),
-                                    _vm._v(" "),
-                                    _vm._l(
-                                      item.details[index].description,
-                                      function(description_item) {
-                                        return _c(
-                                          "div",
-                                          { key: description_item.id },
-                                          [
-                                            _vm._v(
-                                              "\n                " +
-                                                _vm._s(description_item.label) +
-                                                " \n              "
-                                            )
-                                          ]
-                                        )
-                                      }
-                                    ),
-                                    _vm._v(" "),
-                                    _c("div", [
-                                      _vm._v(
-                                        " x " +
-                                          _vm._s(
-                                            item.details[index].cart_amount
-                                          ) +
-                                          " = " +
-                                          _vm._s(
-                                            item.details[index].total_price
+                            _vm._l(item.details, function(detail, index) {
+                              return _c(
+                                "div",
+                                { key: index, staticClass: "flex flex-row" },
+                                [
+                                  _c("div", [
+                                    _vm._v(_vm._s(item.name) + " - ")
+                                  ]),
+                                  _vm._v(" "),
+                                  _vm._l(
+                                    item.details[index].description,
+                                    function(description_item) {
+                                      return _c(
+                                        "div",
+                                        { key: description_item.id },
+                                        [
+                                          _vm._v(
+                                            "\n                " +
+                                              _vm._s(description_item.label) +
+                                              " \n              "
                                           )
+                                        ]
                                       )
-                                    ])
-                                  ],
-                                  2
-                                )
-                              })
-                            ],
-                            2
+                                    }
+                                  ),
+                                  _vm._v(" "),
+                                  _c("div", [
+                                    _vm._v(
+                                      " x " +
+                                        _vm._s(
+                                          item.details[index].cart_amount
+                                        ) +
+                                        " = " +
+                                        _vm._s(item.details[index].total_price)
+                                    )
+                                  ]),
+                                  _vm._v(" "),
+                                  _c(
+                                    "span",
+                                    {
+                                      staticClass: "removeBtn",
+                                      attrs: { title: "Remove from cart" },
+                                      on: {
+                                        click: function($event) {
+                                          $event.preventDefault()
+                                          return _vm.removeFromOrder(
+                                            item,
+                                            index
+                                          )
+                                        }
+                                      }
+                                    },
+                                    [_vm._v("X")]
+                                  )
+                                ],
+                                2
+                              )
+                            }),
+                            0
                           )
                         }),
                         _vm._v(" "),
@@ -31420,7 +31421,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("a", { attrs: { href: "" } }, [
                           _vm._v(
-                            "\n            Total: $" +
+                            "\n            " +
+                              _vm._s(_vm.$store.state.order.total) +
+                              "\n            Total: $" +
                               _vm._s(_vm.totalPriceAll) +
                               "\n          "
                           )
@@ -45280,6 +45283,7 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
 var order = window.localStorage.getItem('order');
 var allProdsCount = window.localStorage.getItem('allProdsCount');
+var total = window.localStorage.getItem('total');
 
 function isEqual(obj1, obj2) {
   var obj1Keys = Object.keys(obj1);
@@ -45315,10 +45319,22 @@ function getOptionValues(params, descrip) {
   }
 }
 
+function calcTotal(order) {
+  var total = 0;
+
+  for (var prod in order) {
+    total += parseFloat(prod.totalProdPrice);
+  }
+
+  console.log("total: " + total.toFixed());
+  return total.toFixed();
+}
+
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
-    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0
+    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0,
+    total: total ? parseFloat(total) : 0.00
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
@@ -45343,14 +45359,12 @@ var store = {
 
             if (new_amount <= max_quantity) {
               prod_details.cart_amount = new_amount;
-              prod_found.totalProdPrice = prod_found.totalProdPrice - prod_details.total_price; //le resto el total_price viejo
+              prod_found.totalProdAmount = new_amount;
+              prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
 
-              console.log("Medium: " + prod_found.totalProdPrice);
               prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
 
               prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
-
-              console.log("After" + prod_found.totalProdPrice);
             }
 
             state.allProdsCount += parseInt(purchase_quantity);
@@ -45367,10 +45381,12 @@ var store = {
             total_price: purchase_quantity * prod_found.price
           };
           prod_found.details.push(options);
+          prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
           prod_found.totalProdPrice += options.total_price;
           state.allProdsCount += parseInt(purchase_quantity);
-        } //If product is not in the order list
+        }
 
+        console.log(params.item); //If product is not in the order list
       } else {
         if (max_quantity >= 1) {
           console.log("*************** COMPLETELY NEW PROD **************");
@@ -45383,30 +45399,57 @@ var store = {
           getOptionValues(params, _options.description);
           details.push(_options);
           vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'details', details);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalProdPrice', _options.total_price); //Vue.set(params.item, 'cart_quantity', purchase_quantity);
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
 
+          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalProdPrice', _options.total_price);
           state.allProdsCount += parseInt(purchase_quantity);
           state.order.push(params.item);
         }
+
+        console.log(params.item);
       }
 
-      console.log(params.item);
+      console.log("####### Order #######");
+      console.log(state.order);
+      console.log("From Add");
       this.commit('saveOrder');
     },
-    removeFromOrder: function removeFromOrder(state, item) {
-      var index = state.order.indexOf(item);
+    removeFromOrder: function removeFromOrder(state, params) {
+      var index = state.order.indexOf(params.item);
 
-      if (index > -1) {
+      if (index > -1 && params.detail_index > -1) {
         var product = state.order[index];
-        state.productCount -= product.cart_quantity;
-        state.order.splice(index, 1);
+        var detail = product.details[params.detail_index];
+
+        if (product.details.length <= 1) {
+          //remove the whole product
+          state.order.splice(index, 1);
+          state.allProdsCount -= detail.cart_amount;
+          state.allProdsCount -= detail.cart_amount;
+        } else {
+          //remove each detail
+          state.order[index].details.splice(params.detail_index, 1);
+          state.allProdsCount -= detail.cart_amount;
+        } //ARRREGLAR PRECIO QUE NO SE RESTA AL ELIMINAR UN PRODUCTO
+
       }
 
+      console.log("From Remove");
       this.commit('saveOrder');
     },
+    // calcTotal(state) {
+    //   let total = 0;
+    //   for(let prod in state.order) {
+    //     total += prod.totalProdPrice;
+    //   }
+    //   return total;
+    // },
     saveOrder: function saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('allProdsCount', state.allProdsCount);
+      var chach = calcTotal(state.order);
+      console.log("local total: " + chach);
+      window.localStorage.setItem('total', calcTotal(state.order));
     },
     processOrder: function processOrder(state) {
       var data = {
@@ -45414,7 +45457,6 @@ var store = {
       };
       axios.post("/orders", data).then(function (response) {
         if (response.status === 200) {
-          //console.log('responseURL: ' + response.request.responseURL);
           window.localStorage.setItem('order', []);
           window.localStorage.setItem('allProdsCount', 0);
           window.location.href = response.request.responseURL;
@@ -45422,7 +45464,6 @@ var store = {
       })["catch"](function (error) {
         //When user is not logged in
         if (error.response.status === 401) {
-          //console.log(error.response.data.url);
           window.location.href = error.response.data.url; //response.request.responseURL;
         } else {
           console.log(error);
@@ -45433,13 +45474,6 @@ var store = {
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (store);
-/*export default new Vuex.Store({
-  modules: {
-
-  }
-})
-
-*/
 
 /***/ }),
 
