@@ -22,30 +22,35 @@
         </a>
         
         <div v-if="$store.state.order.length > 0" class="">
-            <a v-for="item in $store.state.order"
+            <div v-for="item in $store.state.order"
               :key="item.id"
-              class="" 
-              href=""
+              class=""
             >
-              <div v-for="(detail, index) in item.details"
-                  :key="index"
+              <div v-for="(detail, det_index) in item.details"
+                  :key="det_index"
                   class="flex flex-row"
               >
                 <div>{{ item.name }} -&nbsp;</div>
-                <div v-for="description_item in item.details[index].description"
+                <div v-for="description_item in item.details[det_index].description"
                   :key="description_item.id"  
                 >
                   {{ description_item.label }}&nbsp;
                 </div>
-                <div> x {{item.details[index].cart_amount}} = {{ item.details[index].total_price }}</div>
+                <input type="number" 
+                      min="1"
+                      :id="'prod'+item.id+'_det'+ det_index +'_purchase_update'"
+                      :value="item.details[det_index].cart_amount" 
+                      @change.prevent="recalculate(item, det_index)">
+                
+                <div> = {{ item.details[det_index].total_price }}</div>
                 <span class="removeBtn"
                 title="Remove from cart"
-                @click.prevent="removeFromOrder(item, index)">X</span>
+                @click.prevent="removeFromOrder(item, det_index)">X</span>
               </div>
-            </a>
+            </div>
             <br>
             <a class="" href="">
-              {{ $store.state.order.total }}
+              
               Total: ${{ totalPriceAll }}
             </a>
             <hr class="">
@@ -84,15 +89,17 @@
         console.log(this.$store);
         this.$store.commit('processOrder');
       },
+      recalculate(item, detail_index) {
+        this.$store.commit('recalculate', {item, detail_index});
+      },
       close() {
         this.$emit('close');
       }
     },
-
     computed: {
       totalPriceAll() {
         let total = 0;
-
+        
         for (let item of this.$store.state.order) {
           total += parseFloat(item.totalProdPrice);
         }

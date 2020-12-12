@@ -1983,6 +1983,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -2001,6 +2006,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     processOrder: function processOrder() {
       console.log(this.$store);
       this.$store.commit('processOrder');
+    },
+    recalculate: function recalculate(item, detail_index) {
+      this.$store.commit('recalculate', {
+        item: item,
+        detail_index: detail_index
+      });
     },
     close: function close() {
       this.$emit('close');
@@ -31353,19 +31364,22 @@ var render = function() {
                       [
                         _vm._l(_vm.$store.state.order, function(item) {
                           return _c(
-                            "a",
-                            { key: item.id, attrs: { href: "" } },
-                            _vm._l(item.details, function(detail, index) {
+                            "div",
+                            { key: item.id },
+                            _vm._l(item.details, function(detail, det_index) {
                               return _c(
                                 "div",
-                                { key: index, staticClass: "flex flex-row" },
+                                {
+                                  key: det_index,
+                                  staticClass: "flex flex-row"
+                                },
                                 [
                                   _c("div", [
                                     _vm._v(_vm._s(item.name) + " - ")
                                   ]),
                                   _vm._v(" "),
                                   _vm._l(
-                                    item.details[index].description,
+                                    item.details[det_index].description,
                                     function(description_item) {
                                       return _c(
                                         "div",
@@ -31381,14 +31395,34 @@ var render = function() {
                                     }
                                   ),
                                   _vm._v(" "),
+                                  _c("input", {
+                                    attrs: {
+                                      type: "number",
+                                      min: "1",
+                                      id:
+                                        "prod" +
+                                        item.id +
+                                        "_det" +
+                                        det_index +
+                                        "_purchase_update"
+                                    },
+                                    domProps: {
+                                      value: item.details[det_index].cart_amount
+                                    },
+                                    on: {
+                                      change: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.recalculate(item, det_index)
+                                      }
+                                    }
+                                  }),
+                                  _vm._v(" "),
                                   _c("div", [
                                     _vm._v(
-                                      " x " +
+                                      " = " +
                                         _vm._s(
-                                          item.details[index].cart_amount
-                                        ) +
-                                        " = " +
-                                        _vm._s(item.details[index].total_price)
+                                          item.details[det_index].total_price
+                                        )
                                     )
                                   ]),
                                   _vm._v(" "),
@@ -31402,7 +31436,7 @@ var render = function() {
                                           $event.preventDefault()
                                           return _vm.removeFromOrder(
                                             item,
-                                            index
+                                            det_index
                                           )
                                         }
                                       }
@@ -31421,9 +31455,7 @@ var render = function() {
                         _vm._v(" "),
                         _c("a", { attrs: { href: "" } }, [
                           _vm._v(
-                            "\n            " +
-                              _vm._s(_vm.$store.state.order.total) +
-                              "\n            Total: $" +
+                            "\n            \n            Total: $" +
                               _vm._s(_vm.totalPriceAll) +
                               "\n          "
                           )
@@ -45274,16 +45306,23 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
+/* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.common.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(vue__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_1___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_2__["default"]);
+
+
+vue__WEBPACK_IMPORTED_MODULE_3___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
 var order = window.localStorage.getItem('order');
 var allProdsCount = window.localStorage.getItem('allProdsCount');
-var total = window.localStorage.getItem('total');
+var availableAmount = window.localStorage.getItem('availableAmount');
+var remaining = 0;
 
 function isEqual(obj1, obj2) {
   var obj1Keys = Object.keys(obj1);
@@ -45319,100 +45358,112 @@ function getOptionValues(params, descrip) {
   }
 }
 
-function calcTotal(order) {
-  var total = 0;
-
-  for (var prod in order) {
-    total += parseFloat(prod.totalProdPrice);
-  }
-
-  console.log("total: " + total.toFixed());
-  return total.toFixed();
-}
-
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
     allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0,
-    total: total ? parseFloat(total) : 0.00
+    availableAmount: availableAmount ? parseInt(availableAmount) : -1
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
-      var max_quantity = params.item.quantity;
       var purchase_quantity = $('#purchase_quantity').val();
       var prod_found = state.order.find(function (product) {
         return product.id == params.item.id;
       });
 
-      if (prod_found) {
-        var prod_amount_updated = false;
-        var temp_descrip = new Object(); //Get options from input
+      if (params.item.quantity >= 1) {
+        if (prod_found) {
+          remaining = remaining < prod_found.quantity && remaining > 0 ? remaining : prod_found.quantity - prod_found.totalProdAmount;
+          var same_details_prod = false;
+          var temp_descrip = new Object(); //Get options from input
 
-        getOptionValues(params, temp_descrip); //Check all details of the product
+          getOptionValues(params, temp_descrip); //Check all details of the product
 
-        for (var h in prod_found.details) {
-          //If those options coming are equal to the existing ones just add up to that product's quantity in cart
-          if (isEqual(prod_found.details[h].description, temp_descrip)) {
-            console.log("............. SAME PROD, ADDING MORE OF IT ...............");
-            var prod_details = prod_found.details[h];
-            var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
+          for (var h in prod_found.details) {
+            //If those options coming are equal to the existing ones just add up to that product's quantity in cart
+            if (isEqual(prod_found.details[h].description, temp_descrip)) {
+              console.log("............. SAME PROD, ADDING MORE OF IT ...............");
+              var prod_details = prod_found.details[h];
+              var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
+              console.log("before: " + remaining);
 
-            if (new_amount <= max_quantity) {
-              prod_details.cart_amount = new_amount;
-              prod_found.totalProdAmount = new_amount;
-              prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
+              if (new_amount <= remaining) {
+                prod_details.cart_amount = new_amount;
+                prod_found.totalProdAmount = new_amount;
+                remaining -= prod_found.totalProdAmount;
+                console.log("remaining: " + remaining);
+                prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
 
-              prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
+                prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
 
-              prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
+                prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
+
+                state.allProdsCount += parseInt(purchase_quantity);
+              } else {
+                alert("There's only " + remaining + " left you can purchase");
+                $('#purchase_quantity').val(parseInt(remaining));
+              }
+
+              same_details_prod = true;
+              break;
             }
-
-            state.allProdsCount += parseInt(purchase_quantity);
-            prod_amount_updated = true;
-            break;
           }
-        }
 
-        if (!prod_amount_updated) {
-          console.log("------------- SAME PROD, DIFF DETAILS -----------");
-          var options = {
-            description: temp_descrip,
-            cart_amount: purchase_quantity,
-            total_price: purchase_quantity * prod_found.price
-          };
-          prod_found.details.push(options);
-          prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
-          prod_found.totalProdPrice += options.total_price;
-          state.allProdsCount += parseInt(purchase_quantity);
-        }
+          if (!same_details_prod) {
+            console.log("------------- SAME PROD, DIFF DETAILS -----------"); //if((state.availableAmount - purchase_quantity) < 0) {
 
-        console.log(params.item); //If product is not in the order list
-      } else {
-        if (max_quantity >= 1) {
+            console.log("before: " + remaining);
+
+            if (remaining < 0) {
+              //alert("There's only " + state.availableAmount + " left you can purchase");
+              alert("There's only " + remaining + " left you can purchase");
+              $('#purchase_quantity').val(parseInt(remaining));
+            } else {
+              var options = {
+                description: temp_descrip,
+                cart_amount: purchase_quantity,
+                total_price: purchase_quantity * prod_found.price
+              };
+              prod_found.details.push(options);
+              remaining -= options.cart_amount;
+              console.log("remaining: " + remaining);
+              prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
+              prod_found.totalProdPrice += options.total_price;
+              state.allProdsCount += parseInt(purchase_quantity);
+            }
+          }
+
+          console.log(params.item); //If product is not in the order list
+        } else {
           console.log("*************** COMPLETELY NEW PROD **************");
-          var details = [];
-          var _options = {
-            description: new Object(),
-            cart_amount: purchase_quantity,
-            total_price: purchase_quantity * params.item.price
-          };
-          getOptionValues(params, _options.description);
-          details.push(_options);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'details', details);
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
+          remaining = params.item.quantity - purchase_quantity;
 
-          vue__WEBPACK_IMPORTED_MODULE_1___default.a.set(params.item, 'totalProdPrice', _options.total_price);
-          state.allProdsCount += parseInt(purchase_quantity);
-          state.order.push(params.item);
+          if (remaining < 0) {
+            alert("There's only " + params.item.quantity + " left you can purchase");
+          } else {
+            var details = [];
+            var _options = {
+              description: new Object(),
+              cart_amount: purchase_quantity,
+              total_price: purchase_quantity * params.item.price
+            };
+            getOptionValues(params, _options.description);
+            details.push(_options);
+            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
+            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
+
+            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
+            state.allProdsCount += parseInt(purchase_quantity);
+            state.order.push(params.item);
+          }
+
+          console.log(params.item);
         }
 
-        console.log(params.item);
+        console.log("####### Order #######");
+        console.log(state.order);
+        this.commit('saveOrder');
       }
-
-      console.log("####### Order #######");
-      console.log(state.order);
-      console.log("From Add");
-      this.commit('saveOrder');
     },
     removeFromOrder: function removeFromOrder(state, params) {
       var index = state.order.indexOf(params.item);
@@ -45425,31 +45476,59 @@ var store = {
           //remove the whole product
           state.order.splice(index, 1);
           state.allProdsCount -= detail.cart_amount;
-          state.allProdsCount -= detail.cart_amount;
         } else {
           //remove each detail
           state.order[index].details.splice(params.detail_index, 1);
+          product.totalProdAmount -= detail.cart_amount;
+          product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;
-        } //ARRREGLAR PRECIO QUE NO SE RESTA AL ELIMINAR UN PRODUCTO
+        } //state.availableAmount += parseInt(detail.cart_amount);
 
+
+        console.log("after remove available amount is: " + state.availableAmount);
       }
 
       console.log("From Remove");
+      console.log("current order: ");
+      console.log(state.order);
       this.commit('saveOrder');
     },
-    // calcTotal(state) {
-    //   let total = 0;
-    //   for(let prod in state.order) {
-    //     total += prod.totalProdPrice;
-    //   }
-    //   return total;
-    // },
+    recalculate: function recalculate(state, params) {
+      console.log("From recalculate");
+      var prod_index = state.order.indexOf(params.item);
+
+      if (prod_index > -1 && params.detail_index > -1) {
+        var product = state.order[prod_index];
+        var detail = product.details[params.detail_index];
+        var purchase_quantity_update = $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val(); // let temp = state.availableAmount - detail.cart_amount;
+        // if((temp + purchase_quantity_update) <= state.availableAmount){
+        //Restar cantidad original para recalcular con la nueva cantidad
+
+        product.totalProdAmount -= detail.cart_amount;
+        state.allProdsCount -= detail.cart_amount;
+        state.availableAmount -= detail.cart_amount;
+        detail.cart_amount = purchase_quantity_update;
+        product.totalProdAmount += parseInt(purchase_quantity_update);
+        state.allProdsCount += parseInt(purchase_quantity_update);
+        state.availableAmount += parseInt(purchase_quantity_update);
+        console.log("available after recalculation" + state.availableAmount); //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+
+        product.totalProdPrice -= detail.total_price;
+        detail.total_price = purchase_quantity_update * product.price;
+        product.totalProdPrice += detail.total_price; // } else {
+        //   alert("There's not enough amount of products available")
+        // }
+      }
+
+      console.log("From Remove");
+      console.log("current order: ");
+      console.log(state.order);
+      this.commit('saveOrder');
+    },
     saveOrder: function saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('allProdsCount', state.allProdsCount);
-      var chach = calcTotal(state.order);
-      console.log("local total: " + chach);
-      window.localStorage.setItem('total', calcTotal(state.order));
+      window.localStorage.setItem('availableAmount', state.availableAmount);
     },
     processOrder: function processOrder(state) {
       var data = {
@@ -45459,6 +45538,7 @@ var store = {
         if (response.status === 200) {
           window.localStorage.setItem('order', []);
           window.localStorage.setItem('allProdsCount', 0);
+          window.localStorage.setItem('availableAmount', -1);
           window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {

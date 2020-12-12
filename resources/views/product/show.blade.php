@@ -69,7 +69,7 @@
             @endforeach
           </div>
           <div>
-            <input type="number" id="purchase_quantity">
+            <input type="number" id="purchase_quantity" min="1">
             @auth
               @if(Auth::user()->role === 'user')
                 <purchase-button :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
