@@ -42,16 +42,18 @@
                       :value="item.details[det_index].cart_amount" 
                       @change.prevent="recalculate(item, det_index)">
                 
-                <div> = {{ item.details[det_index].total_price }}</div>
+                <div> ₡{{ formatPrice(item.details[det_index].total_price) }}</div>
                 <span class="removeBtn"
-                title="Remove from cart"
-                @click.prevent="removeFromOrder(item, det_index)">X</span>
+                  title="Remove from cart"
+                  @click.prevent="removeFromOrder(item, det_index)">
+                  X
+                </span>
               </div>
             </div>
             <br>
             <a class="" href="">
               
-              Total: ${{ totalPriceAll }}
+              Total: ₡{{ $totalPriceAll }}
             </a>
             <hr class="">
 
@@ -81,6 +83,10 @@
       }
     },
     methods: {
+      formatPrice(num) {
+        let val = (num/1).toFixed(2).replace('.', ',')
+        return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+      },
       removeFromOrder(item, detail_index) {
         console.log(this.$store);
         this.$store.commit('removeFromOrder', { item, detail_index });        

@@ -1988,6 +1988,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -1996,6 +1998,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   methods: {
+    formatPrice: function formatPrice(num) {
+      var val = (num / 1).toFixed(2).replace('.', ',');
+      return val.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    },
     removeFromOrder: function removeFromOrder(item, detail_index) {
       console.log(this.$store);
       this.$store.commit('removeFromOrder', {
@@ -31419,9 +31425,11 @@ var render = function() {
                                   _vm._v(" "),
                                   _c("div", [
                                     _vm._v(
-                                      " = " +
+                                      " ₡" +
                                         _vm._s(
-                                          item.details[det_index].total_price
+                                          _vm.formatPrice(
+                                            item.details[det_index].total_price
+                                          )
                                         )
                                     )
                                   ]),
@@ -31441,7 +31449,11 @@ var render = function() {
                                         }
                                       }
                                     },
-                                    [_vm._v("X")]
+                                    [
+                                      _vm._v(
+                                        "\n                X\n              "
+                                      )
+                                    ]
                                   )
                                 ],
                                 2
@@ -31455,8 +31467,8 @@ var render = function() {
                         _vm._v(" "),
                         _c("a", { attrs: { href: "" } }, [
                           _vm._v(
-                            "\n            \n            Total: $" +
-                              _vm._s(_vm.totalPriceAll) +
+                            "\n            \n            Total: ₡" +
+                              _vm._s(_vm.$totalPriceAll) +
                               "\n          "
                           )
                         ]),
@@ -45321,7 +45333,6 @@ __webpack_require__.r(__webpack_exports__);
 vue__WEBPACK_IMPORTED_MODULE_3___default.a.use(vuex__WEBPACK_IMPORTED_MODULE_4__["default"]);
 var order = window.localStorage.getItem('order');
 var allProdsCount = window.localStorage.getItem('allProdsCount');
-var availableAmount = window.localStorage.getItem('availableAmount');
 var remaining = 0;
 
 function isEqual(obj1, obj2) {
@@ -45361,8 +45372,7 @@ function getOptionValues(params, descrip) {
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
-    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0,
-    availableAmount: availableAmount ? parseInt(availableAmount) : -1
+    allProdsCount: allProdsCount ? parseInt(allProdsCount) : 0
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
@@ -45483,9 +45493,8 @@ var store = {
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;
         } //state.availableAmount += parseInt(detail.cart_amount);
+        //console.log("after remove available amount is: " + state.availableAmount)
 
-
-        console.log("after remove available amount is: " + state.availableAmount);
       }
 
       console.log("From Remove");
@@ -45505,13 +45514,13 @@ var store = {
         //Restar cantidad original para recalcular con la nueva cantidad
 
         product.totalProdAmount -= detail.cart_amount;
-        state.allProdsCount -= detail.cart_amount;
-        state.availableAmount -= detail.cart_amount;
+        state.allProdsCount -= detail.cart_amount; //state.availableAmount -= detail.cart_amount;
+
         detail.cart_amount = purchase_quantity_update;
         product.totalProdAmount += parseInt(purchase_quantity_update);
-        state.allProdsCount += parseInt(purchase_quantity_update);
-        state.availableAmount += parseInt(purchase_quantity_update);
-        console.log("available after recalculation" + state.availableAmount); //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+        state.allProdsCount += parseInt(purchase_quantity_update); //state.availableAmount += parseInt(purchase_quantity_update);
+        //console.log("available after recalculation" +state.availableAmount)
+        //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
 
         product.totalProdPrice -= detail.total_price;
         detail.total_price = purchase_quantity_update * product.price;
@@ -45528,7 +45537,6 @@ var store = {
     saveOrder: function saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('allProdsCount', state.allProdsCount);
-      window.localStorage.setItem('availableAmount', state.availableAmount);
     },
     processOrder: function processOrder(state) {
       var data = {
@@ -45538,7 +45546,6 @@ var store = {
         if (response.status === 200) {
           window.localStorage.setItem('order', []);
           window.localStorage.setItem('allProdsCount', 0);
-          window.localStorage.setItem('availableAmount', -1);
           window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {

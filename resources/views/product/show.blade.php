@@ -44,7 +44,7 @@
             <label class="text-lg font-semibold">Disponibles:</label>
             <p class="col-start-2 col-span-2 text-lg">{{ $product->quantity }}</p>
             <label class="text-lg font-semibold">Precio:</label>
-            <p class="col-start-2 col-span-2 text-lg">₡{{ $product->price }}</p>
+            <p class="col-start-2 col-span-2 text-lg">₡{{ number_format($product->price, 2, ".", " ") }}</p>
             <label class="col-span-3 text-lg font-semibold">Opciones: </label>
             
             @foreach ($attrs as $attr)
