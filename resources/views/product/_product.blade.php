@@ -9,7 +9,7 @@
           @foreach ($options as $k => $opt)
             @if ($attr->id == $opt->attribute_id)
               <label for="opt_checks[{{ $k }}]">
-                {{ Form::checkbox("opt_checks[$k]", "$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options), ['class' => 'form-checkbox']) }}
+                {{ Form::checkbox("opt_checks[$k]", "$opt->attribute_id,$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options), ['class' => 'form-checkbox']) }}
                 <span class="ml-2 text-sm text-gray-700">{{ $opt->option }}</span>
               </label>
             @endif
@@ -62,7 +62,7 @@
         <div class="grid grid-cols-3">
           @foreach ($categories as $k => $category)
             <label for="categ_checks[{{ $k }}]">
-              {{ Form::checkbox("opt_checks[$k]", "$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options), ['class' => 'form-checkbox']) }}
+              {{ Form::checkbox("categ_checks[$k]", "$category->id", $prod_categs==null ? '' : in_array($categ_checks->id, $prod_categs), ['class' => 'form-checkbox']) }}
               <span class="ml-2 text-sm text-gray-700">{{ $category->name }}</span>
             </label>
           @endforeach

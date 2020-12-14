@@ -78,16 +78,18 @@ class ProductController extends Controller
             'name' => 'required',
             'author' => 'required',
         ]);*/
-        $product = new Product;
+        $product = Product::find(25);//new Product;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
-        $product->save();
+        //$product->save();
 
         foreach ($request->opt_checks as $key => $checked_opt) 
         {
+            //print_r($request->opt_checks);
             $ids = explode(',', $checked_opt); 
+            //print_r($ids);
             $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
         }
 
