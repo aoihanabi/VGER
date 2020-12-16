@@ -17,6 +17,14 @@ class Product extends Model
   use SoftDeletes;
 
   /**
+   * Retrieve all products from the DB
+   */
+  public static function get_all_products() 
+  {
+    return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
+  }
+
+  /**
    * Get the images for the product.
    */
   public function images()
@@ -49,13 +57,29 @@ class Product extends Model
   }
   
   /**
+   * Retrieve a product's attributes
+   */
+  public function get_product_attributes() 
+  {
+    return $this->belongsToMany(Attribute::Class, 'product_attribute');
+  }
+
+  /**
+   * Retrieve a product's options
+   */
+  public static function get_product_options($prod_id)
+  {
+    return DB::table('product_options')->select('options_ids', 'amount')->where('product_id', '=', $prod_id)->get();
+  }
+
+  /**
    * The values (or properties) that belong to the product
    */
-  public function values() 
-  {
-    return $this->belongsToMany(Attribute::Class, 'values')->withPivot('option_id')->withTimestamps();
-  }
-  
+  // public function values() 
+  // {
+  //   return $this->belongsToMany(Attribute::Class, 'values')->withPivot('option_id')->withTimestamps();
+  // }
+
   /**
    * The orders that belong to the product
    */
@@ -64,19 +88,7 @@ class Product extends Model
     return $this->belongsToMany(Order::Class, 'orderdetails')->withPivot('subtotal')->withTimestamps();
   }
 
-  /**
-   * Retrieve all products from the DB
-   */
-  public static function get_all_products() 
-  {
-    return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
-  }
+  
 
-  /**
-   * Retrieve all available options/properties
-   */
-  public static function get_product_options() 
-  {
-    return DB::table('options')->select('option', 'attribute_id', 'id')->where('deleted_at', '=', null)->get();
-  }
+  
 }
