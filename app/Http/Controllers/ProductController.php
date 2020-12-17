@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Image;
 use App\Models\Option;
 use App\Models\Product;
+use App\Models\ProductOptions;
 
 class ProductController extends Controller
 {
@@ -86,20 +87,42 @@ class ProductController extends Controller
         /*request()->validate([
             'name' => 'required',
             'author' => 'required',
-        ]);*/
-        $product = Product::find(25);//new Product;
+        // ]);*/
+        $product = new Product;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
-        //$product->save();
+        $product->save();
 
-        foreach ($request->opt_checks as $key => $checked_opt) 
-        {
-            //print_r($request->opt_checks);
-            $ids = explode(',', $checked_opt); 
-            //print_r($ids);
-            $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
+        // foreach ($request->opt_checks as $key => $checked_opt) 
+        // {
+        //     //print_r($request->opt_checks);
+        //     $ids = explode(',', $checked_opt); 
+        //     //print_r($ids);
+        //     $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
+        // }
+        //print_r($request->attribute_checks);
+        foreach ($request->attribute_checks as $attribute) {
+           $product->attributes()->attach($attribute); 
+        }
+        
+        for ($i = 0; $i<$request->contador+1; $i++) {
+            $arr = array(
+                'color' => isset($request->color[$i]) ? $request->color[$i] : null,
+                'talla' => isset($request->talla[$i]) ? $request->talla[$i] : null,
+                'estilo' => isset($request->estilo[$i]) ? $request->estilo[$i] : null, 
+            );
+            $toJson = json_encode($arr);
+            
+            $productOption = new ProductOptions;
+            $productOption->product_id = $product->id;
+            $productOption->options_ids = $toJson;
+            $productOption->amount = $request->opt_amount[$i];
+            $productOption->save();
+            // DB::enableQueryLog();
+            
+            // dd(DB::getQueryLog());
         }
 
         foreach ($request->categ_checks as $key => $checked_categ) 

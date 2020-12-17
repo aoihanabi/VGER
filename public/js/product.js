@@ -1,5 +1,6 @@
 $(function() {
-    
+    // ********* Update product total quantity *********
+    // in index.blade.php
     $(".quantity-modifier").on('click', function(){
         var orig_value = $(this).attr("id");
 
@@ -28,10 +29,12 @@ $(function() {
             }
         });
     });
+    // ********* Add option dropdows dynamically *********
+    // in _product.blade.php
     var cont = 0;
     $("#btn_add_options").on('click', function(){
         var selected_attributes = [];
-        $('input[class="attributes form-checkbox"]').attr('disabled', true); //Avoid second guesses
+        $('input[class="attributes form-checkbox"]').attr('onclick', 'return false'); //Avoid second guesses
         
         jQuery.each($('input[class="attributes form-checkbox"]:checked'), function(){
             selected_attributes.push($(this).siblings('#attribute_name').text());
@@ -40,13 +43,19 @@ $(function() {
             $("#"+selected_attributes[i]).clone().appendTo("#opts");
             $("#"+selected_attributes[i]).removeAttr("hidden");
             $("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+            $("#"+selected_attributes[i]+"_"+cont).attr("name", (selected_attributes[i].toLowerCase())+"["+cont+"]");
         }
         $("#number_hid").clone().appendTo("#amounts");
         $("#number_hid").removeAttr("hidden");
         $("#number_hid").attr("id", "number_"+cont);
+        $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
+
         $("#btn_remove_hid").clone().appendTo("#amounts");
         $("#btn_remove_hid").removeAttr("hidden");
         $("#btn_remove_hid").attr("id", cont);
+
+        $("#contador").replaceWith("<input type='text' id='contador' name='contador' value="+cont+" hidden/>");
+        get_total_amount();
         cont++;
     });
     $(document).on('click',"button.btn_remove_options", function(){
@@ -57,5 +66,21 @@ $(function() {
         $("#Estilo_"+btn_id).remove();
         $("#number_"+btn_id).remove();
         $(this).remove();
+        get_total_amount();
+        cont--;
+
+        if(cont <=0){
+            $('input[class="attributes form-checkbox"]').attr('onclick', 'return true'); //Avoid second guesses
+        }
     });
+    $(document).on('change', ".opt_amount", function() {
+        get_total_amount();
+    });
+    function get_total_amount(){
+        var addition = 0;
+        $(".opt_amount").each(function() {
+            addition += parseInt($(this).val());
+            $("#quantity").val(addition-1);
+        })
+    }
 });

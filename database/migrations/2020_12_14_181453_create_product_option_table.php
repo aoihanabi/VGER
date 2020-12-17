@@ -17,7 +17,7 @@ class CreateProductOptionTable extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->string('options_ids', 25);
+            $table->json('options_ids');
             $table->integer('amount');
         });
     }

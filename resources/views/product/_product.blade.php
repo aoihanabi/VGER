@@ -24,18 +24,13 @@
   <div class="px-4 py-5 bg-white sm:p-6">
     <div class="grid grid-cols-6 gap-6">
       <!-- General Information -->
-      <div id="product_fields" class="col-span-6 sm:col-span-4">
+      <div class="product_fields col-span-6 sm:col-span-4">
           {{ Form::label('name', 'Nombre', ['class' => 'block font-medium text-sm text-gray-700']) }}
           {{ Form::text('name', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
           <br>
           {{ Form::label('description', 'Descripción', ['class' => 'block font-medium text-sm text-gray-700']) }}
           {{ Form::textarea('description', null, ['rows' => 3, 'class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
-          <br>
-          {{ Form::label('quantity', 'Cantidad en inventario', ['class' => 'block font-medium text-sm text-gray-700']) }}
-          {{ Form::text('quantity', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
-          <br>
-          {{ Form::label('price', 'Precio', ['class' => 'block font-medium text-sm text-gray-700']) }}
-          {{ Form::text('price', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
+          
       </div>
       <!-- Product Attributes -->
       <div id="product_attributes" class="col-span-6 sm:col-span-4">
@@ -43,7 +38,7 @@
         <div class="grid grid-cols-3">
           @foreach($attrs as $k => $attr)
             <label for="attribute_checks[{{ $k }}]">
-              {{ Form::checkbox("attribute_checks[$k]", "$attr->id", $prod_attributes==null ? '' : in_array($attr->id, $prod_attributes), ['class' => 'attributes form-checkbox']) }}
+              {{ Form::checkbox("attribute_checks[$k]", "$attr->id", $prod_attributes==null ? '' : in_array($attribute_checks->id, $prod_attributes), ['class' => 'attributes form-checkbox']) }}
               <span id="attribute_name" class="ml-2 text-sm text-gray-700">{{ $attr->name }}</span>
             </label>
           @endforeach
@@ -64,30 +59,26 @@
             {{ Form::select('styles', $styles->pluck('option', 'id'), null, ['id'=>'Estilo', 'hidden', 'class' => 'form-input w-full m-1']) }}
           </div>
           <div id="amounts" class="col-start-3 row-start-1 row-end-4 grid items-center place-items-center">
-            <!-- <div id="number" hidden> -->
-              {{ Form::selectRange('numberd', 1, 50, 1, ['id' => 'number_hid', 'class' => 'form-input', 'hidden']) }}
-              {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 'hidden']) }}
-            <!-- </div> -->
+            {{ Form::selectRange('', 1, 50, 1, ['id' => 'number_hid', 'class' => 'opt_amount form-input', 'hidden']) }}
+            {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 'hidden']) }}
           </div>
+          <input type='text' id='contador' name='contador' value='0' hidden />
         </div>
-        <br>
+        <!-- Quantity & Price -->
+        <div class="product_fields col-span-6 sm:col-span-4">
+          <br>
+          {{ Form::label('quantity', 'Cantidad en inventario', ['class' => 'block font-medium text-sm text-gray-700']) }}
+          {{ Form::text('quantity', 0, ['id' => 'quantity', 'class' => 'form-input rounded-md shadow-sm mt-1 block w-full', 'readonly']) }}
+          <br>
+          {{ Form::label('price', 'Precio', ['class' => 'block font-medium text-sm text-gray-700']) }}
+          {{ Form::text('price', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
+        </div>
           <!-- @yield('options_field') -->
           <!-- @if($product == null )
               @yield('options_field')
           @elseif(Auth::user()->role === 'admin')
               @yield('options_field')
           @endif -->
-      </div>
-
-      <!-- Product Images -->
-      <div id="product_images" class="col-span-6 sm:col-span-4">
-          {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
-          {{ Form::file('main_image') }}
-          <br><br>
-          {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
-          {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
-
-          
       </div>
       <!-- Product Categories -->
       <div id="product_categories" class="col-span-6 sm:col-span-4">
@@ -101,6 +92,15 @@
           @endforeach
         </div>
       </div>
+
+      <!-- Product Images -->
+      <div id="product_images" class="col-span-6 sm:col-span-4">
+          {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
+          {{ Form::file('main_image') }}
+          <br><br>
+          {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
+          {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
+      </div>      
     </div>
     <div class="flex items-center justify-end px-4 py-3 text-right sm:px-6">
       {{ Form::submit('Guardar cambios', ['class' => 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold 

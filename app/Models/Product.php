@@ -57,11 +57,11 @@ class Product extends Model
   }
   
   /**
-   * Retrieve a product's attributes
+   * Retrieve the attributes that belong to the product's
    */
-  public function get_product_attributes() 
+  public function attributes() 
   {
-    return $this->belongsToMany(Attribute::Class, 'product_attribute');
+    return $this->belongsToMany(Attribute::Class, 'product_attributes');
   }
 
   /**
