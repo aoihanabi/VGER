@@ -85,13 +85,13 @@ $(function() {
         })
     }
 
-    // ********* Dynamic product amount restriction *********
+    // ********* Dynamic product options restriction *********
     // in _options_dropdown.blade.php for product SHOW
     $(document).on('change', ".buy_dropdown", function() {
         
         var selected_id = $(this).children("option:selected").val();
-        var product_options = parse_options_json();
-        var similar_options_found = [];
+        var product_options = parse_options_json(); //JSON with all options (related with each other especifically) available for the product
+        var similar_details_found = [];
         
         for(var i = 0; i< product_options.length; i++) {
             
@@ -103,16 +103,16 @@ $(function() {
                 if(product_options[i].options_ids[details] != null) {
                     comparison_id = product_options[i].options_ids[details].id;
                 }
-                //alert("selected:"+selected_id + " compare:"+comparison_id);
 
-                //Comparar el id seleccionado con cada uno de los id de opcion y añadir el objecto a un array para revisar su disponibilidad
+                //Comparar el id seleccionado por el usuario con el resto de ids de opcion.
+                //Y añadir a un array los detalles que incluyan la opcion seleccionada
                 if(selected_id == comparison_id) {
-                    similar_options_found.push(product_options[i]);
+                    similar_details_found.push(product_options[i]);
                 }
             }
         }
 
-        //Habilitar todas las opciones que no lo estén
+        //Resetear todas las opciones deshabilitadas
         jQuery.each($(this).children("option"), function() {
             $(this).attr("disabled", false);
         });
@@ -120,43 +120,34 @@ $(function() {
         //Recorrer los selects que sean sibling de este (onchange)
         var sibling_dropdowns = $(this).siblings('select');
         jQuery.each(sibling_dropdowns, function(){
-            //$(this).find("option:selected").prop("selected", false)
             
-            // if ($(this).find("option").attr("disabled", false)) {
-            //     console.log($(this).find("option").val());
-            // }
             jQuery.each($(this).children("option"), function(){
-                //console.log($(this).text());
-                
-                $(this).attr("disabled", false);
-                var ids_array = [];
-                for (var index in similar_options_found) {
-                    var found_amount = similar_options_found[index].amount;
-                    var found_options = similar_options_found[index].options_ids;
+                                
+                $(this).attr("disabled", false); //resetear opciones deshabilitas
+                var available_optionIds = [];
+                for (var index in similar_details_found) {
+                    var found_amount = similar_details_found[index].amount;
+                    var found_options = similar_details_found[index].options_ids;
                     
-                    //Get options ids to disable?
+                    //Recorrer las opciones para chequear si están disponibles Get options ids to disable?
                     for (var type in found_options) {
                         
                         if(found_options[type] != null) {
-                            //Chequear si la opcion por la que voy tiene una found amount en 0 para deshabilitarla
+                            //Chequear si la opcion por la que va tiene la cantidad en 0 para deshabilitarla
                             if(found_options[type].id == $(this).val() && found_amount == 0) {
-                                //console.log("hello: " +  found_options[type].id);
                                 $(this).attr("disabled", true);
                             } else 
-                            //Chequear si la opción no está en el array para agregarla
-                            if((jQuery.inArray(found_options[type].id, ids_array)) === -1) {
-                                ids_array.push(found_options[type].id);
+                            //Chequear si la opción NO está en el array para agregarla
+                            if((jQuery.inArray(found_options[type].id, available_optionIds)) === -1) {
+                                available_optionIds.push(found_options[type].id);
                             }
                         }
                     }
-                    
                 }
-                console.log(ids_array);
-                // console.log(ids_array.find(x => x !== $(this).val()));
-                // // var test = ids_array.find(x => x !== $(this).val()) == null ? false : true;
-                // console.log (jQuery.inArray($(this).val(), ids_array));
-                if((jQuery.inArray($(this).val(), ids_array)) === -1) {
-                    //console.log($(this).val() + " is not in the array");
+
+                //Si la opción NO está en el array de ids disponibles
+                if((jQuery.inArray($(this).val(), available_optionIds)) === -1) {
+                    
                     $(this).attr("disabled", true);
                 }
 
@@ -165,20 +156,15 @@ $(function() {
                     if($(this).attr('disabled') == 'disabled') {
                         $(this).prop("selected", false);
                     }
-                } else {
-                    if($(this).attr('disabled') != 'disabled') {
-                        $(this).prop("selected", true);
-                    }
-                }
+                } 
+                // else {
+                //     if($(this).attr('disabled') != 'disabled') {
+                //         $(this).prop("selected", true);
+                //     }
+                // }
                 
             });
         });
-        
-        //console.log(similar_options_found);
-        console.log("************************");
-        //console.log();
-        // console.log(product_options);
-        
     });
 
     function parse_options_json() {
@@ -190,11 +176,5 @@ $(function() {
             options_json[i].options_ids = JSON.parse(options_json[i].options_ids);
         }
         return options_json;
-    }
-    function is_null(object) {
-        if(product_options[i].options_ids[details] != null) {
-            comparison_id = product_options[i].options_ids[details].id;
-        }
-        return false;
     }
 });
