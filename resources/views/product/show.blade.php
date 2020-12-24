@@ -67,6 +67,7 @@
               @endauth
               <!-- Agarrar los nombres de atributo y enviarlos en un array al vue -->
             @endforeach
+            <div id="options_json" data-product-options='@json($options_db)' hidden></div>
           </div>
           <div>
             <input type="number" id="purchase_quantity" min="1">

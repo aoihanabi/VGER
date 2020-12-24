@@ -108,11 +108,11 @@ class ProductController extends Controller
         }
         
         for ($i = 0; $i<$request->contador+1; $i++) {
-            $arr = array(
-                'color' => isset($request->color[$i]) ? $request->color[$i] : null,
-                'talla' => isset($request->talla[$i]) ? $request->talla[$i] : null,
-                'estilo' => isset($request->estilo[$i]) ? $request->estilo[$i] : null, 
-            );
+            $arr = [
+                'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
+                'talla' => isset($request->talla[$i]) ? ['id' => $request->talla[$i], 'option' => Option::where('id', $request->talla[$i])->first(['option'])->option] : null,
+                'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
+            ];
             $toJson = json_encode($arr);
             
             $productOption = new ProductOptions;
@@ -143,20 +143,36 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::find($id);
+         $product = Product::find($id);
         $main_img = $product->main_image->first();
         $secondary_imgs = $product->secondary_images;
         $attrs = Attribute::select('attributes.name', 'attributes.id')
-                            ->join('values', 'attributes.id', '=', 'values.attribute_id')
-                            ->where('values.product_id','=',$id)->distinct()->get();
-        #DB::enableQueryLog();
-        $opts = Option::select('options.id', 'options.option', 'options.attribute_id')
-                        ->join('values', 'options.id', '=', 'values.option_id')
-                        ->where('values.product_id', '=', $id)->get();
+                            ->join('product_attributes', 'attributes.id', '=', 'product_attributes.attribute_id')
+                            ->where('product_attributes.product_id','=', $id)->get();//->distinct()->get();
         
-        #dd(DB::getQueryLog());
-        #print_r($opts . '<br \>');
-        return view('product.show', ['product' => $product, 'main_img' => $main_img, 'secondary_imgs' => $secondary_imgs, 'attrs' => $attrs, 'opts' => $opts]);
+        // $opts = Option::select('options.id', 'options.option', 'options.attribute_id')
+        //                 ->join('product_options', 'options.id', '=', 'product_options.options_ids')
+        //                 ->where('product_options.product_id', '=', $id)->get();
+        $options_db = Product::get_product_options($product->id);
+
+        // foreach ($options_db as $detail) {
+        //     echo("amount: " . $detail->amount . "</br>");
+        //     $options = (array)json_decode($detail->options_ids);
+
+        //     // foreach ($options as $opt) {
+        //     //     foreach((array)$opt as $value) {
+        //     //         print_r($value . "</br>");
+        //     //     }
+        //     // }
+        // }
+        
+       
+        return view('product.show', ['product' => $product,
+                                     'main_img' => $main_img, 
+                                     'secondary_imgs' => $secondary_imgs, 
+                                     'attrs' => $attrs, 
+                                     'options_db' => $options_db
+                                     /*'opts' => $opts*/]);
     }
 
     /**
