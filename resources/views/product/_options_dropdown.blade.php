@@ -1,6 +1,6 @@
 <label>{{ $attr->name }}</label>
 <select id="{{ strtolower($attr->name) }}_selected" name="drop_option" class="buy_dropdown p-1 col-span-3 border-2 border-gray-400 rounded" >
-    <option>Seleccione una opción</option>
+    <option value="none">Seleccione una opción</option>
     @php
         $duplicates = [];        
     @endphp
