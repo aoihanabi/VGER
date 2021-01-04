@@ -1,30 +1,11 @@
-@section('options_field')
-  {{ Form::label('', 'Opciones', ['class' => 'block font-medium text-sm text-gray-700']) }}
-  <div class="form-input rounded-md shadow-sm mt-1 block w-full">
-    @foreach($attrs as $attr)    
-      <div class="{{$attr->name}}-attributes">
-        {{ Form::label("$attr->name", "$attr->name", ['class' => 'block font-medium font-semibold text-sm text-gray-700 ']) }}
-        
-        <div class="mb-3 grid grid-cols-3">
-          @foreach ($options as $k => $opt)
-            @if ($attr->id == $opt->attribute_id)
-              <label for="opt_checks[{{ $k }}]">
-                {{ Form::checkbox("opt_checks[$k]", "$opt->attribute_id,$opt->id", $prod_options==null ? '' : in_array($opt->id, $prod_options), ['class' => 'form-checkbox']) }}
-                <span class="ml-2 text-sm text-gray-700">{{ $opt->option }}</span>
-              </label>
-            @endif
-          @endforeach
-        </div> 
-      </div>
-    @endforeach
-  </div>
-@endsection
-
 <div class="shadow overflow-hidden sm:rounded-md">
   <div class="px-4 py-5 bg-white sm:p-6">
     <div class="grid grid-cols-6 gap-6">
       <!-- General Information -->
       <div class="product_fields col-span-6 sm:col-span-4">
+          {{ Form::label('code', 'Código', ['class' => 'block font-medium text-sm text-gray-700']) }}
+          {{ Form::text('code', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
+          <br>
           {{ Form::label('name', 'Nombre', ['class' => 'block font-medium text-sm text-gray-700']) }}
           {{ Form::text('name', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
           <br>
@@ -73,12 +54,6 @@
           {{ Form::label('price', 'Precio', ['class' => 'block font-medium text-sm text-gray-700']) }}
           {{ Form::text('price', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
         </div>
-          <!-- @yield('options_field') -->
-          <!-- @if($product == null )
-              @yield('options_field')
-          @elseif(Auth::user()->role === 'admin')
-              @yield('options_field')
-          @endif -->
       </div>
       <!-- Product Categories -->
       <div id="product_categories" class="col-span-6 sm:col-span-4">

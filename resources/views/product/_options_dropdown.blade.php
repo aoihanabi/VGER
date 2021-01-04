@@ -1,5 +1,5 @@
 <label>{{ $attr->name }}</label>
-<select id="{{ strtolower($attr->name) }}_selected" name="drop_option" class="buy_dropdown p-1 col-span-3 border-2 border-gray-400 rounded" >
+<select id="{{ strtolower($attr->name) }}_selected" name="drop_option" class="buy_dropdown col-span-3 form-input rounded-md shadow-sm mt-1 block w-full" >
     <option value="none">Seleccione una opción</option>
     @php
         $duplicates = [];        
@@ -16,8 +16,6 @@
                         $duplicates[] = $opt->id;
                     @endphp
                 @endif
-                
-
             @endif
         @endforeach
     @endforeach

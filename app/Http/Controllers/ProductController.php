@@ -89,6 +89,7 @@ class ProductController extends Controller
             'author' => 'required',
         // ]);*/
         $product = new Product;
+        $product->code = $request->code;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->quantity = $request->quantity;

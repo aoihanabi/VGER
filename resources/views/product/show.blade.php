@@ -20,6 +20,7 @@
       
       <div class="px-5">
         <div class="flex flex-row justify-end">
+          <label for="code" class="flex-1"> # {{ $product->code }} </label>
           @can('update', $product)
             <button class="px-2">
               <a href="{{ route('products.edit', $product->id) }}"><i class="fas fa-edit"></i></a>
@@ -41,8 +42,8 @@
         <div>
           <p class="py-2 px-1 text-lg">{{ $product->description }}</p>
           <div class="my-3 grid grid-cols-3 gap-4">
-            <label class="text-lg font-semibold">Disponibles:</label>
-            <p class="col-start-2 col-span-2 text-lg">{{ $product->quantity }}</p>
+            <!-- <label class="text-lg font-semibold">Disponibles:</label>
+            <p class="col-start-2 col-span-2 text-lg">{{ $product->quantity }}</p> -->
             <label class="text-lg font-semibold">Precio:</label>
             <p class="col-start-2 col-span-2 text-lg">₡{{ number_format($product->price, 2, ".", " ") }}</p>
             <label class="col-span-3 text-lg font-semibold">Opciones: </label>
@@ -52,10 +53,24 @@
                 @if(Auth::user()->role === 'admin' || Auth::user()->role === 'employee')
                   <!-- Show options as as simple labels -->
                   <label class="col-span-3 font-semibold">{{ $attr->name }}</label>
-                  @foreach ($opts as $opt) 
-                    @if ($opt->attribute_id == $attr->id)
-                      <label class="py-2 px-4 border-2 border-gray-600 rounded-full text-center">{{ $opt->option }}</label>
-                    @endif
+                  
+                  @php
+                      $duplicates = [];
+                  @endphp
+                  @foreach ($options_db as $detail) 
+                    
+                    @foreach((array)json_decode($detail->options_ids) as $key => $opt)
+                        @if($opt != null && $key == strtolower($attr->name))
+                            
+                            @if (!in_array($opt->id, $duplicates))
+                              <label class="py-2 px-4 border-2 border-gray-600 rounded-full text-center">{{ $opt->option }}</label>
+                              @php 
+                                  $duplicates[] = $opt->id;
+                              @endphp
+                            @endif
+                        @endif
+                    @endforeach
+                  
                   @endforeach
                 @else
                   @include('product._options_dropdown', ['attr' => $attr])
@@ -67,10 +82,12 @@
               @endauth
               <!-- Agarrar los nombres de atributo y enviarlos en un array al vue -->
             @endforeach
+            <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
+            <input type="number" id="purchase_quantity" min="1" class="col-span-3 form-input rounded-md shadow-sm mt-1 block w-full">
             <div id="options_json" data-product-options='@json($options_db)' hidden></div>
           </div>
           <div>
-            <input type="number" id="purchase_quantity" min="1">
+            
             @auth
               @if(Auth::user()->role === 'user')
                 <purchase-button :product="{{ $product }}" :attributes="{{ $attrs }}" /><!-- attr_names -->
