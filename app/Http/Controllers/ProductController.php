@@ -12,6 +12,9 @@ use App\Models\Option;
 use App\Models\Product;
 use App\Models\ProductOptions;
 
+// DB::enableQueryLog();
+// dd(DB::getQueryLog());
+
 class ProductController extends Controller
 {
     /**
@@ -95,19 +98,11 @@ class ProductController extends Controller
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();
-
-        // foreach ($request->opt_checks as $key => $checked_opt) 
-        // {
-        //     //print_r($request->opt_checks);
-        //     $ids = explode(',', $checked_opt); 
-        //     //print_r($ids);
-        //     $product->values()->attach($ids[0], ['option_id' => $ids[1]]);
-        // }
-        //print_r($request->attribute_checks);
+        
+        #OPTIONS
         foreach ($request->attribute_checks as $attribute) {
            $product->attributes()->attach($attribute); 
-        }
-        
+        }        
         for ($i = 0; $i<$request->contador+1; $i++) {
             $arr = [
                 'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
@@ -121,15 +116,15 @@ class ProductController extends Controller
             $productOption->options_ids = $toJson;
             $productOption->amount = $request->opt_amount[$i];
             $productOption->save();
-            // DB::enableQueryLog();
-            
-            // dd(DB::getQueryLog());
         }
 
+        #CATEGORIES
         foreach ($request->categ_checks as $key => $checked_categ) 
         {
             $product->categories()->attach($checked_categ);
         }
+
+        #IMAGES
         $this->upload_product_images($request, $product);
         $product->refresh();
         
@@ -144,36 +139,19 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-         $product = Product::find($id);
+        $product = Product::find($id);
         $main_img = $product->main_image->first();
         $secondary_imgs = $product->secondary_images;
         $attrs = Attribute::select('attributes.name', 'attributes.id')
                             ->join('product_attributes', 'attributes.id', '=', 'product_attributes.attribute_id')
                             ->where('product_attributes.product_id','=', $id)->get();//->distinct()->get();
-        
-        // $opts = Option::select('options.id', 'options.option', 'options.attribute_id')
-        //                 ->join('product_options', 'options.id', '=', 'product_options.options_ids')
-        //                 ->where('product_options.product_id', '=', $id)->get();
         $options_db = Product::get_product_options($product->id);
 
-        // foreach ($options_db as $detail) {
-        //     echo("amount: " . $detail->amount . "</br>");
-        //     $options = (array)json_decode($detail->options_ids);
-
-        //     // foreach ($options as $opt) {
-        //     //     foreach((array)$opt as $value) {
-        //     //         print_r($value . "</br>");
-        //     //     }
-        //     // }
-        // }
-        
-       
         return view('product.show', ['product' => $product,
                                      'main_img' => $main_img, 
                                      'secondary_imgs' => $secondary_imgs, 
                                      'attrs' => $attrs, 
-                                     'options_db' => $options_db
-                                     /*'opts' => $opts*/]);
+                                     'options_db' => $options_db]);
     }
 
     /**
@@ -186,38 +164,29 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $attrs = Attribute::get_all_attributes();
-        //$options = Option::get_all_options();
-        $categories = Category::get_all_categories();
-
         $colors = Option::get_options_by_attribute(1);
         $sizes = Option::get_options_by_attribute(2);
         $styles = Option::get_options_by_attribute(3);
+        $categories = Category::get_all_categories();
 
+        #Specific product attributes
         $prod_attributes = array();
         foreach ($product->attributes()->get() as $attr) {
-            //echo($attr->pivot->attribute_id);
             array_push($prod_attributes, $attr->pivot->attribute_id);
         }
-        //$prod_options = array();
-        // foreach ($product->values as $val) {
-        //     $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
-        //     array_push($prod_options, $prod_opt);
-        // }
+
+        #Specific product options(characteristics) and their corresponding amount
         $prod_options = array();
-        $prod_colors = array();
-        $prod_sizes = array();
-        $prod_styles = array();
         $prod_options_amount = array();
         $all_prod_options = Product::get_product_options($id);
-        $html_test = "<h1> hello </h1>";
         foreach($all_prod_options as $options_and_amount) {
             
             array_push($prod_options_amount, $options_and_amount->amount);
-            
             $options = json_decode($options_and_amount->options_ids);
             array_push($prod_options, $options);
         }
 
+        #Specific product categories
         $prod_categs = array();
         foreach ($product->categories as $key => $category) {
             array_push($prod_categs, $category->id);
@@ -229,7 +198,7 @@ class ProductController extends Controller
                                      'colors' => $colors, 
                                      'sizes' => $sizes,
                                      'styles' => $styles,
-                                     'options' => null,//$options, 
+                                     'options' => null,
                                      'prod_options' => $prod_options,
                                      'prod_options_amount' => $prod_options_amount,
                                      'categories' => $categories,

@@ -1,11 +1,11 @@
 <!-- Called in _product partial view -->
 <div id="opts" class="col-span-2">
   {{ Form::select('colors', $colors->pluck('option', 'id'), $options->color != null ? $options->color->id : null, 
-                  ['id'=>'Color', $options != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
+                  ['id'=>'Color', $options->color != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
   {{ Form::select('sizes', $sizes->pluck('option', 'id'), $options->talla != null ? $options->talla->id : null, 
-                  ['id'=>'Talla', $options != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
+                  ['id'=>'Talla', $options->talla != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
   {{ Form::select('styles', $styles->pluck('option', 'id'), $options->estilo != null ? $options->estilo->id : null,
-                  ['id'=>'Estilo', $options != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
+                  ['id'=>'Estilo', $options->estilo != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
 </div>
 <div id="amounts" class="col-start-3 grid items-center place-items-center">
   {{ Form::selectRange('', 1, 50, $prod_options_amount != null ? $prod_options_amount[$k] : '1', 

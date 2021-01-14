@@ -45,7 +45,7 @@
         <div class="product_fields col-span-6 sm:col-span-4">
           <br>
           {{ Form::label('quantity', 'Cantidad en inventario', ['class' => 'block font-medium text-sm text-gray-700']) }}
-          {{ Form::text('quantity', 0, ['id' => 'quantity', 'class' => 'form-input rounded-md shadow-sm mt-1 block w-full', 'readonly']) }}
+          {{ Form::text('quantity', null, ['id' => 'quantity', 'class' => 'form-input rounded-md shadow-sm mt-1 block w-full', 'readonly']) }}
           <br>
           {{ Form::label('price', 'Precio', ['class' => 'block font-medium text-sm text-gray-700']) }}
           {{ Form::text('price', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
