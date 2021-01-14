@@ -59,15 +59,15 @@ class ProductController extends Controller
             $sizes = Option::get_options_by_attribute(2);
             $styles = Option::get_options_by_attribute(3);
 
-
             return view('product.create', ['product' => null, 
                                            'attrs' => $attrs,
+                                           'prod_attributes' => null,
                                            'colors' => $colors, 
                                            'sizes' => $sizes,
-                                           'styles' => $styles,
-                                           'prod_attributes' => null,
+                                           'styles' => $styles,                                           
                                            'options' => $options, 
                                            'prod_options' => null, 
+                                           'prod_options_amount' => null,
                                            'categories' => $categories,
                                            'prod_categs' => null]);
         } else {
@@ -186,13 +186,36 @@ class ProductController extends Controller
     {
         $product = Product::find($id);
         $attrs = Attribute::get_all_attributes();
-        $options = Option::get_all_options();
+        //$options = Option::get_all_options();
         $categories = Category::get_all_categories();
 
+        $colors = Option::get_options_by_attribute(1);
+        $sizes = Option::get_options_by_attribute(2);
+        $styles = Option::get_options_by_attribute(3);
+
+        $prod_attributes = array();
+        foreach ($product->attributes()->get() as $attr) {
+            //echo($attr->pivot->attribute_id);
+            array_push($prod_attributes, $attr->pivot->attribute_id);
+        }
+        //$prod_options = array();
+        // foreach ($product->values as $val) {
+        //     $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
+        //     array_push($prod_options, $prod_opt);
+        // }
         $prod_options = array();
-        foreach ($product->values as $val) {
-            $prod_opt = DB::table('options')->where('id', $val->pivot->option_id)->value('id');
-            array_push($prod_options, $prod_opt);
+        $prod_colors = array();
+        $prod_sizes = array();
+        $prod_styles = array();
+        $prod_options_amount = array();
+        $all_prod_options = Product::get_product_options($id);
+        $html_test = "<h1> hello </h1>";
+        foreach($all_prod_options as $options_and_amount) {
+            
+            array_push($prod_options_amount, $options_and_amount->amount);
+            
+            $options = json_decode($options_and_amount->options_ids);
+            array_push($prod_options, $options);
         }
 
         $prod_categs = array();
@@ -201,11 +224,17 @@ class ProductController extends Controller
         }
 
         return view('product.edit', ['product' => $product, 
-                                     'attrs' => $attrs, 
-                                     'options' => $options, 
+                                     'attrs' => $attrs,
+                                     'prod_attributes' => $prod_attributes,
+                                     'colors' => $colors, 
+                                     'sizes' => $sizes,
+                                     'styles' => $styles,
+                                     'options' => null,//$options, 
                                      'prod_options' => $prod_options,
+                                     'prod_options_amount' => $prod_options_amount,
                                      'categories' => $categories,
-                                     'prod_categs' => $prod_categs]);
+                                     'prod_categs' => $prod_categs
+                                     ]);
     }
 
     /**
@@ -218,17 +247,22 @@ class ProductController extends Controller
     public function update(Request $request, $id)
     {
         $product = Product::find($id);
+        $product->code = $request->code;
         $product->name = $request->name;
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
         $product->save();
 
-        if ($request->hasfile('main_image')) {
-            $old_main = $product->images()->main_image(); //$product->images()->where('type', 'MN')->first();
-            $old_main->delete();
-        }
-        $this->upload_product_images($request, $product);
+        #CATEGORIES
+        $product->categories()->sync($request->categ_checks);
+
+        #IMAGES
+        // if ($request->hasfile('main_image')) {
+        //     $old_main = $product->images()->main_image(); //$product->images()->where('type', 'MN')->first();
+        //     $old_main->delete();
+        // }
+        // $this->upload_product_images($request, $product);
         
         $product->refresh();
         return redirect()->action([ProductController::class, 'index']);
