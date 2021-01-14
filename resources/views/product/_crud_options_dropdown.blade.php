@@ -1,5 +1,5 @@
 <!-- Called in _product partial view -->
-<div id="opts" class="col-span-2">
+<div id="opts" class="col-span-2" hidden>
   @if ($options != null)
     {{ Form::select('color['.$k.']', $colors->pluck('option', 'id'), $options->color != null ? $options->color->id : null, 
                     ['id'=>'Color_'.$k, $options->color != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
@@ -16,10 +16,10 @@
                   ['id'=>'Estilo', 'hidden', 'class' => 'form-input w-full m-1']) }}
   @endif
 </div>
-<div id="amounts" class="col-start-3 grid items-center place-items-center">
+<div id="amounts" class="col-start-3 grid items-center place-items-center" hidden>
   {{ Form::selectRange('', 1, 50, $prod_options_amount != null ? $prod_options_amount[$k] : '1', 
                       ['id' => 'number_hid', 'class' => 'opt_amount form-input', $prod_options_amount != null ? '' : 'hidden']) }}
   {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", $prod_options_amount != null ? '' : 'hidden']) }}
 </div>
 <input type='text' id='contador' name='contador' value='0' hidden />
-<hr class="col-span-3 m-3">
+<hr id="divider" class="col-span-3 m-3">

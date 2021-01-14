@@ -40,20 +40,41 @@ $(function() {
         jQuery.each($('input[class="attributes form-checkbox"]:checked'), function(){
             selected_attributes.push($(this).siblings('#attribute_name').text());
         })
+
+        $("#opts").clone().appendTo("#option_dropdowns");
+        $("#opts").attr("id", "opts_"+cont);
+        $("#opts_"+cont).removeAttr("hidden");
         for (var i = 0; i<selected_attributes.length; i++) {
-            $("#"+selected_attributes[i]).clone().appendTo("#opts");
-            $("#"+selected_attributes[i]).removeAttr("hidden");
-            $("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+            //$("#"+selected_attributes[i]).clone().appendTo("#opts");
+            //$("#"+selected_attributes[i]).removeAttr("hidden");
+            //$("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+            $("#opts_"+cont).children("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+            $("#"+selected_attributes[i]+"_"+cont).removeAttr("hidden");
             $("#"+selected_attributes[i]+"_"+cont).attr("name", (selected_attributes[i].toLowerCase())+"["+cont+"]");
         }
-        $("#number_hid").clone().appendTo("#amounts");
-        $("#number_hid").removeAttr("hidden");
-        $("#number_hid").attr("id", "number_"+cont);
+        
+        // $("#number_hid").clone().appendTo("#amounts");
+        // $("#number_hid").removeAttr("hidden");
+        // $("#number_hid").attr("id", "number_"+cont);
+        // $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
+
+        // $("#btn_remove_hid").clone().appendTo("#amounts");
+        // $("#btn_remove_hid").removeAttr("hidden");
+        // $("#btn_remove_hid").attr("id", cont);
+
+        $("#amounts").clone().appendTo("#option_dropdowns");
+        $("#amounts").attr("id", "amounts_"+cont);
+        $("#amounts_"+cont).removeAttr("hidden");
+
+        $("#amounts_"+cont).children("#number_hid").attr("id", "number_"+cont);
+        $("#number_"+cont).removeAttr("hidden");
         $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
 
-        $("#btn_remove_hid").clone().appendTo("#amounts");
-        $("#btn_remove_hid").removeAttr("hidden");
-        $("#btn_remove_hid").attr("id", cont);
+        $("#amounts_"+cont).children("#btn_remove_hid").attr("id", cont);
+        $("#"+cont).removeAttr("hidden");
+
+        $("#divider").clone().appendTo("#option_dropdowns");
+        
 
         $("#contador").replaceWith("<input type='text' id='contador' name='contador' value="+cont+" hidden/>");
         calc_product_amount();
