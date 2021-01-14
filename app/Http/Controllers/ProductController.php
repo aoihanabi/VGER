@@ -226,6 +226,23 @@ class ProductController extends Controller
         #CATEGORIES
         $product->categories()->sync($request->categ_checks);
 
+        #OPTIONS
+        $product->attributes()->sync($request->attribute_checks);
+        // for ($i = 0; $i<$request->contador+1; $i++) {
+        //      $arr = [
+        //          'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
+        //          'talla' => isset($request->talla[$i]) ? ['id' => $request->talla[$i], 'option' => Option::where('id', $request->talla[$i])->first(['option'])->option] : null,
+        //          'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
+        //      ];
+        //      $toJson = json_encode($arr);
+             
+        //      $productOption = new ProductOptions;
+        //      $productOption->product_id = $product->id;
+        //      $productOption->options_ids = $toJson;
+        //      $productOption->amount = $request->opt_amount[$i];
+        //      $productOption->save();
+        //  }
+
         #IMAGES
         // if ($request->hasfile('main_image')) {
         //     $old_main = $product->images()->main_image(); //$product->images()->where('type', 'MN')->first();
