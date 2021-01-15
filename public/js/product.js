@@ -32,12 +32,12 @@ $(function() {
 
     // ********* Add option dropdows dynamically *********
     // in _product.blade.php for product CREATE & EDIT
-    var cont = 0;
+    var cont = $("#contador").val();//0;
     $("#btn_add_options").on('click', function(){
         var selected_attributes = [];
         $('input[class="attributes form-checkbox"]').attr('onclick', 'return false'); //Avoid second guesses
         
-        jQuery.each($('input[class="attributes form-checkbox"]:checked'), function(){
+        jQuery.each($('input[class="attributes form-checkbox"]:checked'), function() {
             selected_attributes.push($(this).siblings('#attribute_name').text());
         })
 
