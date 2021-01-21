@@ -35,65 +35,69 @@ $(function() {
     var cont = $("#contador").val();//0;
     $("#btn_add_options").on('click', function(){
         var selected_attributes = [];
-        $('input[class="attributes form-checkbox"]').attr('onclick', 'return false'); //Avoid second guesses
+        //$('input[class="attributes form-checkbox"]').attr('onclick', 'return false'); //Avoid second guesses
         
         jQuery.each($('input[class="attributes form-checkbox"]:checked'), function() {
             selected_attributes.push($(this).siblings('#attribute_name').text());
         })
+        
+        //For Edit Forms --------------------------------
+        manage_existing_dropdowns(selected_attributes);
+        //-----------------------------------------------
 
+        //Duplicate and rename #opts element and its childs
         $("#opts").clone().appendTo("#option_dropdowns");
-        $("#opts").attr("id", "opts_"+cont);
-        $("#opts_"+cont).removeAttr("hidden");
+        $("#opts").attr("id", cont);
+        $("#" + cont).removeAttr("hidden");
         for (var i = 0; i<selected_attributes.length; i++) {
-            //$("#"+selected_attributes[i]).clone().appendTo("#opts");
-            //$("#"+selected_attributes[i]).removeAttr("hidden");
-            //$("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
-            $("#opts_"+cont).children("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+            $("#"+cont).children("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
             $("#"+selected_attributes[i]+"_"+cont).removeAttr("hidden");
             $("#"+selected_attributes[i]+"_"+cont).attr("name", (selected_attributes[i].toLowerCase())+"["+cont+"]");
         }
-        
-        // $("#number_hid").clone().appendTo("#amounts");
-        // $("#number_hid").removeAttr("hidden");
-        // $("#number_hid").attr("id", "number_"+cont);
-        // $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
 
-        // $("#btn_remove_hid").clone().appendTo("#amounts");
-        // $("#btn_remove_hid").removeAttr("hidden");
-        // $("#btn_remove_hid").attr("id", cont);
-
+        //Duplicate and rename #amounts elem and its childs
         $("#amounts").clone().appendTo("#option_dropdowns");
         $("#amounts").attr("id", "amounts_"+cont);
         $("#amounts_"+cont).removeAttr("hidden");
 
-        $("#amounts_"+cont).children("#number_hid").attr("id", "number_"+cont);
+        $("#amounts_"+cont).children("#number_hid").attr("id", "number_"+cont); // option amount dropdown 
         $("#number_"+cont).removeAttr("hidden");
         $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
 
-        $("#amounts_"+cont).children("#btn_remove_hid").attr("id", cont);
-        $("#"+cont).removeAttr("hidden");
+        $("#amounts_"+cont).children("#btn_remove_hid").attr("remove_counter", cont); //remove option button
+        $("#amounts_"+cont).children("#btn_remove_hid").removeAttr("hidden");
 
-        $("#divider").clone().appendTo("#option_dropdowns");
-        
+        $("#divider").clone().appendTo("#option_dropdowns"); //divider
+        //rename_dropdown_elements(selected_attributes, cont);
+        $("#divider").attr("id", "divider_"+cont);
+        $("#divider_"+cont).removeAttr("hidden");
 
         $("#contador").replaceWith("<input type='text' id='contador' name='contador' value="+cont+" hidden/>");
         calc_product_amount();
         cont++;
     });
-    $(document).on('click',"button.btn_remove_options", function(){
-        var btn_id = $(this).attr("id");
-        
-        $("#Color_"+btn_id).remove();
-        $("#Talla_"+btn_id).remove();
-        $("#Estilo_"+btn_id).remove();
-        $("#number_"+btn_id).remove();
-        $(this).remove();
+    $(document).on('click',"button.btn_remove_options", function() {
+        var elem_count = $(this).attr("remove_counter");
+        $("#"+elem_count).remove();
+        $("#amounts_"+elem_count).remove();
+        // $("#Color_"+elem_count).remove();
+        // $("#Talla_"+elem_count).remove();
+        // $("#Estilo_"+elem_count).remove();
+        // $("#number_"+elem_count).remove();
+        $("#divider_"+elem_count).remove();
+        //$(this).remove();
         calc_product_amount();
+        rename_dropdown_elements(cont)
         cont--;
-
+        
         if(cont <=0){
             $('input[class="attributes form-checkbox"]').attr('onclick', 'return true'); //Avoid second guesses
         }
+        // var selected_attributes = [];
+        // jQuery.each($('input[class="attributes form-checkbox"]:checked'), function() {
+        //     selected_attributes.push($(this).siblings('#attribute_name').text());
+        // })
+         
     });
     $(document).on('change', ".opt_amount", function() {
         calc_product_amount();
@@ -103,6 +107,161 @@ $(function() {
         $(".opt_amount").each(function() {
             addition += parseInt($(this).val());
             $("#quantity").val(addition-1);
+        })
+    }
+    //Add or remove dropdowns to existing .opt_class div elements according to the attribute checkbox selected
+    function manage_existing_dropdowns(selected_attributes){
+        jQuery.each($(".opts_class:visible"), function() {
+            
+            var total_dropdowns = $(this).children('select:visible').length;
+            var opts_id = $(this).attr('id');
+
+            if (total_dropdowns != 0) {
+                //Check if total visible dropdowns correspond to the total attributes selected, to either add needed dropdowns or hide them
+                if(total_dropdowns < selected_attributes.length) {
+                    
+                    var hidden_select = $(this).children('select:hidden');
+                    jQuery.each(hidden_select, function(){
+                        
+                        var hidden_select_id = $(this).attr('id');
+                        var simpler_name = hidden_select_id != undefined ? hidden_select_id.slice(0, -2) : '';//remove index in the name of existing selects
+                        
+                        //when it's CREATE form
+                        //if select id IS in selected_attributes array
+                        if (jQuery.inArray(hidden_select_id, selected_attributes) !== -1) {
+                            var temp_id = $(this).attr('id');
+                            var temp_name = $(this).attr('name');
+                            //alert(opts_id + " - " + temp_id+"_"+cont)
+                            $(this).attr("id", temp_id+"_"+opts_id);
+                            $(this).attr("name", temp_name+"["+opts_id+"]");
+                            $(this).removeAttr("hidden");
+                            //duplicar num_hid
+                        }
+                        //when it's EDIT form
+                        //if select IS in selected_attributes array
+                        else if(jQuery.inArray(simpler_name, selected_attributes) !== -1){ 
+                            $(this).removeAttr("hidden");
+                        }
+                    })
+                }
+                if (total_dropdowns > selected_attributes.length) {
+                    var visible_select = $(this).children('select:visible');
+                    jQuery.each(visible_select, function(){
+                        
+                        var visible_select_id = $(this).attr('id');
+                        var simpler_name = visible_select_id != undefined ? visible_select_id.slice(0, -2) : '';
+                        
+                        // console.log(visible_select_id + "  " + selected_attributes);
+                        // console.log(simpler_name + "  " + selected_attributes);
+                        
+                        //if select id IS NOT in selected_attributes, hide it
+                        if(jQuery.inArray(simpler_name, selected_attributes) === -1){ //for edit
+                            $(this).attr("hidden", true);
+                        }
+                    })
+                }
+                //Check if the dropdowns showing are according to the attributes selected
+                if(total_dropdowns == selected_attributes.length) {
+                    var vis_select = $(this).children('select');
+                    
+                    jQuery.each(vis_select, function(){
+                        //console.log($(this).attr("id"));
+                        var vis_select_id = $(this).attr('id');
+                        var simpler_name = vis_select_id != undefined ? vis_select_id.slice(0, -2) : '';
+
+                        if(jQuery.inArray(simpler_name, selected_attributes) === -1){
+                            //console.log("hide "+vis_select_id);
+                            //alert("1"+simpler_name + " is not in " + selected_attributes)
+                            $(this).attr("hidden", true);
+                        }
+                        // console.log(vis_select_id + " " + selected_attributes);
+                        // console.log((jQuery.inArray(vis_select_id, selected_attributes) !== -1));
+                        // console.log(($(this).attr("hidden") == "hidden"));
+                        
+                        if((jQuery.inArray(vis_select_id, selected_attributes) !== -1)){
+                            //alert("2"+vis_select_id + " is in " + selected_attributes)
+                            if($(this).attr("hidden") == "hidden"){
+                                var temp_id = $(this).attr('id');
+                                var temp_name = $(this).attr('name');
+
+                                $(this).attr("id", temp_id+"_"+opts_id);
+                                $(this).attr("name", temp_name+"["+opts_id+"]");
+                                // $(this).attr("id", temp_id+"_"+cont);
+                                // $(this).attr("name", temp_name+"["+cont+"]");
+                                $(this).removeAttr("hidden");
+                                console.log($(this).attr("id") +" make visible");
+                            }
+                        }
+                        // alert(simpler_name+"? in "+selected_attributes);
+                        // console.log((jQuery.inArray(simpler_name, selected_attributes) !== -1));
+                        if((jQuery.inArray(simpler_name, selected_attributes) !== -1)){
+                            //alert("3"+simpler_name + " is in " + selected_attributes)
+                            if($(this).attr("hidden") == "hidden"){
+                                $(this).removeAttr("hidden");
+                            }
+                        }
+                    })
+                }
+                
+            }
+
+        })
+    }
+    // Re calcula y asigna los indices en orden incremental para los
+    // dropdown que contienen las opciones. 
+    //(Para que puedan ser captados sin problemas por el controlador)
+    function rename_dropdown_elements(cont) {
+       
+        var new_count = 0;
+        //For each div .opts_class
+        jQuery.each($(".opts_class:visible"), function() {
+            $(this).attr("id", new_count);
+            var visible_select = $(this).children('select:visible');
+
+            //For each select inside that div
+            jQuery.each(visible_select, function() {
+                
+                var select_id = $(this).attr("id");
+                var select_name = $(this).attr("name");
+                
+                if(new_count < cont) {
+                    var temp_id = select_id.slice(0,-1);
+                    $(this).attr("id", temp_id + new_count);
+                    
+                    var temp_name = select_name.slice(0,-2);
+                    $(this).attr("name", temp_name + new_count+"]");
+                }
+            });
+            new_count++;
+        })
+
+        new_count = 0;
+        //For each div .amounts_class
+        jQuery.each($(".amounts_class:visible"), function() {
+            $(this).attr("id", "amounts_"+new_count);     
+            $(this).children("#btn_remove_hid").attr("remove_counter", new_count);
+
+            var number_select = $(this).children('select');
+            //For each select inside that div
+            jQuery.each(number_select, function() {
+                
+                //opt_amount
+                if(new_count < cont) {
+                    //var temp_id = select_id.slice(0,-1);
+                    $(this).attr("id", "number_" + new_count);
+                    
+                    //var temp_name = select_name.slice(0,-2);
+                    $(this).attr("name", "opt_amount["+new_count+"]");
+                    
+                }
+            });
+            new_count++;
+        })
+
+        new_count = 0;
+        jQuery.each($(".divider:visible"), function(){
+            $(this).attr("id", "divider_"+new_count);
+            new_count++;
         })
     }
 

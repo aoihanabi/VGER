@@ -30,13 +30,13 @@
       <div id="product_options" class="col-span-6 sm:col-span-4">
         <div class="flex flex-row justify-end">
           {{ Form::label('', 'Opciones', ['class' => 'block font-medium text-sm text-gray-700 flex-1']) }}
-          {{ Form::button('+', ['id' => 'btn_add_options', 'class' => 'my-2 px-2 col-end-3 text-white bg-blue-700 hover:bg-blue-800 rounded']) }}
+          {{ Form::button('', ['id' => 'btn_add_options', 'class' => 'fas fa-plus my-2 p-2 col-end-3 text-white bg-blue-700 hover:bg-blue-800 rounded']) }}
         </div>
         <div id="option_dropdowns" class="grid grid-cols-3">
           <!-- WHEN EDIT -->
           @if ($prod_options != null)
             @foreach ($prod_options as $k => $options)
-              <div id="opts_{{$k}}" class="col-span-2 {{$options != null ? '' : 'hidden'}}">
+              <div id="{{$k}}" class="opts_class col-span-2 {{$options != null ? '' : 'hidden'}}">
                 {{ Form::select('color['.$k.']', $colors->pluck('option', 'id'), $options->color != null ? $options->color->id : null, 
                                 ['id'=>'Color_'.$k, $options->color != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
                 {{ Form::select('talla['.$k.']', $sizes->pluck('option', 'id'), $options->talla != null ? $options->talla->id : null, 
@@ -44,15 +44,16 @@
                 {{ Form::select('estilo['.$k.']', $styles->pluck('option', 'id'), $options->estilo != null ? $options->estilo->id : null,
                               ['id'=>'Estilo_'.$k, $options->estilo != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
               </div>
-              <div id="amounts_{{$k}}" class="col-start-3 grid items-center place-items-center" hidden>
+              <div id="amounts_{{$k}}" class="amounts_class col-start-3 my-1 mx-5">
                 {{ Form::selectRange('', 1, 50, $prod_options_amount != null ? $prod_options_amount[$k] : '1', 
-                                    ['id' => 'number_hid', 'class' => 'opt_amount form-input', $prod_options_amount != null ? '' : 'hidden']) }}
-                {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", $prod_options_amount != null ? '' : 'hidden']) }}
+                                    ['id' => 'number_'.$k, 'name' => 'opt_amount['.$k.']', 'class' => 'opt_amount mr-1 form-input', $prod_options_amount != null ? '' : 'hidden']) }}
+                {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 
+                                  $prod_options_amount != null ? '' : 'hidden', 'remove_counter' => $k]) }}
               </div>
+              <hr id="divider_{{$k}}" class="col-span-3 m-3 divider">
             @endforeach
           @endif
-          <hr id="divider" class="col-span-3 m-3">
-          <div id="opts" class="col-span-2" hidden>
+          <div id="opts" class="opts_class col-span-2" hidden>
             {{ Form::select('colors', $colors->pluck('option', 'id'), null, 
                             ['id'=>'Color', 'hidden', 'class' => 'form-input w-full m-1']) }}
             {{ Form::select('sizes', $sizes->pluck('option', 'id'), null, 
@@ -60,12 +61,12 @@
             {{ Form::select('styles', $styles->pluck('option', 'id'), null,
                           ['id'=>'Estilo', 'hidden', 'class' => 'form-input w-full m-1']) }}
           </div>
-          <div id="amounts" class="col-start-3 grid items-center place-items-center" hidden>
-            {{ Form::selectRange('', 1, 50, '1', ['id' => 'number_hid', 'class' => 'opt_amount form-input', 'hidden']) }}
+          <div id="amounts" class="amounts_class col-start-3 my-1 mx-5" hidden>
+            {{ Form::selectRange('', 1, 50, '1', ['id' => 'number_hid', 'class' => 'opt_amount mr-1 form-input', 'hidden']) }}
             {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 'hidden']) }}
           </div>
           <input type='text' id='contador' name='contador' value='{{ $prod_options != null ? count($prod_options) : "0" }}' hidden />
-          
+          <hr id="divider" class="col-span-3 m-3 divider" hidden>
         </div>
         <!-- Quantity & Price -->
         <div class="product_fields col-span-6 sm:col-span-4">
