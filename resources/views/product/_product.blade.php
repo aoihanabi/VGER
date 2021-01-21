@@ -37,12 +37,35 @@
           @if ($prod_options != null)
             @foreach ($prod_options as $k => $options)
               <div id="{{$k}}" class="opts_class col-span-2 {{$options != null ? '' : 'hidden'}}">
-                {{ Form::select('color['.$k.']', $colors->pluck('option', 'id'), $options->color != null ? $options->color->id : null, 
-                                ['id'=>'Color_'.$k, $options->color != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
-                {{ Form::select('talla['.$k.']', $sizes->pluck('option', 'id'), $options->talla != null ? $options->talla->id : null, 
-                                ['id'=>'Talla_'.$k, $options->talla != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
-                {{ Form::select('estilo['.$k.']', $styles->pluck('option', 'id'), $options->estilo != null ? $options->estilo->id : null,
-                              ['id'=>'Estilo_'.$k, $options->estilo != null ? '' : 'hidden', 'class' => 'form-input w-full m-1']) }}
+                <!-- Form::select('NAME', ARRAY-OF-OPTIONS, SELECTED-OPTION, 
+                                ['id'=>'ID', HIDDEN-ATTRIBUTE, 'class' => 'CLASS']) -->
+
+                {{ Form::select($options->color != null ? 'color['.$k.']' : 'colors', 
+                                $colors->pluck('option', 'id'), 
+                                $options->color != null ? $options->color->id : null, 
+                                [
+                                  'id'=>'Color_'.$k, 
+                                  $options->color != null ? '' : 'hidden', 
+                                  'class' => 'form-input w-full m-1'
+                                ]) }}
+                
+                {{ Form::select($options->talla != null ? 'talla['.$k.']' : 'sizes',
+                                $sizes->pluck('option', 'id'), 
+                                $options->talla != null ? $options->talla->id : null, 
+                                [
+                                  'id'=>'Talla_'.$k, 
+                                  $options->talla != null ? '' : 'hidden', 
+                                  'class' => 'form-input w-full m-1'
+                                ]) }}
+                
+                {{ Form::select($options->estilo != null ? 'estilo['.$k.']' : 'styles',
+                                $styles->pluck('option', 'id'), 
+                                $options->estilo != null ? $options->estilo->id : null,
+                              [
+                                'id'=>'Estilo_'.$k, 
+                                $options->estilo != null ? '' : 'hidden', 
+                                'class' => 'form-input w-full m-1'
+                              ]) }}
               </div>
               <div id="amounts_{{$k}}" class="amounts_class col-start-3 my-1 mx-5">
                 {{ Form::selectRange('', 1, 50, $prod_options_amount != null ? $prod_options_amount[$k] : '1', 

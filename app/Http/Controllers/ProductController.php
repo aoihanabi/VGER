@@ -90,7 +90,7 @@ class ProductController extends Controller
         /*request()->validate([
             'name' => 'required',
             'author' => 'required',
-        // ]);*/
+        ]);*/
         $product = new Product;
         $product->code = $request->code;
         $product->name = $request->name;
@@ -110,7 +110,7 @@ class ProductController extends Controller
                 'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
             ];
             $toJson = json_encode($arr);
-            
+            //print_r($arr);
             $productOption = new ProductOptions;
             $productOption->product_id = $product->id;
             $productOption->options_ids = $toJson;
@@ -228,20 +228,33 @@ class ProductController extends Controller
 
         #OPTIONS
         $product->attributes()->sync($request->attribute_checks);
-        // for ($i = 0; $i<$request->contador+1; $i++) {
-        //      $arr = [
-        //          'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
-        //          'talla' => isset($request->talla[$i]) ? ['id' => $request->talla[$i], 'option' => Option::where('id', $request->talla[$i])->first(['option'])->option] : null,
-        //          'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
-        //      ];
-        //      $toJson = json_encode($arr);
-             
-        //      $productOption = new ProductOptions;
-        //      $productOption->product_id = $product->id;
-        //      $productOption->options_ids = $toJson;
-        //      $productOption->amount = $request->opt_amount[$i];
-        //      $productOption->save();
-        //  }
+        echo($request->contador);
+        for ($i = 0; $i<$request->contador+1; $i++) {
+            $arr = [
+                'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
+                'talla' => isset($request->talla[$i]) ? ['id' => $request->talla[$i], 'option' => Option::where('id', $request->talla[$i])->first(['option'])->option] : null,
+                'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
+            ];
+            
+            $toJson = json_encode($arr);
+            
+            $productOption = ProductOptions::where('product_id', $product->id)->get(); //find?
+            
+            if(isset($productOption[$i])) {
+                //print_r($productOption[$i]->options_ids);
+                $productOption[$i]->options_ids = $toJson;
+                $productOption[$i]->amount = $request->opt_amount[$i];
+                $productOption[$i]->save();
+                //echo("Modified: ". $productOption[$i]->id);
+            } else {
+                $prodOpt = new ProductOptions;
+                $prodOpt->product_id = $product->id;
+                $prodOpt->options_ids = $toJson;
+                $prodOpt->amount = $request->opt_amount[$i];
+                $prodOpt->save();
+                //echo("Add new one " . ($i) ." - " . $request->opt_amount[$i]);
+            }
+        }
 
         #IMAGES
         // if ($request->hasfile('main_image')) {

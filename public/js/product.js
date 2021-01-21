@@ -128,10 +128,11 @@ $(function() {
                         
                         //when it's CREATE form
                         //if select id IS in selected_attributes array
+                        console.log(hidden_select_id + " - " +selected_attributes);
                         if (jQuery.inArray(hidden_select_id, selected_attributes) !== -1) {
                             var temp_id = $(this).attr('id');
                             var temp_name = $(this).attr('name');
-                            //alert(opts_id + " - " + temp_id+"_"+cont)
+                            
                             $(this).attr("id", temp_id+"_"+opts_id);
                             $(this).attr("name", temp_name+"["+opts_id+"]");
                             $(this).removeAttr("hidden");
@@ -140,6 +141,9 @@ $(function() {
                         //when it's EDIT form
                         //if select IS in selected_attributes array
                         else if(jQuery.inArray(simpler_name, selected_attributes) !== -1){ 
+                            
+                            var temp_id = ($(this).attr('id')).slice(0,-2);
+                            $(this).attr("name", (temp_id.toLowerCase())+"["+opts_id+"]");
                             $(this).removeAttr("hidden");
                         }
                     })
@@ -156,6 +160,7 @@ $(function() {
                         
                         //if select id IS NOT in selected_attributes, hide it
                         if(jQuery.inArray(simpler_name, selected_attributes) === -1){ //for edit
+                            $(this).attr("name", ""); //erase its name to avoid the controller catching it
                             $(this).attr("hidden", true);
                         }
                     })
@@ -169,27 +174,29 @@ $(function() {
                         var vis_select_id = $(this).attr('id');
                         var simpler_name = vis_select_id != undefined ? vis_select_id.slice(0, -2) : '';
 
+                        //console.log(simpler_name +" in "+ selected_attributes);
                         if(jQuery.inArray(simpler_name, selected_attributes) === -1){
-                            //console.log("hide "+vis_select_id);
+                            console.log("hide "+vis_select_id);
                             //alert("1"+simpler_name + " is not in " + selected_attributes)
+                            $(this).attr("name", "");
                             $(this).attr("hidden", true);
                         }
-                        // console.log(vis_select_id + " " + selected_attributes);
-                        // console.log((jQuery.inArray(vis_select_id, selected_attributes) !== -1));
+                         console.log(vis_select_id + " " + selected_attributes);
+                         console.log((jQuery.inArray(vis_select_id, selected_attributes) !== -1));
                         // console.log(($(this).attr("hidden") == "hidden"));
                         
                         if((jQuery.inArray(vis_select_id, selected_attributes) !== -1)){
                             //alert("2"+vis_select_id + " is in " + selected_attributes)
                             if($(this).attr("hidden") == "hidden"){
                                 var temp_id = $(this).attr('id');
-                                var temp_name = $(this).attr('name');
+                                //var temp_name = $(this).attr('name');
 
                                 $(this).attr("id", temp_id+"_"+opts_id);
-                                $(this).attr("name", temp_name+"["+opts_id+"]");
+                                $(this).attr("name", (temp_id.toLowerCase())+"["+opts_id+"]");
                                 // $(this).attr("id", temp_id+"_"+cont);
                                 // $(this).attr("name", temp_name+"["+cont+"]");
                                 $(this).removeAttr("hidden");
-                                console.log($(this).attr("id") +" make visible");
+                                //console.log($(this).attr("id") +" make visible");
                             }
                         }
                         // alert(simpler_name+"? in "+selected_attributes);
@@ -197,6 +204,8 @@ $(function() {
                         if((jQuery.inArray(simpler_name, selected_attributes) !== -1)){
                             //alert("3"+simpler_name + " is in " + selected_attributes)
                             if($(this).attr("hidden") == "hidden"){
+                                var temp_id = ($(this).attr('id')).slice(0,-2);;
+                                $(this).attr("name", (temp_id.toLowerCase())+"["+opts_id+"]");
                                 $(this).removeAttr("hidden");
                             }
                         }
