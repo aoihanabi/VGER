@@ -110,7 +110,7 @@ class ProductController extends Controller
                 'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
             ];
             $toJson = json_encode($arr);
-            //print_r($arr);
+            print_r($arr);
             $productOption = new ProductOptions;
             $productOption->product_id = $product->id;
             $productOption->options_ids = $toJson;
@@ -241,27 +241,25 @@ class ProductController extends Controller
             $productOption = ProductOptions::where('product_id', $product->id)->get(); //find?
             
             if(isset($productOption[$i])) {
-                //print_r($productOption[$i]->options_ids);
+
                 $productOption[$i]->options_ids = $toJson;
                 $productOption[$i]->amount = $request->opt_amount[$i];
                 $productOption[$i]->save();
-                //echo("Modified: ". $productOption[$i]->id);
             } else {
                 $prodOpt = new ProductOptions;
                 $prodOpt->product_id = $product->id;
                 $prodOpt->options_ids = $toJson;
                 $prodOpt->amount = $request->opt_amount[$i];
                 $prodOpt->save();
-                //echo("Add new one " . ($i) ." - " . $request->opt_amount[$i]);
             }
         }
 
         #IMAGES
-        // if ($request->hasfile('main_image')) {
-        //     $old_main = $product->images()->main_image(); //$product->images()->where('type', 'MN')->first();
-        //     $old_main->delete();
-        // }
-        // $this->upload_product_images($request, $product);
+        if ($request->hasfile('main_image')) {
+            $old_main = $product->images()->main_image();
+            $old_main->delete();
+        }
+        $this->upload_product_images($request, $product);
         
         $product->refresh();
         return redirect()->action([ProductController::class, 'index']);
@@ -287,18 +285,28 @@ class ProductController extends Controller
 
         if($request->hasfile('main_image'))
         {
+            //When updating, Delete if a previous image exists.
+            $old_main = $product->main_image->first(); 
+            if($old_main) {
+                $old_main->delete();
+            }
             $path_main = $request->file('main_image')->store('images/products');
             $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
             $product->images()->save($im_main);
         }
 
         if($request->hasfile('sec_images')) {
-            foreach($request->file('sec_images') as $file)
-            { 
+            
+            $old_secondary = $product->secondary_images;
+            foreach($request->file('sec_images') as $key => $file)
+            {
+                if(isset($old_secondary[$key])) {
+                    $old_secondary[$key]->delete();
+                }
                 $path_sec = $file->store('images/products');
                 $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
                 $product->images()->save($im_sec);
-            }    
+            }
         }
     }
 
