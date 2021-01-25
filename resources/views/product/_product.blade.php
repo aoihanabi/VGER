@@ -1,5 +1,8 @@
 
-
+  <?php
+    $oldcolor = Request::old('color');
+    //print_r($oldcolor);
+  ?>
   @if ($errors->any())
     @foreach ($errors->all() as $error)
       <div class="my-2 p-2 shadow  sm:rounded-md bg-red-200 ">
@@ -8,7 +11,6 @@
             {{ $error }}
           </span>
         </span>
-        
       </div>
     @endforeach
   @endif
@@ -90,6 +92,7 @@
               <hr id="divider_{{$k}}" class="col-span-3 m-3 divider">
             @endforeach
           @endif
+          
           <div id="opts" class="opts_class col-span-2" hidden>
             {{ Form::select('colors', $colors->pluck('option', 'id'), null, 
                             ['id'=>'Color', 'hidden', 'class' => 'form-input w-full m-1']) }}

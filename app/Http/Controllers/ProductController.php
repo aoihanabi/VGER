@@ -90,7 +90,15 @@ class ProductController extends Controller
         $validated = $request->validate([
             'code' => 'required|numeric|digits:6',
             'name' => 'required|max:150',
-            'name' => 'required|max:350',
+            'description' => 'max:350',
+            'quantity' => 'required|numeric',
+            'price' => 'required|numeric',
+            'attribute_checks' => 'required',
+            'color' => 'required_without_all:talla,estilo',
+            'talla' => 'required_without_all:color,estilo',
+            'estilo' => 'required_without_all:talla,color',
+            'categ_checks' => 'required',
+            'main_image' => 'required',
         ]);
         $product = new Product;
         $product->code = $request->code;
@@ -111,7 +119,7 @@ class ProductController extends Controller
                 'estilo' => isset($request->estilo[$i]) ? ['id' => $request->estilo[$i], 'option' => Option::where('id', $request->estilo[$i])->first(['option'])->option] : null, 
             ];
             $toJson = json_encode($arr);
-            print_r($arr);
+            //print_r($arr);
             $productOption = new ProductOptions;
             $productOption->product_id = $product->id;
             $productOption->options_ids = $toJson;

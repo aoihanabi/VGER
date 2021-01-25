@@ -30,75 +30,69 @@ $(function() {
         });
     });
 
-    // ********* Add option dropdows dynamically *********
+    // ************** Add option dropdows dynamically ****************
     // in _product.blade.php for product CREATE & EDIT
     var cont = $("#contador").val();//0;
     $("#btn_add_options").on('click', function(){
+
         var selected_attributes = [];
-        //$('input[class="attributes form-checkbox"]').attr('onclick', 'return false'); //Avoid second guesses
         
         jQuery.each($('input[class="attributes form-checkbox"]:checked'), function() {
             selected_attributes.push($(this).siblings('#attribute_name').text());
         })
-        
-        //For Edit Forms --------------------------------
-        manage_existing_dropdowns(selected_attributes);
-        //-----------------------------------------------
 
-        //Duplicate and rename #opts element and its childs
-        $("#opts").clone().appendTo("#option_dropdowns");
-        $("#opts").attr("id", cont);
-        $("#" + cont).removeAttr("hidden");
-        for (var i = 0; i<selected_attributes.length; i++) {
-            $("#"+cont).children("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
-            $("#"+selected_attributes[i]+"_"+cont).removeAttr("hidden");
-            $("#"+selected_attributes[i]+"_"+cont).attr("name", (selected_attributes[i].toLowerCase())+"["+cont+"]");
+        if(selected_attributes.length > 0) {
+            //When editing an existing product options, add/remove/change to the old dropdonws
+            manage_existing_dropdowns(selected_attributes);
+            //-----------------------------------------------
+
+            //Duplicate and rename #opts element and its childs
+            $("#opts").clone().appendTo("#option_dropdowns");
+            $("#opts").attr("id", cont);
+            $("#" + cont).removeAttr("hidden");
+            for (var i = 0; i<selected_attributes.length; i++) {
+                $("#"+cont).children("#"+selected_attributes[i]).attr("id", selected_attributes[i]+"_"+cont);
+                $("#"+selected_attributes[i]+"_"+cont).removeAttr("hidden");
+                $("#"+selected_attributes[i]+"_"+cont).attr("name", (selected_attributes[i].toLowerCase())+"["+cont+"]");
+            }
+
+            //Duplicate and rename #amounts elem and its childs
+            $("#amounts").clone().appendTo("#option_dropdowns");
+            $("#amounts").attr("id", "amounts_"+cont);
+            $("#amounts_"+cont).removeAttr("hidden");
+
+            $("#amounts_"+cont).children("#number_hid").attr("id", "number_"+cont); // option amount dropdown 
+            $("#number_"+cont).removeAttr("hidden");
+            $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
+
+            $("#amounts_"+cont).children("#btn_remove_hid").attr("remove_counter", cont); //remove option button
+            $("#amounts_"+cont).children("#btn_remove_hid").removeAttr("hidden");
+
+            $("#divider").clone().appendTo("#option_dropdowns"); //divider
+            $("#divider").attr("id", "divider_"+cont);
+            $("#divider_"+cont).removeAttr("hidden");
+
+            $("#contador").replaceWith("<input type='text' id='contador' name='contador' value="+cont+" hidden/>");
+            calc_product_amount();
+            cont++;
+        } else {
+            alert("Seleccione al menos un atributo a agregar");
         }
-
-        //Duplicate and rename #amounts elem and its childs
-        $("#amounts").clone().appendTo("#option_dropdowns");
-        $("#amounts").attr("id", "amounts_"+cont);
-        $("#amounts_"+cont).removeAttr("hidden");
-
-        $("#amounts_"+cont).children("#number_hid").attr("id", "number_"+cont); // option amount dropdown 
-        $("#number_"+cont).removeAttr("hidden");
-        $("#number_"+cont).attr("name", "opt_amount["+cont+"]");
-
-        $("#amounts_"+cont).children("#btn_remove_hid").attr("remove_counter", cont); //remove option button
-        $("#amounts_"+cont).children("#btn_remove_hid").removeAttr("hidden");
-
-        $("#divider").clone().appendTo("#option_dropdowns"); //divider
-        //rename_dropdown_elements(selected_attributes, cont);
-        $("#divider").attr("id", "divider_"+cont);
-        $("#divider_"+cont).removeAttr("hidden");
-
-        $("#contador").replaceWith("<input type='text' id='contador' name='contador' value="+cont+" hidden/>");
-        calc_product_amount();
-        cont++;
     });
+
+    //REMOVE PRODUCT OPTION
     $(document).on('click',"button.btn_remove_options", function() {
         var elem_count = $(this).attr("remove_counter");
+        
         $("#"+elem_count).remove();
         $("#amounts_"+elem_count).remove();
-        // $("#Color_"+elem_count).remove();
-        // $("#Talla_"+elem_count).remove();
-        // $("#Estilo_"+elem_count).remove();
-        // $("#number_"+elem_count).remove();
         $("#divider_"+elem_count).remove();
-        //$(this).remove();
         calc_product_amount();
+        
         rename_dropdown_elements(cont)
         cont--;
-        
-        if(cont <=0){
-            $('input[class="attributes form-checkbox"]').attr('onclick', 'return true'); //Avoid second guesses
-        }
-        // var selected_attributes = [];
-        // jQuery.each($('input[class="attributes form-checkbox"]:checked'), function() {
-        //     selected_attributes.push($(this).siblings('#attribute_name').text());
-        // })
-         
     });
+    //SUM OF TOTAL PRODUCT'S QUANTITY
     $(document).on('change', ".opt_amount", function() {
         calc_product_amount();
     });
@@ -109,6 +103,7 @@ $(function() {
             $("#quantity").val(addition-1);
         })
     }
+
     //Add or remove dropdowns to existing .opt_class div elements according to the attribute checkbox selected
     function manage_existing_dropdowns(selected_attributes){
         jQuery.each($(".opts_class:visible"), function() {
@@ -216,6 +211,7 @@ $(function() {
 
         })
     }
+
     // Re calcula y asigna los indices en orden incremental para los
     // dropdown que contienen las opciones. 
     //(Para que puedan ser captados sin problemas por el controlador)
@@ -274,11 +270,12 @@ $(function() {
         })
     }
 
+    function test(val) {
+        $("#option_dropdowns").append('<input type="text" value='+val+'>');
+    }
+
     // ********* Dynamic product options restriction *********
-    // in _options_dropdown.blade.php for product SHOW
-    
-    //var selected_id = [];
-    
+    // in _options_dropdown.blade.php for product SHOW when a user is making an order
     $(document).on('change', ".buy_dropdown", function() {
         
         if ($(this).children("option:selected").val() == "none" ){

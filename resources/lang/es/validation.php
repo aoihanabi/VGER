@@ -151,6 +151,24 @@ return [
             'required' => 'El precio es requerido.',
             'numeric' => 'El precio debe ser un valor numérico.',
         ],
+        'attribute_checks' => [
+            'required' => 'Debe seleccionar al menos un atributo.'
+        ],
+        'color' => [
+            'required_without_all' => 'Debe agregar al menos una opcion.'
+        ],
+        'talla' => [
+            'required_without_all' => 'Debe agregar al menos una opcion.'
+        ],
+        'estilo' => [
+            'required_without_all' => 'Debe agregar al menos una opcion.'
+        ],
+        'categ_checks' => [
+            'required' => 'Debe seleccionar al menos una categoría.'
+        ],
+        'main_image' => [
+            'required' => 'La imagen principal es requerida.'
+        ],
     ],
 
     /*
