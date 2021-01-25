@@ -1,3 +1,17 @@
+
+
+  @if ($errors->any())
+    @foreach ($errors->all() as $error)
+      <div class="my-2 p-2 shadow  sm:rounded-md bg-red-200 ">
+        <span class="fas fa-exclamation-circle text-red-900">
+          <span class="font-sans font-light text-md text-red-900">
+            {{ $error }}
+          </span>
+        </span>
+        
+      </div>
+    @endforeach
+  @endif
 <div class="shadow overflow-hidden sm:rounded-md">
   <div class="px-4 py-5 bg-white sm:p-6">
     <div class="grid grid-cols-6 gap-6">
@@ -121,7 +135,7 @@
           <br><br>
           {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
           {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
-      </div>      
+      </div>
     </div>
     <div class="flex items-center justify-end px-4 py-3 text-right sm:px-6">
       {{ Form::submit('Guardar cambios', ['class' => 'inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold 
