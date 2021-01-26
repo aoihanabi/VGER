@@ -22,6 +22,7 @@ function isEqual(obj1, obj2) {
   }
   
   for (let i of obj1Keys) { 
+    //console.log(obj1[i].id +" = "+ obj2[i].id);
     if(obj1[i].id !== obj2[i].id) {
       //console.log("no son los mismos valores");
       return false;
@@ -37,14 +38,44 @@ function getOptionValues(params, descrip) {
     let temp_opt_id = $('#'+ attr_name + '_selected').val();
     let temp_opt_name = $('#'+ attr_name + '_selected option:selected').text();
     
-    let attribute_values = new Object();
-    attribute_values["id"] = temp_opt_id;
-    attribute_values["label"] = temp_opt_name;
-
-    descrip[attr_name] = attribute_values;
+    // //let attribute_values = new Object();
+    // attribute_values["id"] = temp_opt_id;
+    // attribute_values["label"] = temp_opt_name;
+    descrip[attr_name] = new Object();
+    descrip[attr_name]["id"] = temp_opt_id;
+    descrip[attr_name]["label"] = temp_opt_name;
+    //descrip[attr_name] = attribute_values;
   }
 }
 
+function parseOptionsJson() {
+  let div = document.getElementById("options_json");
+  let options_json = div.getAttribute('data-product-options');
+
+  options_json = JSON.parse(options_json);
+  for(var i = 0; i < options_json.length; i++) {
+    options_json[i].options_ids = JSON.parse(options_json[i].options_ids);
+  }
+  return options_json;
+}
+
+function getSpecificAmount(json_options, prod_details) { //Change names and stuff
+  var opt_without_null = new Object;
+  for (let i in json_options) {
+    
+    for (let k in json_options[i].options_ids) {
+      if (json_options[i].options_ids[k] != null) {
+        opt_without_null[k] = json_options[i].options_ids[k];
+      }
+    }
+    
+    if(isEqual(opt_without_null, prod_details)){
+      console.log("AMOUNT = " + json_options[i].amount);
+      return json_options[i].amount;
+    }
+  }
+  return 0;
+}
 let store = {
   state: {
     order: order ? JSON.parse(order) : [],
@@ -134,11 +165,18 @@ let store = {
             let options = {
               description: new Object, 
               cart_amount: purchase_quantity,
+              specific_option_amount: 0,
               total_price: (purchase_quantity * params.item.price)
             };
             getOptionValues(params, options.description);
             details.push(options);
             
+            //------------------------- TESTING FIELD -------------------------
+            //console.log(parse_options_json());
+            var opt_amount = getSpecificAmount(parseOptionsJson(), options.description);
+            console.log(opt_amount);
+
+            //-----------------------------------------------------------------
 
             Vue.set(params.item, 'details', details);
             Vue.set(params.item, 'totalProdAmount', parseInt(options.cart_amount)); //cart_quantity

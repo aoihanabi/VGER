@@ -1,4 +1,5 @@
 <template>
+<!-- ************************* MODAL WINDOW ************************ -->
   <Transition name="fade">
     <div
       v-if="showing" 

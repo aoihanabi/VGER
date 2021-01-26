@@ -154,8 +154,10 @@ class ProductController extends Controller
         $attrs = Attribute::select('attributes.name', 'attributes.id')
                             ->join('product_attributes', 'attributes.id', '=', 'product_attributes.attribute_id')
                             ->where('product_attributes.product_id','=', $id)->get();//->distinct()->get();
+        //$attrs = $product->attributes()->get();
+        //echo($attrs . PHP_EOL);
         $options_db = Product::get_product_options($product->id);
-
+        //echo($options_db . PHP_EOL);
         return view('product.show', ['product' => $product,
                                      'main_img' => $main_img, 
                                      'secondary_imgs' => $secondary_imgs, 

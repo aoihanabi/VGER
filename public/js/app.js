@@ -1990,6 +1990,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -31352,14 +31353,14 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\n        ×\n      ")]
+                  [_vm._v("\r\n          ×\r\n        ")]
                 ),
                 _vm._v(" "),
                 _c("a", { attrs: { href: "" } }, [
                   _vm._v(
-                    "\n        Pedido (" +
+                    "\r\n          Pedido (" +
                       _vm._s(_vm.$store.state.allProdsCount) +
-                      ")\n      "
+                      ")\r\n        "
                   )
                 ]),
                 _vm._v(" "),
@@ -31392,9 +31393,9 @@ var render = function() {
                                         { key: description_item.id },
                                         [
                                           _vm._v(
-                                            "\n                " +
+                                            "\r\n                  " +
                                               _vm._s(description_item.label) +
-                                              " \n              "
+                                              " \r\n                "
                                           )
                                         ]
                                       )
@@ -31451,7 +31452,7 @@ var render = function() {
                                     },
                                     [
                                       _vm._v(
-                                        "\n                X\n              "
+                                        "\r\n                  X\r\n                "
                                       )
                                     ]
                                   )
@@ -31467,9 +31468,9 @@ var render = function() {
                         _vm._v(" "),
                         _c("a", { attrs: { href: "" } }, [
                           _vm._v(
-                            "\n            \n            Total: ₡" +
+                            "\r\n              \r\n              Total: ₡" +
                               _vm._s(_vm.$totalPriceAll) +
-                              "\n          "
+                              "\r\n            "
                           )
                         ]),
                         _vm._v(" "),
@@ -31494,7 +31495,7 @@ var render = function() {
                     )
                   : _c("div", {}, [
                       _c("a", { attrs: { href: "" } }, [
-                        _vm._v("\n          Cart is empty\n        ")
+                        _vm._v("\r\n            Cart is empty\r\n          ")
                       ])
                     ])
               ]
@@ -45340,20 +45341,21 @@ function isEqual(obj1, obj2) {
   var obj2Keys = Object.keys(obj2);
 
   if (obj1Keys.length !== obj2Keys.length) {
-    //console.log("no son los mismos attributos");
+    console.log("no son los mismos attributos");
     return false;
   }
 
   for (var _i = 0, _obj1Keys = obj1Keys; _i < _obj1Keys.length; _i++) {
     var i = _obj1Keys[_i];
+    console.log(obj1[i].id + " = " + obj2[i].id);
 
     if (obj1[i].id !== obj2[i].id) {
-      //console.log("no son los mismos valores");
+      console.log("no son los mismos valores");
       return false;
     }
-  } //console.log("son iguales");
+  }
 
-
+  console.log("son iguales");
   return true;
 }
 
@@ -45361,12 +45363,46 @@ function getOptionValues(params, descrip) {
   for (var i in params.attrs) {
     var attr_name = params.attrs[i].name.toLowerCase();
     var temp_opt_id = $('#' + attr_name + '_selected').val();
-    var temp_opt_name = $('#' + attr_name + '_selected option:selected').text();
-    var attribute_values = new Object();
-    attribute_values["id"] = temp_opt_id;
-    attribute_values["label"] = temp_opt_name;
-    descrip[attr_name] = attribute_values;
+    var temp_opt_name = $('#' + attr_name + '_selected option:selected').text(); // //let attribute_values = new Object();
+    // attribute_values["id"] = temp_opt_id;
+    // attribute_values["label"] = temp_opt_name;
+
+    descrip[attr_name] = new Object();
+    descrip[attr_name]["id"] = temp_opt_id;
+    descrip[attr_name]["label"] = temp_opt_name; //descrip[attr_name] = attribute_values;
   }
+}
+
+function parseOptionsJson() {
+  var div = document.getElementById("options_json");
+  var options_json = div.getAttribute('data-product-options');
+  options_json = JSON.parse(options_json);
+
+  for (var i = 0; i < options_json.length; i++) {
+    options_json[i].options_ids = JSON.parse(options_json[i].options_ids);
+  }
+
+  return options_json;
+}
+
+function getSpecificAmount(json_options, prod_details) {
+  //Change names and stuff
+  var opt_without_null = new Object();
+
+  for (var i in json_options) {
+    for (var k in json_options[i].options_ids) {
+      if (json_options[i].options_ids[k] != null) {
+        opt_without_null[k] = json_options[i].options_ids[k];
+      }
+    }
+
+    if (isEqual(opt_without_null, prod_details)) {
+      console.log("AMOUNT = " + json_options[i].amount);
+      return json_options[i].amount;
+    }
+  }
+
+  return 0;
 }
 
 var store = {
@@ -45455,10 +45491,16 @@ var store = {
             var _options = {
               description: new Object(),
               cart_amount: purchase_quantity,
+              specific_option_amount: 0,
               total_price: purchase_quantity * params.item.price
             };
             getOptionValues(params, _options.description);
-            details.push(_options);
+            details.push(_options); //------------------------- TESTING FIELD -------------------------
+            //console.log(parse_options_json());
+
+            var opt_amount = getSpecificAmount(parseOptionsJson(), _options.description);
+            console.log(opt_amount); //-----------------------------------------------------------------
+
             vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
             vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
 
