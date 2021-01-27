@@ -45551,7 +45551,7 @@ var store = {
           //remove each detail
           state.order[index].details.splice(params.detail_index, 1);
           product.totalProdAmount -= detail.cart_amount;
-          product.quantityLeft += detail.cart_amount;
+          product.quantityLeft += parseInt(detail.cart_amount);
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;
         }
@@ -45569,17 +45569,31 @@ var store = {
       if (prod_index > -1 && params.detail_index > -1) {
         var product = state.order[prod_index];
         var detail = product.details[params.detail_index];
-        var purchase_quantity_update = $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val(); //Restar cantidad original para recalcular con la nueva cantidad
+        var purchase_quantity_update = $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val();
+        var specific_option_amount = getSpecificAmount(parseOptionsJson(), detail.description); // (detail.option_amount_left + detail.cart_amount); //Get back the total amount of that option
 
-        product.totalProdAmount -= detail.cart_amount;
-        state.allProdsCount -= detail.cart_amount;
-        detail.cart_amount = purchase_quantity_update;
-        product.totalProdAmount += parseInt(purchase_quantity_update);
-        state.allProdsCount += parseInt(purchase_quantity_update); //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+        console.log(specific_option_amount + " | " + purchase_quantity_update);
 
-        product.totalProdPrice -= detail.total_price;
-        detail.total_price = purchase_quantity_update * product.price;
-        product.totalProdPrice += detail.total_price;
+        if (specific_option_amount >= purchase_quantity_update) {
+          //Restar cantidad original(vieja) para recalcular con la nueva cantidad
+          detail.option_amount_left = specific_option_amount - purchase_quantity_update;
+          product.totalProdAmount -= detail.cart_amount;
+          product.quantityLeft += detail.cart_amount;
+          console.log("+= " + product.quantityLeft);
+          state.allProdsCount -= detail.cart_amount;
+          detail.cart_amount = parseInt(purchase_quantity_update);
+          product.totalProdAmount += parseInt(purchase_quantity_update);
+          product.quantityLeft -= parseInt(purchase_quantity_update);
+          console.log("-=" + product.quantityLeft);
+          state.allProdsCount += parseInt(purchase_quantity_update); //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+
+          product.totalProdPrice -= detail.total_price;
+          detail.total_price = purchase_quantity_update * product.price;
+          product.totalProdPrice += detail.total_price;
+        } else {
+          alert("La cantidad máxima disponible del producto indicado es: " + specific_option_amount);
+          $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val(parseInt(specific_option_amount));
+        }
       }
 
       console.log("From Remove");
