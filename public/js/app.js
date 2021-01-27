@@ -45397,7 +45397,6 @@ function getSpecificAmount(json_options, prod_details) {
     }
 
     if (isEqual(opt_without_null, prod_details)) {
-      console.log("AMOUNT = " + json_options[i].amount);
       return json_options[i].amount;
     }
   }
@@ -45431,8 +45430,7 @@ var store = {
             if (isEqual(prod_found.details[h].description, temp_descrip)) {
               console.log("............. SAME PROD, ADDING MORE OF IT ...............");
               var prod_details = prod_found.details[h];
-              var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
-              console.log("Remaining before: " + prod_found.quantityLeft);
+              var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity); //console.log("Remaining before: " + prod_found.quantityLeft);
 
               if (new_amount <= prod_found.quantityLeft) {
                 //Check if there's enough amount left of the product with those specific options
@@ -45453,11 +45451,11 @@ var store = {
                   alert("Solo quedan " + prod_details.option_amount_left + " disponibles con las características seleccionadas.");
                 }
               } else {
-                alert("There's only " + remaining + " left you can purchase");
-                $('#purchase_quantity').val(parseInt(remaining));
-              }
+                alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+                $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
+              } //console.log("Remaining after: " + prod_found.quantityLeft);
 
-              console.log("Remaining after: " + remaining);
+
               same_details_prod = true;
               break;
             }
@@ -45468,12 +45466,12 @@ var store = {
             console.log("before: " + prod_found.quantityLeft); //if(remaining < 0) { °
 
             if (prod_found.quantityLeft < 0) {
-              alert("There's only " + remaining + " left you can purchase");
-              $('#purchase_quantity').val(parseInt(remaining));
+              alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+              $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
             } else {
               var options = {
                 description: temp_descrip,
-                cart_amount: purchase_quantity,
+                cart_amount: parseInt(purchase_quantity),
                 option_amount_left: 0,
                 total_price: purchase_quantity * prod_found.price
               }; //Get the amount available of the product with those specific options.
@@ -45483,8 +45481,8 @@ var store = {
               if (specific_amount >= purchase_quantity) {
                 options.option_amount_left = specific_amount - purchase_quantity;
                 prod_found.details.push(options);
-                prod_found.quantityLeft -= options.cart_amount;
-                console.log("remaining: " + prod_found.quantityLeft);
+                prod_found.quantityLeft -= options.cart_amount; //console.log("remaining: " + prod_found.quantityLeft); 
+
                 prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
                 prod_found.totalProdPrice += options.total_price;
                 state.allProdsCount += parseInt(purchase_quantity);
@@ -45494,8 +45492,8 @@ var store = {
 
           console.log(params.item); //If product is not in the order list
         } else {
-          console.log("*************** COMPLETELY NEW PROD **************");
-          console.log("Remaining before: " + remaining);
+          console.log("*************** COMPLETELY NEW PROD **************"); //console.log("Remaining before: " +  remaining);
+
           remaining = params.item.quantity - purchase_quantity;
 
           if (remaining < 0) {
@@ -45504,7 +45502,7 @@ var store = {
             var details = [];
             var _options = {
               description: new Object(),
-              cart_amount: purchase_quantity,
+              cart_amount: parseInt(purchase_quantity),
               option_amount_left: 0,
               total_price: purchase_quantity * params.item.price
             }; //Get options from dropdowns
@@ -45526,9 +45524,9 @@ var store = {
             } else {
               alert("Solo quedan " + specific_amount + " disponibles con las características seleccionadas.");
             }
-          }
+          } //console.log("Remaining after:" +  params.item.quantityLeft);
 
-          console.log("Remaining after:" + params.item.quantityLeft);
+
           console.log(params.item);
         }
 
@@ -45538,6 +45536,7 @@ var store = {
       }
     },
     removeFromOrder: function removeFromOrder(state, params) {
+      //Add back if something is removed
       var index = state.order.indexOf(params.item);
 
       if (index > -1 && params.detail_index > -1) {
@@ -45552,6 +45551,7 @@ var store = {
           //remove each detail
           state.order[index].details.splice(params.detail_index, 1);
           product.totalProdAmount -= detail.cart_amount;
+          product.quantityLeft += detail.cart_amount;
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;
         }
@@ -45597,9 +45597,9 @@ var store = {
       };
       axios.post("/orders", data).then(function (response) {
         if (response.status === 200) {
+          //Clean UP DROPDOWNS AND STUFF
           window.localStorage.setItem('order', []);
-          window.localStorage.setItem('allProdsCount', 0);
-          window.location.href = response.request.responseURL;
+          window.localStorage.setItem('allProdsCount', 0); //window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {
         //When user is not logged in

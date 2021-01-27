@@ -70,7 +70,6 @@ function getSpecificAmount(json_options, prod_details) { //Change names and stuf
     }
     
     if(isEqual(opt_without_null, prod_details)){
-      console.log("AMOUNT = " + json_options[i].amount);
       return json_options[i].amount;
     }
   }
@@ -150,7 +149,7 @@ let store = {
 
               let options = {
                 description: temp_descrip, 
-                cart_amount: purchase_quantity,
+                cart_amount: parseInt(purchase_quantity),
                 option_amount_left: 0,
                 total_price: (purchase_quantity * prod_found.price)
               };
@@ -189,7 +188,7 @@ let store = {
             let details = [];
             let options = {
               description: new Object, 
-              cart_amount: purchase_quantity,
+              cart_amount: parseInt(purchase_quantity),
               option_amount_left: 0,
               total_price: (purchase_quantity * params.item.price)
             };
@@ -224,7 +223,7 @@ let store = {
         this.commit('saveOrder');
       }
     },
-    removeFromOrder(state, params) {
+    removeFromOrder(state, params) { //Add back if something is removed
       let index = state.order.indexOf(params.item);
 
       if (index > -1 && params.detail_index > -1) {
@@ -239,6 +238,7 @@ let store = {
           //remove each detail
           state.order[index].details.splice(params.detail_index, 1);
           product.totalProdAmount -= detail.cart_amount;
+          product.quantityLeft += detail.cart_amount;
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;          
         }
@@ -293,10 +293,12 @@ let store = {
       axios.post("/orders", data)
             .then(response => {
               if (response.status === 200) {
+
+                //Clean UP DROPDOWNS AND STUFF
                 
                 window.localStorage.setItem('order', []);
                 window.localStorage.setItem('allProdsCount', 0);
-                window.location.href = response.request.responseURL;
+                //window.location.href = response.request.responseURL;
               }
             })
             .catch(

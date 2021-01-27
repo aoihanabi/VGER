@@ -80,9 +80,12 @@ class OrderController extends Controller
                     }
                     $total += $subtotal;
                     $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $purchased_quantity, 'description' => $description]);
+                    echo("Left: ".$prod->quantityLeft . PHP_EOL);
+                    $product->quantity = $prod->quantityLeft;
+                    $product->save();
                 }
                 $order->total = $total;
-                print_r($order);
+                //print_r($order);
                 $order->save();
 
                 // send_email('Su pedido se realizó con éxito!',
