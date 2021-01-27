@@ -54,7 +54,7 @@
             <br>
             <a class="" href="">
               
-              Total: ₡{{ $totalPriceAll }}
+              Total: ₡{{ totalPriceAll }}
             </a>
             <hr class="">
 

@@ -31469,7 +31469,7 @@ var render = function() {
                         _c("a", { attrs: { href: "" } }, [
                           _vm._v(
                             "\r\n              \r\n              Total: ₡" +
-                              _vm._s(_vm.$totalPriceAll) +
+                              _vm._s(_vm.totalPriceAll) +
                               "\r\n            "
                           )
                         ]),
@@ -45341,21 +45341,21 @@ function isEqual(obj1, obj2) {
   var obj2Keys = Object.keys(obj2);
 
   if (obj1Keys.length !== obj2Keys.length) {
-    console.log("no son los mismos attributos");
+    //console.log("no son los mismos attributos");
     return false;
   }
 
   for (var _i = 0, _obj1Keys = obj1Keys; _i < _obj1Keys.length; _i++) {
     var i = _obj1Keys[_i];
-    console.log(obj1[i].id + " = " + obj2[i].id);
 
+    //console.log(obj1[i].id +" = "+ obj2[i].id);
     if (obj1[i].id !== obj2[i].id) {
-      console.log("no son los mismos valores");
+      //console.log("no son los mismos valores");
       return false;
     }
-  }
+  } //console.log("son iguales");
 
-  console.log("son iguales");
+
   return true;
 }
 
@@ -45434,17 +45434,23 @@ var store = {
               console.log("before: " + remaining);
 
               if (new_amount <= remaining) {
-                prod_details.cart_amount = new_amount;
-                prod_found.totalProdAmount = new_amount;
-                remaining -= prod_found.totalProdAmount;
-                console.log("remaining: " + remaining);
-                prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
+                if (prod_details.option_amount_left >= purchase_quantity) {
+                  alert("Go ahead, there is enough");
+                  prod_details.cart_amount = new_amount;
+                  prod_details.option_amount_left -= purchase_quantity;
+                  prod_found.totalProdAmount = new_amount;
+                  remaining -= prod_found.totalProdAmount;
+                  console.log("remaining: " + remaining);
+                  prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
 
-                prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
+                  prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
 
-                prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
+                  prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
 
-                state.allProdsCount += parseInt(purchase_quantity);
+                  state.allProdsCount += parseInt(purchase_quantity);
+                } else {
+                  alert("There is only " + prod_details.option_amount_left + " left available with those characteristics");
+                }
               } else {
                 alert("There's only " + remaining + " left you can purchase");
                 $('#purchase_quantity').val(parseInt(remaining));
@@ -45468,14 +45474,22 @@ var store = {
               var options = {
                 description: temp_descrip,
                 cart_amount: purchase_quantity,
+                option_amount_left: 0,
                 total_price: purchase_quantity * prod_found.price
               };
-              prod_found.details.push(options);
-              remaining -= options.cart_amount;
-              console.log("remaining: " + remaining);
-              prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
-              prod_found.totalProdPrice += options.total_price;
-              state.allProdsCount += parseInt(purchase_quantity);
+              var specific_amount = getSpecificAmount(parseOptionsJson(), options.description);
+              console.log("specific amount: " + specific_amount);
+
+              if (specific_amount >= purchase_quantity) {
+                options.option_amount_left = specific_amount - purchase_quantity;
+                alert("left: " + options.option_amount_left);
+                prod_found.details.push(options);
+                remaining -= options.cart_amount;
+                console.log("remaining: " + remaining);
+                prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
+                prod_found.totalProdPrice += options.total_price;
+                state.allProdsCount += parseInt(purchase_quantity);
+              }
             }
           }
 
@@ -45491,22 +45505,31 @@ var store = {
             var _options = {
               description: new Object(),
               cart_amount: purchase_quantity,
-              specific_option_amount: 0,
+              option_amount_left: 0,
               total_price: purchase_quantity * params.item.price
             };
             getOptionValues(params, _options.description);
-            details.push(_options); //------------------------- TESTING FIELD -------------------------
+            var specific_amount = getSpecificAmount(parseOptionsJson(), _options.description);
+            console.log("specific amount: " + specific_amount);
+
+            if (specific_amount >= purchase_quantity) {
+              _options.option_amount_left = specific_amount - purchase_quantity;
+              alert("left: " + _options.option_amount_left);
+              details.push(_options);
+              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
+              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
+
+              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
+              state.allProdsCount += parseInt(purchase_quantity);
+              state.order.push(params.item);
+            } else {
+              alert("There are only " + specific_amount + " available with those characteristics.");
+            } //------------------------- TESTING FIELD -------------------------
             //console.log(parse_options_json());
+            // var opt_amount = getSpecificAmount(parseOptionsJson(), options.description);
+            // console.log(opt_amount);
+            //-----------------------------------------------------------------
 
-            var opt_amount = getSpecificAmount(parseOptionsJson(), _options.description);
-            console.log(opt_amount); //-----------------------------------------------------------------
-
-            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
-            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
-
-            vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
-            state.allProdsCount += parseInt(purchase_quantity);
-            state.order.push(params.item);
           }
 
           console.log(params.item);
