@@ -106,8 +106,8 @@ let store = {
               let prod_details = prod_found.details[h];
               let new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
               
-              console.log("before: " + remaining);
-              if (new_amount <=  remaining) {
+              //console.log("Remaining before: " + prod_found.quantityLeft);
+              if (new_amount <=  prod_found.quantityLeft) {
                 //Check if there's enough amount left of the product with those specific options
                 if(prod_details.option_amount_left >= purchase_quantity) {
                   
@@ -115,8 +115,7 @@ let store = {
                   prod_details.option_amount_left -= purchase_quantity;
                   
                   prod_found.totalProdAmount = new_amount;
-                  remaining -= prod_found.totalProdAmount;
-                  console.log("remaining: " + remaining);
+                  prod_found.quantityLeft -= purchase_quantity;//prod_found.totalProdAmount;
                   
                   prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
                   prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
@@ -128,9 +127,10 @@ let store = {
                 }
                 
               } else {
-                alert("There's only " + remaining + " left you can purchase");
-                $('#purchase_quantity').val(parseInt(remaining));
+                alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+                $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
               }
+              //console.log("Remaining after: " + prod_found.quantityLeft);
               same_details_prod = true;
               break;
             }
@@ -138,12 +138,13 @@ let store = {
           
           if(!same_details_prod) {
             console.log("------------- SAME PROD, DIFF DETAILS -----------")
-            console.log("before: " + remaining);
+            console.log("before: " + prod_found.quantityLeft);
             
-            if(remaining < 0) {
+            //if(remaining < 0) { °
+            if(prod_found.quantityLeft < 0) {
 
-              alert("There's only " + remaining + " left you can purchase");
-              $('#purchase_quantity').val(parseInt(remaining));
+              alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+              $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
 
             } else {
 
@@ -164,8 +165,8 @@ let store = {
                 
                 prod_found.details.push(options);
                 
-                remaining -= options.cart_amount;
-                console.log("remaining: " + remaining);
+                prod_found.quantityLeft -= options.cart_amount;
+                //console.log("remaining: " + prod_found.quantityLeft); 
                 prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
                 prod_found.totalProdPrice += options.total_price;
       
@@ -178,6 +179,7 @@ let store = {
           //If product is not in the order list
         } else {
           console.log("*************** COMPLETELY NEW PROD **************");
+          //console.log("Remaining before: " +  remaining);
           remaining = params.item.quantity - purchase_quantity;
           
           if (remaining < 0) {
@@ -206,6 +208,7 @@ let store = {
               Vue.set(params.item, 'details', details);
               Vue.set(params.item, 'totalProdAmount', parseInt(options.cart_amount)); //cart_quantity
               Vue.set(params.item, 'totalProdPrice', options.total_price);
+              Vue.set(params.item, 'quantityLeft', remaining);
 
               state.allProdsCount += parseInt(purchase_quantity);
               state.order.push(params.item);
@@ -213,6 +216,7 @@ let store = {
               alert("Solo quedan " + specific_amount + " disponibles con las características seleccionadas.")
             }
           }
+          //console.log("Remaining after:" +  params.item.quantityLeft);
           console.log(params.item);
         }
         console.log("####### Order #######");
@@ -238,8 +242,6 @@ let store = {
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;          
         }
-        //state.availableAmount += parseInt(detail.cart_amount);
-        //console.log("after remove available amount is: " + state.availableAmount)
       }
       console.log("From Remove");
       console.log("current order: ");
@@ -248,7 +250,7 @@ let store = {
       this.commit('saveOrder');
     },
     recalculate(state, params) {
-      console.log("From recalculate");
+      //console.log("From recalculate");
       
       let prod_index = state.order.indexOf(params.item);
 
@@ -256,32 +258,20 @@ let store = {
         let product = state.order[prod_index];
         let detail = product.details[params.detail_index];
         let purchase_quantity_update = $("#prod"+product.id+"_det"+params.detail_index+"_purchase_update").val();
-        
-        // let temp = state.availableAmount - detail.cart_amount;
-        // if((temp + purchase_quantity_update) <= state.availableAmount){
-          //Restar cantidad original para recalcular con la nueva cantidad
-          product.totalProdAmount -= detail.cart_amount;
-          state.allProdsCount -= detail.cart_amount;
-          //state.availableAmount -= detail.cart_amount;
-          
-          detail.cart_amount = purchase_quantity_update;
-          
-          product.totalProdAmount += parseInt(purchase_quantity_update); 
-          state.allProdsCount += parseInt(purchase_quantity_update);
-          //state.availableAmount += parseInt(purchase_quantity_update);
-          //console.log("available after recalculation" +state.availableAmount)
 
-          //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
-          product.totalProdPrice -= detail.total_price;
-          detail.total_price = purchase_quantity_update * product.price;
-          product.totalProdPrice += detail.total_price;
-        // } else {
-        //   alert("There's not enough amount of products available")
-        // }
+        //Restar cantidad original para recalcular con la nueva cantidad
+        product.totalProdAmount -= detail.cart_amount;
+        state.allProdsCount -= detail.cart_amount;
         
+        detail.cart_amount = purchase_quantity_update;
+        
+        product.totalProdAmount += parseInt(purchase_quantity_update); 
+        state.allProdsCount += parseInt(purchase_quantity_update);
 
-        
-        
+        //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+        product.totalProdPrice -= detail.total_price;
+        detail.total_price = purchase_quantity_update * product.price;
+        product.totalProdPrice += detail.total_price;
       }
       console.log("From Remove");
       console.log("current order: ");
@@ -289,10 +279,12 @@ let store = {
       
       this.commit('saveOrder');
     },
+
     saveOrder(state) {
       window.localStorage.setItem('order', JSON.stringify(state.order));
       window.localStorage.setItem('allProdsCount', state.allProdsCount);
     },
+
     processOrder(state) {
       let data = {
         order: JSON.stringify(state.order)

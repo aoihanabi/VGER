@@ -45412,7 +45412,8 @@ var store = {
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
-      var purchase_quantity = $('#purchase_quantity').val();
+      var purchase_quantity = $('#purchase_quantity').val(); //Product amount the user wants to purchase
+
       var prod_found = state.order.find(function (product) {
         return product.id == params.item.id;
       });
@@ -45421,7 +45422,7 @@ var store = {
         if (prod_found) {
           remaining = remaining < prod_found.quantity && remaining > 0 ? remaining : prod_found.quantity - prod_found.totalProdAmount;
           var same_details_prod = false;
-          var temp_descrip = new Object(); //Get options from input
+          var temp_descrip = new Object(); //Get options from dropdowns
 
           getOptionValues(params, temp_descrip); //Check all details of the product
 
@@ -45431,16 +45432,16 @@ var store = {
               console.log("............. SAME PROD, ADDING MORE OF IT ...............");
               var prod_details = prod_found.details[h];
               var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity);
-              console.log("before: " + remaining);
+              console.log("Remaining before: " + prod_found.quantityLeft);
 
-              if (new_amount <= remaining) {
+              if (new_amount <= prod_found.quantityLeft) {
+                //Check if there's enough amount left of the product with those specific options
                 if (prod_details.option_amount_left >= purchase_quantity) {
-                  alert("Go ahead, there is enough");
                   prod_details.cart_amount = new_amount;
                   prod_details.option_amount_left -= purchase_quantity;
                   prod_found.totalProdAmount = new_amount;
-                  remaining -= prod_found.totalProdAmount;
-                  console.log("remaining: " + remaining);
+                  prod_found.quantityLeft -= purchase_quantity; //prod_found.totalProdAmount;
+
                   prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
 
                   prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
@@ -45449,25 +45450,24 @@ var store = {
 
                   state.allProdsCount += parseInt(purchase_quantity);
                 } else {
-                  alert("There is only " + prod_details.option_amount_left + " left available with those characteristics");
+                  alert("Solo quedan " + prod_details.option_amount_left + " disponibles con las características seleccionadas.");
                 }
               } else {
                 alert("There's only " + remaining + " left you can purchase");
                 $('#purchase_quantity').val(parseInt(remaining));
               }
 
+              console.log("Remaining after: " + remaining);
               same_details_prod = true;
               break;
             }
           }
 
           if (!same_details_prod) {
-            console.log("------------- SAME PROD, DIFF DETAILS -----------"); //if((state.availableAmount - purchase_quantity) < 0) {
+            console.log("------------- SAME PROD, DIFF DETAILS -----------");
+            console.log("before: " + prod_found.quantityLeft); //if(remaining < 0) { °
 
-            console.log("before: " + remaining);
-
-            if (remaining < 0) {
-              //alert("There's only " + state.availableAmount + " left you can purchase");
+            if (prod_found.quantityLeft < 0) {
               alert("There's only " + remaining + " left you can purchase");
               $('#purchase_quantity').val(parseInt(remaining));
             } else {
@@ -45476,16 +45476,15 @@ var store = {
                 cart_amount: purchase_quantity,
                 option_amount_left: 0,
                 total_price: purchase_quantity * prod_found.price
-              };
-              var specific_amount = getSpecificAmount(parseOptionsJson(), options.description);
-              console.log("specific amount: " + specific_amount);
+              }; //Get the amount available of the product with those specific options.
+
+              var specific_amount = getSpecificAmount(parseOptionsJson(), options.description); //Check if there is enough amount left of the product with those specific options
 
               if (specific_amount >= purchase_quantity) {
                 options.option_amount_left = specific_amount - purchase_quantity;
-                alert("left: " + options.option_amount_left);
                 prod_found.details.push(options);
-                remaining -= options.cart_amount;
-                console.log("remaining: " + remaining);
+                prod_found.quantityLeft -= options.cart_amount;
+                console.log("remaining: " + prod_found.quantityLeft);
                 prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
                 prod_found.totalProdPrice += options.total_price;
                 state.allProdsCount += parseInt(purchase_quantity);
@@ -45496,6 +45495,7 @@ var store = {
           console.log(params.item); //If product is not in the order list
         } else {
           console.log("*************** COMPLETELY NEW PROD **************");
+          console.log("Remaining before: " + remaining);
           remaining = params.item.quantity - purchase_quantity;
 
           if (remaining < 0) {
@@ -45507,31 +45507,28 @@ var store = {
               cart_amount: purchase_quantity,
               option_amount_left: 0,
               total_price: purchase_quantity * params.item.price
-            };
-            getOptionValues(params, _options.description);
-            var specific_amount = getSpecificAmount(parseOptionsJson(), _options.description);
-            console.log("specific amount: " + specific_amount);
+            }; //Get options from dropdowns
+
+            getOptionValues(params, _options.description); //Get the amount available of the product with those specific options.
+
+            var specific_amount = getSpecificAmount(parseOptionsJson(), _options.description); //Check if there is enough amount left of the product with those specific options
 
             if (specific_amount >= purchase_quantity) {
               _options.option_amount_left = specific_amount - purchase_quantity;
-              alert("left: " + _options.option_amount_left);
               details.push(_options);
               vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
               vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
 
               vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
+              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'quantityLeft', remaining);
               state.allProdsCount += parseInt(purchase_quantity);
               state.order.push(params.item);
             } else {
-              alert("There are only " + specific_amount + " available with those characteristics.");
-            } //------------------------- TESTING FIELD -------------------------
-            //console.log(parse_options_json());
-            // var opt_amount = getSpecificAmount(parseOptionsJson(), options.description);
-            // console.log(opt_amount);
-            //-----------------------------------------------------------------
-
+              alert("Solo quedan " + specific_amount + " disponibles con las características seleccionadas.");
+            }
           }
 
+          console.log("Remaining after:" + params.item.quantityLeft);
           console.log(params.item);
         }
 
@@ -45557,9 +45554,7 @@ var store = {
           product.totalProdAmount -= detail.cart_amount;
           product.totalProdPrice -= detail.total_price;
           state.allProdsCount -= detail.cart_amount;
-        } //state.availableAmount += parseInt(detail.cart_amount);
-        //console.log("after remove available amount is: " + state.availableAmount)
-
+        }
       }
 
       console.log("From Remove");
@@ -45568,30 +45563,23 @@ var store = {
       this.commit('saveOrder');
     },
     recalculate: function recalculate(state, params) {
-      console.log("From recalculate");
+      //console.log("From recalculate");
       var prod_index = state.order.indexOf(params.item);
 
       if (prod_index > -1 && params.detail_index > -1) {
         var product = state.order[prod_index];
         var detail = product.details[params.detail_index];
-        var purchase_quantity_update = $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val(); // let temp = state.availableAmount - detail.cart_amount;
-        // if((temp + purchase_quantity_update) <= state.availableAmount){
-        //Restar cantidad original para recalcular con la nueva cantidad
+        var purchase_quantity_update = $("#prod" + product.id + "_det" + params.detail_index + "_purchase_update").val(); //Restar cantidad original para recalcular con la nueva cantidad
 
         product.totalProdAmount -= detail.cart_amount;
-        state.allProdsCount -= detail.cart_amount; //state.availableAmount -= detail.cart_amount;
-
+        state.allProdsCount -= detail.cart_amount;
         detail.cart_amount = purchase_quantity_update;
         product.totalProdAmount += parseInt(purchase_quantity_update);
-        state.allProdsCount += parseInt(purchase_quantity_update); //state.availableAmount += parseInt(purchase_quantity_update);
-        //console.log("available after recalculation" +state.availableAmount)
-        //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
+        state.allProdsCount += parseInt(purchase_quantity_update); //Restar el total original del producto para recalcular el precio de acuerdo la nueva cantidad
 
         product.totalProdPrice -= detail.total_price;
         detail.total_price = purchase_quantity_update * product.price;
-        product.totalProdPrice += detail.total_price; // } else {
-        //   alert("There's not enough amount of products available")
-        // }
+        product.totalProdPrice += detail.total_price;
       }
 
       console.log("From Remove");
