@@ -1,7 +1,12 @@
-<!-- _product.blade -->
-<?php
-    $oldcolor = Request::old('color');
-    //print_r($oldcolor);
+  <?php
+    //For loading dynamicly added option dropdowns after validation error ocurrs
+    $lastColors = Request::old('color');
+    $lastTallas = Request::old('talla');
+    $lastEstilos = Request::old('estilo');
+    $lastAmount = Request::old('opt_amount');
+    // print_r($lastColors != null ? $lastcolors : "colors null | ");
+    // print_r($lastTallas != null ? $lastallas :"tallas null | ");
+    // print_r($lastEstilos != null ? $lastestilos:"estilos nul | ");
   ?>
   @if ($errors->any())
     @foreach ($errors->all() as $error)
@@ -13,6 +18,8 @@
         </span>
       </div>
     @endforeach
+    
+    
   @endif
 <div class="shadow overflow-hidden sm:rounded-md">
   <div class="px-4 py-5 bg-white sm:p-6">
@@ -92,6 +99,48 @@
             @endforeach
           @endif
 
+          <!-- WHEN ERROR -->
+          @if ($errors->any())
+            @for ($i = 0; $i < count($lastAmount); $i++)
+              @include('product._product_form_dropdowns', 
+                      ['opts_div_id' => $i,
+                        'opts_div_hidden' => '',
+                        
+                        'color_name' => $lastColors != null ? 'color['.$i.']' : 'colors',
+                        'all_colors' => $colors,
+                        'color_selected' => $lastColors != null ? $lastColors[$i] : null,
+                        'color_id' => 'Color_'.$i,
+                        'color_hidden' => $lastColors != null ? '' : 'hidden',
+                        
+                        'talla_name' => $lastTallas != null ? 'talla['.$i.']' : 'sizes',
+                        'all_tallas' => $sizes,
+                        'talla_selected' => $lastTallas != null ? $lastTallas[$i] : null,
+                        'talla_id' => 'Talla_'.$i,
+                        'talla_hidden' => $lastTallas != null ? '' : 'hidden',
+                        
+                        'estilo_name' => $lastEstilos != null ? 'estilo['.$i.']' : 'styles',
+                        'all_estilos' => $styles,
+                        'estilo_selected' => $lastEstilos != null ? $lastEstilos[$i] : null,
+                        'estilo_id' => 'Estilo_'.$i,
+                        'estilo_hidden' => $lastEstilos != null ? '' : 'hidden',
+
+                        'amount_div_id' => 'amounts_'.$i,
+                        'amount_div_hidden' => '',
+                        'amount_name' => 'opt_amount['.$i.']',
+                        'amount_selected' => $lastAmount != null ? $lastAmount[$i] : '1',
+                        'amount_id' => 'number_'.$i,
+                        'amount_hidden' => $lastAmount != null ? '' : 'hidden',
+                        
+                        'remove_btn_hidden' => $lastAmount != null ? '' : 'hidden',
+                        'remove_counter' => $i,
+
+                        'divider_id' => 'divider_'.$i,
+                        'divider_hidden' => ''
+                      ])
+            @endfor
+          @endif
+          
+          <!-- ALWAYS  -->
           @include('product._product_form_dropdowns', 
                   ['opts_div_id' => 'opts',
                     'opts_div_hidden' => 'hidden',
