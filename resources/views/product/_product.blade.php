@@ -1,5 +1,5 @@
-
-  <?php
+<!-- _product.blade -->
+<?php
     $oldcolor = Request::old('color');
     //print_r($oldcolor);
   ?>
@@ -52,61 +52,84 @@
           <!-- WHEN EDIT -->
           @if ($prod_options != null)
             @foreach ($prod_options as $k => $options)
-              <div id="{{$k}}" class="opts_class col-span-2 {{$options != null ? '' : 'hidden'}}">
-                <!-- Form::select('NAME', ARRAY-OF-OPTIONS, SELECTED-OPTION, 
-                                ['id'=>'ID', HIDDEN-ATTRIBUTE, 'class' => 'CLASS']) -->
 
-                {{ Form::select($options->color != null ? 'color['.$k.']' : 'colors', 
-                                $colors->pluck('option', 'id'), 
-                                $options->color != null ? $options->color->id : null, 
-                                [
-                                  'id'=>'Color_'.$k, 
-                                  $options->color != null ? '' : 'hidden', 
-                                  'class' => 'form-input w-full m-1'
-                                ]) }}
-                
-                {{ Form::select($options->talla != null ? 'talla['.$k.']' : 'sizes',
-                                $sizes->pluck('option', 'id'), 
-                                $options->talla != null ? $options->talla->id : null, 
-                                [
-                                  'id'=>'Talla_'.$k, 
-                                  $options->talla != null ? '' : 'hidden', 
-                                  'class' => 'form-input w-full m-1'
-                                ]) }}
-                
-                {{ Form::select($options->estilo != null ? 'estilo['.$k.']' : 'styles',
-                                $styles->pluck('option', 'id'), 
-                                $options->estilo != null ? $options->estilo->id : null,
-                              [
-                                'id'=>'Estilo_'.$k, 
-                                $options->estilo != null ? '' : 'hidden', 
-                                'class' => 'form-input w-full m-1'
-                              ]) }}
-              </div>
-              <div id="amounts_{{$k}}" class="amounts_class col-start-3 my-1 mx-5">
-                {{ Form::selectRange('', 1, 50, $prod_options_amount != null ? $prod_options_amount[$k] : '1', 
-                                    ['id' => 'number_'.$k, 'name' => 'opt_amount['.$k.']', 'class' => 'opt_amount mr-1 form-input', $prod_options_amount != null ? '' : 'hidden']) }}
-                {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 
-                                  $prod_options_amount != null ? '' : 'hidden', 'remove_counter' => $k]) }}
-              </div>
-              <hr id="divider_{{$k}}" class="col-span-3 m-3 divider">
+              @include('product._product_form_dropdowns', 
+                      ['opts_div_id' => $k,
+                       'opts_div_hidden' => '',
+                       
+                       'color_name' => $options->color != null ? 'color['.$k.']' : 'colors',
+                       'all_colors' => $colors,
+                       'color_selected' => $options->color != null ? $options->color->id : null,
+                       'color_id' => 'Color_'.$k,
+                       'color_hidden' => $options->color != null ? '' : 'hidden',
+                       
+                       'talla_name' => $options->talla != null ? 'talla['.$k.']' : 'sizes',
+                       'all_tallas' => $sizes,
+                       'talla_selected' => $options->talla != null ? $options->talla->id : null,
+                       'talla_id' => 'Talla_'.$k,
+                       'talla_hidden' => $options->talla != null ? '' : 'hidden',
+                       
+                       'estilo_name' => $options->estilo != null ? 'estilo['.$k.']' : 'styles',
+                       'all_estilos' => $styles,
+                       'estilo_selected' => $options->estilo != null ? $options->estilo->id : null,
+                       'estilo_id' => 'Estilo_'.$k,
+                       'estilo_hidden' => $options->estilo != null ? '' : 'hidden',
+
+                       'amount_div_id' => 'amounts_'.$k,
+                       'amount_div_hidden' => '',
+                       'amount_name' => 'opt_amount['.$k.']',
+                       'amount_selected' => $prod_options_amount != null ? $prod_options_amount[$k] : '1',
+                       'amount_id' => 'number_'.$k,
+                       'amount_hidden' => $prod_options_amount != null ? '' : 'hidden',
+                       
+                       'remove_btn_hidden' => $prod_options_amount != null ? '' : 'hidden',
+                       'remove_counter' => $k,
+
+                       'divider_id' => 'divider_'.$k,
+                       'divider_hidden' => ''
+                      ])
+              
             @endforeach
           @endif
+
+          @include('product._product_form_dropdowns', 
+                  ['opts_div_id' => 'opts',
+                    'opts_div_hidden' => 'hidden',
+                    
+                    'color_name' => 'colors',
+                    'all_colors' => $colors,
+                    'color_selected' => null,
+                    'color_id' => 'Color',
+                    'color_hidden' => 'hidden',
+                    
+                    'talla_name' => 'sizes',
+                    'all_tallas' => $sizes,
+                    'talla_selected' => null,
+                    'talla_id' => 'Talla',
+                    'talla_hidden' => 'hidden',
+                    
+                    'estilo_name' => 'styles',
+                    'all_estilos' => $styles,
+                    'estilo_selected' => null,
+                    'estilo_id' => 'Estilo',
+                    'estilo_hidden' => 'hidden',
+
+                    'amount_div_id' => 'amounts',
+                    'amount_div_hidden' => 'hidden',
+                    'amount_name' => '',
+                    'amount_selected' => '1',
+                    'amount_id' => 'number_hid',
+                    'amount_hidden' => 'hidden',
+                    
+                    'remove_btn_hidden' => 'hidden',
+                    'remove_counter' => '',
+
+                    'divider_id' => 'divider',
+                    'divider_hidden' => 'hidden'
+                  ])
           
-          <div id="opts" class="opts_class col-span-2" hidden>
-            {{ Form::select('colors', $colors->pluck('option', 'id'), null, 
-                            ['id'=>'Color', 'hidden', 'class' => 'form-input w-full m-1']) }}
-            {{ Form::select('sizes', $sizes->pluck('option', 'id'), null, 
-                            ['id'=>'Talla', 'hidden', 'class' => 'form-input w-full m-1']) }}
-            {{ Form::select('styles', $styles->pluck('option', 'id'), null,
-                          ['id'=>'Estilo', 'hidden', 'class' => 'form-input w-full m-1']) }}
-          </div>
-          <div id="amounts" class="amounts_class col-start-3 my-1 mx-5" hidden>
-            {{ Form::selectRange('', 1, 50, '1', ['id' => 'number_hid', 'class' => 'opt_amount mr-1 form-input', 'hidden']) }}
-            {{ Form::button('X', ['id' => 'btn_remove_hid', 'class' => "btn_remove_options my-2 px-2 col-end-3 text-white bg-red-700 hover:bg-red-800 rounded", 'hidden']) }}
-          </div>
           <input type='text' id='contador' name='contador' value='{{ $prod_options != null ? count($prod_options) : "0" }}' hidden />
-          <hr id="divider" class="col-span-3 m-3 divider" hidden>
+          
         </div>
         <!-- Quantity & Price -->
         <div class="product_fields col-span-6 sm:col-span-4">
@@ -145,10 +168,6 @@
                                                       text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none 
                                                       focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150']) }}
     </div>
-    
-    
-
   </div>
     
 </div>
-
