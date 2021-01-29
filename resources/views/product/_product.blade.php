@@ -101,43 +101,45 @@
 
           <!-- WHEN ERROR -->
           @if ($errors->any())
-            @for ($i = 0; $i < count($lastAmount); $i++)
-              @include('product._product_form_dropdowns', 
-                      ['opts_div_id' => $i,
-                        'opts_div_hidden' => '',
-                        
-                        'color_name' => $lastColors != null ? 'color['.$i.']' : 'colors',
-                        'all_colors' => $colors,
-                        'color_selected' => $lastColors != null ? $lastColors[$i] : null,
-                        'color_id' => 'Color_'.$i,
-                        'color_hidden' => $lastColors != null ? '' : 'hidden',
-                        
-                        'talla_name' => $lastTallas != null ? 'talla['.$i.']' : 'sizes',
-                        'all_tallas' => $sizes,
-                        'talla_selected' => $lastTallas != null ? $lastTallas[$i] : null,
-                        'talla_id' => 'Talla_'.$i,
-                        'talla_hidden' => $lastTallas != null ? '' : 'hidden',
-                        
-                        'estilo_name' => $lastEstilos != null ? 'estilo['.$i.']' : 'styles',
-                        'all_estilos' => $styles,
-                        'estilo_selected' => $lastEstilos != null ? $lastEstilos[$i] : null,
-                        'estilo_id' => 'Estilo_'.$i,
-                        'estilo_hidden' => $lastEstilos != null ? '' : 'hidden',
+            @if($lastAmount != null)
+              @for ($i = 0; $i < count($lastAmount); $i++)
+                @include('product._product_form_dropdowns', 
+                        ['opts_div_id' => $i,
+                          'opts_div_hidden' => '',
+                          
+                          'color_name' => $lastColors != null ? 'color['.$i.']' : 'colors',
+                          'all_colors' => $colors,
+                          'color_selected' => $lastColors != null ? $lastColors[$i] : null,
+                          'color_id' => 'Color_'.$i,
+                          'color_hidden' => $lastColors != null ? '' : 'hidden',
+                          
+                          'talla_name' => $lastTallas != null ? 'talla['.$i.']' : 'sizes',
+                          'all_tallas' => $sizes,
+                          'talla_selected' => $lastTallas != null ? $lastTallas[$i] : null,
+                          'talla_id' => 'Talla_'.$i,
+                          'talla_hidden' => $lastTallas != null ? '' : 'hidden',
+                          
+                          'estilo_name' => $lastEstilos != null ? 'estilo['.$i.']' : 'styles',
+                          'all_estilos' => $styles,
+                          'estilo_selected' => $lastEstilos != null ? $lastEstilos[$i] : null,
+                          'estilo_id' => 'Estilo_'.$i,
+                          'estilo_hidden' => $lastEstilos != null ? '' : 'hidden',
 
-                        'amount_div_id' => 'amounts_'.$i,
-                        'amount_div_hidden' => '',
-                        'amount_name' => 'opt_amount['.$i.']',
-                        'amount_selected' => $lastAmount != null ? $lastAmount[$i] : '1',
-                        'amount_id' => 'number_'.$i,
-                        'amount_hidden' => $lastAmount != null ? '' : 'hidden',
-                        
-                        'remove_btn_hidden' => $lastAmount != null ? '' : 'hidden',
-                        'remove_counter' => $i,
+                          'amount_div_id' => 'amounts_'.$i,
+                          'amount_div_hidden' => '',
+                          'amount_name' => 'opt_amount['.$i.']',
+                          'amount_selected' => $lastAmount != null ? $lastAmount[$i] : '1',
+                          'amount_id' => 'number_'.$i,
+                          'amount_hidden' => $lastAmount != null ? '' : 'hidden',
+                          
+                          'remove_btn_hidden' => $lastAmount != null ? '' : 'hidden',
+                          'remove_counter' => $i,
 
-                        'divider_id' => 'divider_'.$i,
-                        'divider_hidden' => ''
-                      ])
-            @endfor
+                          'divider_id' => 'divider_'.$i,
+                          'divider_hidden' => ''
+                        ])
+              @endfor
+            @endif
           @endif
           
           <!-- ALWAYS  -->
