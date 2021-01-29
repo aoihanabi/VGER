@@ -3,7 +3,7 @@
     <div class="grid grid-cols-6 gap-6">
         <!-- General Information -->
         <div class="category_fields col-span-6 sm:col-span-4">
-            {{ Form::label('name', 'Nombre de la Categoría', ['class' => 'block font-medium text-sm text-gray-700']) }}
+            {{ Form::label('name', 'Categoría', ['class' => 'block font-medium text-sm text-gray-700']) }}
             {{ Form::text('name', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
         </div>    
     </div>

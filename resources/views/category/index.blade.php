@@ -10,6 +10,13 @@
         <div class="mt-5 md:mt-0 md:col-span-2">
             <div class="shadow overflow-hidden sm:rounded-md">
                 <div class="px-4 py-5 bg-white sm:p-6">
+                
+                    <div class="flex col-start-2 items-center justify-end py-3">
+                        {{ link_to(route('categories.create'), $title = 'Crear nueva categoría',
+                            ['class' => 'items-center px-4 py-2 pt-2 bg-gray-800 border border-transparent rounded-md font-semibold 
+                                        text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none 
+                                        focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150']) }}
+                    </div>
                     <div class="grid grid-cols-2 gap-x-15 gap-y-6">
                         
                         <!-- General Information -->
@@ -29,12 +36,7 @@
                             
                         </div>
                         @endforeach
-                        <div class="flex col-start-2 items-center justify-end py-3">
-                            {{ link_to(route('categories.create'), $title = 'Crear nueva categoría',
-                                ['class' => 'items-center px-4 py-2 pt-2 bg-gray-800 border border-transparent rounded-md font-semibold 
-                                            text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none 
-                                            focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150']) }}
-                        </div>
+                        
                     </div>
                 </div>
             </div>
