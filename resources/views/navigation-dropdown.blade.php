@@ -16,7 +16,18 @@
                     <x-jet-nav-link href="/" :active="request()->routeIs('home')">
                         {{ __('Inicio') }}
                     </x-jet-nav-link>
-                    <x-jet-nav-link href="{{ route('products.index') }}" :active="request()->routeIs('products.index')">
+
+                    @php
+                        if (Auth::check()) {
+                            $url = route('products.index');
+                            if(Auth::user()->isAdmin() || Auth::user()->isEmployee()) {
+                                $url = route('admin.products.index');
+                            }
+                        } else {
+                            $url = route('products.index');
+                        }
+                    @endphp
+                    <x-jet-nav-link href="{{ $url }}" :active="request()->routeIs('products.index')">
                         {{ __('Productos') }}
                     </x-jet-nav-link>
                     @if (!Auth::check())
@@ -31,6 +42,28 @@
 
                 <!-- Settings Dropdown -->
                 @if(Auth::check())
+                <div class="hidden sm:flex sm:items-center sm:ml-5">
+                    <x-jet-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="text-sm text-gray-500">
+                                Mantenimiento
+                            </button>
+                        </x-slot>
+                        <x-slot name="content">
+                            <!-- Product Management -->
+                            <div class="block px-4 py-2 text-xs text-gray-400">
+                                {{ __('Administrar Productos') }}
+                            </div>
+
+                            <x-jet-dropdown-link href="{{ route('categories.create') }}">
+                                {{ __('Crear categoría') }}
+                            </x-jet-dropdown-link>
+                            <!-- <a href="products/create">Crear nuevo producto</a>
+                            {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}
+                            {{ link_to(route('options.create'), $title = 'Crear nueva característica') }} -->
+                        </x-slot>
+                    </x-jet-dropdown>
+                </div>
                 <div class="hidden sm:flex sm:items-center sm:ml-5">
                                 
                     <x-jet-dropdown align="right" width="48">

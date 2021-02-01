@@ -18,11 +18,12 @@ class CheckVIPUser
     public function handle(Request $request, Closure $next)
     {
         if(Auth::check()) {
-            if (Auth::user()->isUser()) 
+            
+            if (Auth::user()->isEmployee() || Auth::user()->isAdmin()) 
             {            
-                return redirect(url()->previous()); //Add notice msg later?
+                return $next($request);
             }
-            return $next($request);
+            return redirect(url()->previous()); //Add notice msg later?
         }
         return redirect('login');
     }

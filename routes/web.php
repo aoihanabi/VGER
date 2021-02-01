@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OptionController;
@@ -27,8 +28,12 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('products', ProductController::class);
+Route::resource('products', ProductController::class)->only([
+    'index', 'show'
+]);
 Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
+Route::resource('admin/products', AdminProductController::class, ['as' => 'admin'])->middleware('auth.vip');
+
 
 Route::resource('categories', CategoryController::class)->except('show');
 Route::resource('options', OptionController::class)->except('show');
