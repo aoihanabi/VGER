@@ -55,8 +55,16 @@
                                 {{ __('Administrar Productos') }}
                             </div>
 
+                            <x-jet-dropdown-link href="{{ route('admin.products.create') }}">
+                                {{ __('Agregar producto') }}
+                            </x-jet-dropdown-link>
+                            <div class="border-t border-gray-100"></div>
                             <x-jet-dropdown-link href="{{ route('categories.create') }}">
-                                {{ __('Crear categoría') }}
+                                {{ __('Agregar categoría') }}
+                            </x-jet-dropdown-link>
+                            <div class="border-t border-gray-100"></div>
+                            <x-jet-dropdown-link href="{{ route('options.create') }}">
+                                {{ __('Agregar caraterística') }}
                             </x-jet-dropdown-link>
                             <!-- <a href="products/create">Crear nuevo producto</a>
                             {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}

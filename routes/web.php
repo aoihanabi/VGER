@@ -31,8 +31,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::resource('products', ProductController::class)->only([
     'index', 'show'
 ]);
-Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
 Route::resource('admin/products', AdminProductController::class, ['as' => 'admin'])->middleware('auth.vip');
+// Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
 
 
 Route::resource('categories', CategoryController::class)->except('show');

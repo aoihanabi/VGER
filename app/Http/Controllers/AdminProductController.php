@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Product;
 
 class AdminProductController extends Controller
 {
@@ -13,7 +14,15 @@ class AdminProductController extends Controller
      */
     public function index()
     {
-        return "hola";
+        $products = Product::get_all_products(); 
+        
+        $mains = array();
+        foreach ($products as $p) {
+            $image = Product::find($p->id)->main_image->first();
+            array_push($mains, $image->url);
+        }
+
+        return view('admin_product.index', ['products' => $products, 'main_imgs' => $mains]);
     }
 
     /**
