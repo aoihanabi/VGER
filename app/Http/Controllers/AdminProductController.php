@@ -54,7 +54,19 @@ class AdminProductController extends Controller
      */
     public function show($id)
     {
-        //
+        $product = Product::find($id);
+        $main_img = $product->main_image->first();
+        $secondary_imgs = $product->secondary_images;
+        // $attrs = Attribute::select('attributes.name', 'attributes.id')
+        //                     ->join('product_attributes', 'attributes.id', '=', 'product_attributes.attribute_id')
+        //                     ->where('product_attributes.product_id','=', $id)->get();
+        $options_db = Product::get_product_options($product->id);
+        
+        return view('admin_product.show', ['product' => $product,
+                                     'main_img' => $main_img, 
+                                     'secondary_imgs' => $secondary_imgs, 
+                                    //  'attrs' => $attrs, 
+                                     'options_db' => $options_db]);
     }
 
     /**

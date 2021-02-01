@@ -11,7 +11,7 @@
       @foreach($products as $key => $prod)
         <div class="border-solid border border-gray-300 rounded shadow-md">
           <div class="m-5">
-            <a href="{{ route('products.show', ['product' => $prod->id]) }}">
+            <a href="{{ route('admin.products.show', ['product' => $prod->id]) }}">
               
               <img src="{{ asset($main_imgs[$key]) }}" style="width: 300px; height: 200px;"></img>
               
