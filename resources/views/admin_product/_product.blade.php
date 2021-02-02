@@ -8,19 +8,6 @@
     // print_r($lastTallas != null ? $lastallas :"tallas null | ");
     // print_r($lastEstilos != null ? $lastestilos:"estilos nul | ");
   ?>
-  @if ($errors->any())
-    @foreach ($errors->all() as $error)
-      <div class="my-2 p-2 shadow  sm:rounded-md bg-red-200 ">
-        <span class="fas fa-exclamation-circle text-red-900">
-          <span class="font-sans font-light text-md text-red-900">
-            {{ $error }}
-          </span>
-        </span>
-      </div>
-    @endforeach
-    
-    
-  @endif
 <div class="shadow overflow-hidden sm:rounded-md">
   <div class="px-4 py-5 bg-white sm:p-6">
     <div class="grid grid-cols-6 gap-6">
@@ -60,7 +47,7 @@
           @if ($prod_options != null)
             @foreach ($prod_options as $k => $options)
 
-              @include('product._product_form_dropdowns', 
+              @include('admin_product._product_form_dropdowns', 
                       ['opts_div_id' => $k,
                        'opts_div_hidden' => '',
                        
@@ -103,7 +90,7 @@
           @if ($errors->any())
             @if($lastAmount != null)
               @for ($i = 0; $i < count($lastAmount); $i++)
-                @include('product._product_form_dropdowns', 
+                @include('admin_product._product_form_dropdowns', 
                         ['opts_div_id' => $i,
                           'opts_div_hidden' => '',
                           
@@ -143,7 +130,7 @@
           @endif
           
           <!-- ALWAYS  -->
-          @include('product._product_form_dropdowns', 
+          @include('admin_product._product_form_dropdowns', 
                   ['opts_div_id' => 'opts',
                     'opts_div_hidden' => 'hidden',
                     

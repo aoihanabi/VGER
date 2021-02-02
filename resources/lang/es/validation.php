@@ -117,6 +117,7 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute format is invalid.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'product_not_found' => 'Producto no encontrado.',
 
     /*
     |--------------------------------------------------------------------------
@@ -169,6 +170,7 @@ return [
         'main_image' => [
             'required' => 'La imagen principal es requerida.'
         ],
+        
     ],
 
     /*

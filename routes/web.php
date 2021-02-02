@@ -28,8 +28,8 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-Route::resource('products', ProductController::class)->only([
-    'index', 'show'
+Route::resource('products', ProductController::class)->except([
+    'create', 'store'
 ]);
 Route::resource('admin/products', AdminProductController::class, ['as' => 'admin'])->middleware('auth.vip');
 // Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);

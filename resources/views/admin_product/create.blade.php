@@ -9,8 +9,8 @@
       </div>
 
       <div class="mt-5 md:mt-0 md:col-span-2">
-        {{ Form::open(['route' => 'products.store', 'files' => true]) }}
-          @include('product._product')
+        {{ Form::open(['route' => 'admin.products.store', 'files' => true]) }}
+          @include('admin_product._product')
         {{ Form::close() }}
       </div>
     </div>

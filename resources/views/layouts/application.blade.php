@@ -21,6 +21,10 @@
       
 
       <div  class="">
+        @if($errors->any())
+          @include('error-message')
+        @endif
+        
         @yield('content')        
       </div>
       
