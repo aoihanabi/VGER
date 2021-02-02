@@ -170,7 +170,11 @@ return [
         'main_image' => [
             'required' => 'La imagen principal es requerida.'
         ],
-        
+        //Categoría
+        'name' => [
+            'required' => 'El nombre es requerido.',
+            'max' => 'El nombre no puede tener más :max caractéres.',
+        ],
     ],
 
     /*
