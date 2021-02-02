@@ -34,9 +34,8 @@ Route::resource('products', ProductController::class)->only([
 Route::resource('admin/products', AdminProductController::class, ['as' => 'admin'])->middleware('auth.vip');
 // Route::post('update-quantity', [ProductController::class, 'update_quantity_only']);
 
-
 Route::resource('admin/categories', CategoryController::class)->except('show')->middleware('auth.vip');
-Route::resource('options', OptionController::class)->except('show');
+Route::resource('admin/options', OptionController::class)->except('show')->middleware('auth.vip');
 Route::resource('users', UserController::class)->except('show');
 
 Route::get('/orders/all', [OrderController::class, 'all_orders']);

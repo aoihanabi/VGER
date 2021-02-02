@@ -52,6 +52,10 @@ class OptionController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'option' => 'required|max:20',
+            'attribute_id' => 'required',
+        ]);
         $option = new Option;
         $option->attribute_id = $request->attribute_id;
         $option->option = $request->option;
@@ -84,6 +88,10 @@ class OptionController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'option' => 'required|max:20',
+            'attribute_id' => 'required',
+        ]);
         $option = Option::find($id);
         $option->option = $request->option;
         $option->attribute_id = $request->attribute_id;        

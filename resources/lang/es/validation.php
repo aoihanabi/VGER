@@ -175,6 +175,14 @@ return [
             'required' => 'El nombre es requerido.',
             'max' => 'El nombre no puede tener más :max caractéres.',
         ],
+        //Opciones/características
+        'option' => [
+            'required' => 'La característica es requerida.',
+            'max' => 'La característica no puede tener más :max caractéres.',
+        ],
+        'attribute_id' => [
+            'required' => 'Seleccione un tipo de característica.',
+        ],
     ],
 
     /*

@@ -8,7 +8,7 @@
             <p class="mt-1 text-sm text-gray-600">Agregar una categoría de producto</p>
             
             <div class="flex text-center pr-6 py-6">
-                <a href="/options" class='flex-1 items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold 
+                <a href="{{ route('options.index') }}" class='flex-1 items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold 
                                         text-xs text-gray-800 font-bold uppercase tracking-widest hover:bg-gray-200 active:bg-gray-300 focus:outline-none 
                                         focus:border-gray-400 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150'>
                 Ver todas </a>
