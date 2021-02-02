@@ -123,7 +123,7 @@ class AdminProductController extends Controller
         $this->upload_product_images($request, $product);
         $product->refresh();
         
-        return redirect()->action([ProductController::class, 'index']);
+        return redirect()->action([AdminProductController::class, 'index']);
     }
 
     /**
@@ -210,6 +210,19 @@ class AdminProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validated = $request->validate([
+            'code' => 'required|numeric|digits:6',
+            'name' => 'required|max:150',
+            'description' => 'max:350',
+            'quantity' => 'required|numeric',
+            'price' => 'required|numeric',
+            'attribute_checks' => 'required',
+            'color' => 'required_without_all:talla,estilo',
+            'talla' => 'required_without_all:color,estilo',
+            'estilo' => 'required_without_all:talla,color',
+            'categ_checks' => 'required',
+        ]);
+
         $product = Product::find($id);
         $product->code = $request->code;
         $product->name = $request->name;
@@ -223,8 +236,8 @@ class AdminProductController extends Controller
 
         #OPTIONS
         $product->attributes()->sync($request->attribute_checks);
-        echo($request->contador);
-        for ($i = 0; $i<$request->contador+1; $i++) {
+        //echo($request->contador);
+        for ($i = 0; $i<$request->contador; $i++) {
             $arr = [
                 'color' => isset($request->color[$i]) ? ['id' => $request->color[$i], 'option' => Option::where('id', $request->color[$i])->first(['option'])->option] : null,
                 'talla' => isset($request->talla[$i]) ? ['id' => $request->talla[$i], 'option' => Option::where('id', $request->talla[$i])->first(['option'])->option] : null,
@@ -234,7 +247,8 @@ class AdminProductController extends Controller
             $toJson = json_encode($arr);
             
             $productOption = ProductOptions::where('product_id', $product->id)->get(); //find?
-            
+            echo($i . " | " . PHP_EOL);
+            echo(count($request->opt_amount) . PHP_EOL);
             if(isset($productOption[$i])) {
 
                 $productOption[$i]->options_ids = $toJson;
@@ -250,14 +264,10 @@ class AdminProductController extends Controller
         }
 
         #IMAGES
-        if ($request->hasfile('main_image')) {
-            $old_main = $product->images()->main_image();
-            $old_main->delete();
-        }
         $this->upload_product_images($request, $product);
         
         $product->refresh();
-        return redirect()->action([ProductController::class, 'index']);
+        return redirect()->action([AdminProductController::class, 'index']);
     }
 
     /**
@@ -269,5 +279,37 @@ class AdminProductController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /*
+     * UploadS image to the server and saves its url to DB
+     */
+    public function upload_product_images($request, $product) {
+
+        if($request->hasfile('main_image'))
+        {
+            //When updating, Delete if a previous image exists.
+            $old_main = $product->main_image->first(); 
+            if($old_main) {
+                $old_main->delete();
+            }
+            $path_main = $request->file('main_image')->store('images/products');
+            $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
+            $product->images()->save($im_main);
+        }
+
+        if($request->hasfile('sec_images')) {
+            
+            $old_secondary = $product->secondary_images;
+            foreach($request->file('sec_images') as $key => $file)
+            {
+                if(isset($old_secondary[$key])) {
+                    $old_secondary[$key]->delete();
+                }
+                $path_sec = $file->store('images/products');
+                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
+                $product->images()->save($im_sec);
+            }
+        }
     }
 }

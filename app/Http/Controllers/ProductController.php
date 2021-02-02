@@ -296,37 +296,37 @@ class ProductController extends Controller
         return redirect()->action([ProductController::class, 'index']);
     }
 
-    /*
-     * Upload image to the server and saves its url to DB
-     */
-    public function upload_product_images($request, $product) {
+    // /*
+    //  * Upload image to the server and saves its url to DB
+    //  */
+    // public function upload_product_images($request, $product) {
 
-        if($request->hasfile('main_image'))
-        {
-            //When updating, Delete if a previous image exists.
-            $old_main = $product->main_image->first(); 
-            if($old_main) {
-                $old_main->delete();
-            }
-            $path_main = $request->file('main_image')->store('images/products');
-            $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
-            $product->images()->save($im_main);
-        }
+    //     if($request->hasfile('main_image'))
+    //     {
+    //         //When updating, Delete if a previous image exists.
+    //         $old_main = $product->main_image->first(); 
+    //         if($old_main) {
+    //             $old_main->delete();
+    //         }
+    //         $path_main = $request->file('main_image')->store('images/products');
+    //         $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
+    //         $product->images()->save($im_main);
+    //     }
 
-        if($request->hasfile('sec_images')) {
+    //     if($request->hasfile('sec_images')) {
             
-            $old_secondary = $product->secondary_images;
-            foreach($request->file('sec_images') as $key => $file)
-            {
-                if(isset($old_secondary[$key])) {
-                    $old_secondary[$key]->delete();
-                }
-                $path_sec = $file->store('images/products');
-                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
-                $product->images()->save($im_sec);
-            }
-        }
-    }
+    //         $old_secondary = $product->secondary_images;
+    //         foreach($request->file('sec_images') as $key => $file)
+    //         {
+    //             if(isset($old_secondary[$key])) {
+    //                 $old_secondary[$key]->delete();
+    //             }
+    //             $path_sec = $file->store('images/products');
+    //             $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
+    //             $product->images()->save($im_sec);
+    //         }
+    //     }
+    // }
 
     /**
      * Method to update product's quantity only from index page using ajax
