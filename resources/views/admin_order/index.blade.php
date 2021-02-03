@@ -7,15 +7,15 @@
         <h2 class="text-xl">Órdenes</h2>
     </div>
     <div class="py-10">
-        <div x-data="{show_{{ConstantsHelper::ORDER_STATUS_PROCESSED}}:false}" class="py-2">
-            <a x-on:click.prevent="show_{{ConstantsHelper::ORDER_STATUS_PROCESSED}}=!show_{{ConstantsHelper::ORDER_STATUS_PROCESSED}}" class="hover:bg-gray-100 cursor-pointer">
+        <div x-data="{show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}:false}" class="py-2">
+            <a x-on:click.prevent="show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}=!show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}" class="hover:bg-gray-100 cursor-pointer">
                 <div class="flex flex-row items-center">
                     <p class="flex-1 font-semibold"> Pedidos en proceso </p>
                     <i class="p-3 justify-self-end rounded hover:bg-gray-200 cursor-pointer fas fa-angle-down"></i>
                 </div>
             </a>
             @foreach($orders as $order)
-                @if ($order->status ==  ConstantsHelper::ORDER_STATUS_PROCESSED)
+                @if ($order->status ==  ConstantsHelper::ORDER_STATUS_IN_PROCESS)
                     <div x-show="show_{{$order->status}}" class="bg-gray-100 px-4 py-3 my-2 text-gray-700">
                         <a href="{{ route('admin.orders.show', ['order' => $order->id]) }}" class="">
                             <div class="py-5 grid grid-cols-3 content-center hover:bg-gray-100">
@@ -39,7 +39,7 @@
             @foreach($orders as $order)
                 @if ($order->status ==  ConstantsHelper::ORDER_STATUS_READY)
                     <div x-show="show_{{$order->status}}" class="bg-gray-100 px-4 py-3 my-2 text-gray-700">
-                        <a href="{{ route('orders.show', ['order' => $order->id]) }}" class="">
+                        <a href="{{ route('admin.orders.show', ['order' => $order->id]) }}" class="">
                             <div class="py-5 grid grid-cols-3 content-center hover:bg-gray-100">
                                 <div class="text-lg font-semibold col-span-2">Pedido #{{$order->id}}</div>
                                 <div class="text-md font-semibold row-start-2">Usuario: {{ $order->name }} </div>

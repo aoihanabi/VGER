@@ -55,7 +55,7 @@ class Order extends Model
         // $opts = Option::select('options.attribute_id', 'options.option')
         //                 ->join('values', 'options.id', '=', 'values.option_id')
         //                 ->where('values.product_id', '=', $id)->get();
-        return DB::table('orderdetails')->select('products.name', 'subtotal', 'purchased_quantity')
+        return DB::table('orderdetails')->select('products.name', 'orderdetails.subtotal', 'orderdetails.purchased_quantity', 'orderdetails.description')
                                         ->join('products', 'orderdetails.product_id', '=', 'products.id')
                                         ->where('order_id', $order_id)->get();
     }

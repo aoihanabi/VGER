@@ -30,12 +30,12 @@ class AdminOrderController extends Controller
             
             //DB::enableQueryLog();
             //dd(DB::getQueryLog());
-            return view('order.show', ['order' => $order, 'details' => $details]);
+            return view('admin_order.show', ['order' => $order, 'details' => $details]);
         } catch (Exception $e) {
             return redirect()->action([OrderController::class, 'index'])->withErrors([Lang::get('validation.order_not_found')]);
         }
     }
-    
+
     /**
      * Sort orders by user, date or status
      */
