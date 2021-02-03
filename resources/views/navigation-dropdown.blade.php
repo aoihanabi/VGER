@@ -42,102 +42,112 @@
 
                 <!-- Settings Dropdown -->
                 @if(Auth::check())
-                <div class="hidden sm:flex sm:items-center sm:ml-5">
-                    <x-jet-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            <button class="text-sm text-gray-500">
-                                Mantenimiento
-                            </button>
-                        </x-slot>
-                        <x-slot name="content">
-                            <!-- Product Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Administrar Productos') }}
-                            </div>
-
-                            <x-jet-dropdown-link href="{{ route('admin.products.create') }}">
-                                {{ __('Agregar producto') }}
-                            </x-jet-dropdown-link>
-                            <div class="border-t border-gray-100"></div>
-                            <x-jet-dropdown-link href="{{ route('categories.create') }}">
-                                {{ __('Agregar categoría') }}
-                            </x-jet-dropdown-link>
-                            <div class="border-t border-gray-100"></div>
-                            <x-jet-dropdown-link href="{{ route('options.create') }}">
-                                {{ __('Agregar caraterística') }}
-                            </x-jet-dropdown-link>
-                            <!-- <a href="products/create">Crear nuevo producto</a>
-                            {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}
-                            {{ link_to(route('options.create'), $title = 'Crear nueva característica') }} -->
-                        </x-slot>
-                    </x-jet-dropdown>
-                </div>
-                <div class="hidden sm:flex sm:items-center sm:ml-5">
-                                
-                    <x-jet-dropdown align="right" width="48">
-                        <x-slot name="trigger">
-                            @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
-                                    <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                                </button>
-                            @else
-                                <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
-                                    <div>{{ Auth::user()->name }}</div>
-
-                                    <div class="ml-1">
-                                        <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
+                    @if(Auth::user()->isAdmin() || Auth::user()->isEmployee())
+                        <div class="hidden sm:flex sm:items-center sm:ml-5">
+                            <x-jet-dropdown align="right" width="48">
+                                <x-slot name="trigger">
+                                    <button class="text-sm text-gray-500">
+                                        Mantenimiento
+                                    </button>
+                                </x-slot>
+                                <x-slot name="content">
+                                    <!-- Product Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Administrar Productos') }}
                                     </div>
-                                </button>
-                            @endif
-                        </x-slot>
 
-                        <x-slot name="content">
-                            <!-- Orders Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Administrar Pedidos') }}
-                            </div>
+                                    <x-jet-dropdown-link href="{{ route('admin.products.create') }}">
+                                        {{ __('Agregar producto') }}
+                                    </x-jet-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>
+                                    <x-jet-dropdown-link href="{{ route('categories.create') }}">
+                                        {{ __('Agregar categoría') }}
+                                    </x-jet-dropdown-link>
+                                    <div class="border-t border-gray-100"></div>
+                                    <x-jet-dropdown-link href="{{ route('options.create') }}">
+                                        {{ __('Agregar caraterística') }}
+                                    </x-jet-dropdown-link>
+                                    <!-- <a href="products/create">Crear nuevo producto</a>
+                                    {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}
+                                    {{ link_to(route('options.create'), $title = 'Crear nueva característica') }} -->
 
-                            <x-jet-dropdown-link href="{{ route('orders.index') }}">
-                                {{ __('Pedidos') }}
-                            </x-jet-dropdown-link>
+                                    <!-- Order Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Administrar Pedidos') }}
+                                    </div>
+                                    <x-jet-dropdown-link href="{{ route('admin.orders.index') }}">
+                                        {{ __('Ver pedidos') }}
+                                    </x-jet-dropdown-link>
+                                </x-slot>
+                            </x-jet-dropdown>
+                        </div>
+                    @endif
+                    <div class="hidden sm:flex sm:items-center sm:ml-5">
+                                    
+                        <x-jet-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                                    <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition duration-150 ease-in-out">
+                                        <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                    </button>
+                                @else
+                                    <button class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300 transition duration-150 ease-in-out">
+                                        <div>{{ Auth::user()->name }}</div>
 
-                            <div class="border-t border-gray-100"></div>
+                                        <div class="ml-1">
+                                            <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                            </svg>
+                                        </div>
+                                    </button>
+                                @endif
+                            </x-slot>
 
-                            <!-- Account Management -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Administrar Cuenta') }}
-                            </div>
+                            <x-slot name="content">
+                                <!-- Orders Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Administrar Pedidos') }}
+                                </div>
 
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
-                            </x-jet-dropdown-link>
-
-                            <!-- @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
-                                    {{ __('API Tokens') }}
+                                <x-jet-dropdown-link href="{{ route('orders.index') }}">
+                                    {{ __('Mis Pedidos') }}
                                 </x-jet-dropdown-link>
-                            @endif -->
 
-                            <div class="border-t border-gray-100"></div>
+                                <div class="border-t border-gray-100"></div>
 
-                            
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ __('Administrar Cuenta') }}
+                                </div>
 
-                            <!-- Authentication -->
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                    onclick="event.preventDefault();
-                                                                this.closest('form').submit();">
-                                    {{ __('Logout') }}
+                                <x-jet-dropdown-link href="{{ route('profile.show') }}">
+                                    {{ __('Profile') }}
                                 </x-jet-dropdown-link>
-                            </form>
-                        </x-slot>
-                    </x-jet-dropdown>
-                    
-                </div>
+
+                                <!-- @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                                    <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
+                                        {{ __('API Tokens') }}
+                                    </x-jet-dropdown-link>
+                                @endif -->
+
+                                <div class="border-t border-gray-100"></div>
+
+                                
+
+                                <!-- Authentication -->
+                                <form method="POST" action="{{ route('logout') }}">
+                                    @csrf
+
+                                    <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                        onclick="event.preventDefault();
+                                                                    this.closest('form').submit();">
+                                        {{ __('Logout') }}
+                                    </x-jet-dropdown-link>
+                                </form>
+                            </x-slot>
+                        </x-jet-dropdown>
+                        
+                    </div>
                 @endif
             </div>
 

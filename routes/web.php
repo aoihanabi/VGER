@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminOrderController;
 use App\Http\Controllers\AdminProductController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 
 
@@ -38,9 +39,12 @@ Route::resource('admin/categories', CategoryController::class)->except('show')->
 Route::resource('admin/options', OptionController::class)->except('show')->middleware('auth.vip');
 Route::resource('users', UserController::class)->except('show');
 
-Route::get('/orders/all', [OrderController::class, 'all_orders']);
-Route::post('/orders/sort', [OrderController::class, 'sort_orders']);//add params
-Route::resource('orders', OrderController::class);
+Route::resource('orders', OrderController::class)->except(['create', 'edit', 'update', 'destroy'])->middleware('auth');
+Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function() 
+{
+    Route::get('orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+    Route::post('orders/sort', [AdminOrderController::class, 'sort_orders']);//add params
+});
 
 
 // Route::group(['prefix' => 'general',  'middleware' => ['jwt.verify','admin']], function()

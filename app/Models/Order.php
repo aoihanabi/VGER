@@ -12,6 +12,28 @@ class Order extends Model
     use HasFactory;
 
     /**
+     * Retrieve all orders from the DB
+     */
+    public static function get_all_orders() 
+    {
+        //Auth::user()->id
+        
+        return Order::get(['id', 'total', 'date', 'status', 'user_id']);
+    }
+
+    /**
+     * Retrieve all orders of the authenticated user from the DB
+     */
+    public static function get_user_orders() 
+    {
+        //Auth::user()->id
+        
+        return Order::where([
+            ['user_id', Auth::user()->id]
+        ])->get();
+    }
+
+    /**
      * Retrieve all orders in 'in porcess' of the authenticated user from the DB
      */
     public static function get_in_process_orders() 

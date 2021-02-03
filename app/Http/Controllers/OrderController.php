@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Lang;
+use \Exception;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\Order;
@@ -21,7 +23,7 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth.vip')->only(['all_orders', 'sort_orders']);
+        //$this->middleware('auth.vip')->only(['all_orders', 'sort_orders']);
     }
     /**
      * Display a listing of the resource.
@@ -30,19 +32,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $process_orders = Order::get_in_process_orders();
+        $process_orders = Order::get_user_orders();
         //print_r($process_orders);
         return view('order.index', ['p_orders' => $process_orders]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -109,50 +101,16 @@ class OrderController extends Controller
      */
     public function show($id)
     {
-        
-        $order = Order::find($id);
-        $details = Order::get_order_details($order->id);
-        
-        //DB::enableQueryLog();
-        //dd(DB::getQueryLog());
-        return view('order.show', ['order' => $order, 'details' => $details]);
-    }
-
-    /**
-     * Show all orders (only admins or employees)
-     */
-    public function all_orders() {
-        return view('order.all-orders');
-    }
-    
-    /**
-     * Sort orders by user, date or status
-     */
-    public function sort_orders(Request $request){
-        return view('order.all-orders');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+        try {
+            $order = Order::find($id);
+            $details = Order::get_order_details($order->id);
+            
+            //DB::enableQueryLog();
+            //dd(DB::getQueryLog());
+            return view('order.show', ['order' => $order, 'details' => $details]);
+        } catch (Exception $e) {
+            return redirect()->action([OrderController::class, 'index'])->withErrors([Lang::get('validation.order_not_found')]);
+        }
     }
 
     /**
