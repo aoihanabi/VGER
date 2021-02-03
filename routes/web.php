@@ -43,6 +43,7 @@ Route::resource('orders', OrderController::class)->except(['create', 'edit', 'up
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function() 
 {
     Route::get('orders', [AdminOrderController::class, 'index'])->name('admin.orders.index');
+    Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
     Route::post('orders/sort', [AdminOrderController::class, 'sort_orders']);//add params
 });
 

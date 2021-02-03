@@ -2,19 +2,19 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-xl">Órdenes en proceso</h2>
+        <div id="orders_masthead" class="py-5 text-center">
+            <h2 class="text-xl">Mis pedidos</h2>
+        </div>
         <div class="py-10">
             @foreach($p_orders as $order)
-                <a href="">
-                <div class="py-5 flex flex-row content-center hover:bg-gray-100">
-                    <div class="text-lg font-semibold flex-1">Pedido #{{$order->id}}</div>
-                    <div class="text-lg font-semibold">{{$order->total}}</div>
+                <a href="{{ route('orders.show', ['order' => $order->id]) }}">
+                <div class="py-5 grid grid-cols-3 content-center hover:bg-gray-100">
+                    <div class="text-lg font-semibold col-span-2">Pedido #{{$order->id}}</div>
+                    <div class="text-lg font-semibold justify-self-end pr-4">₡{{number_format($order->total, 2, ".", " ")}}</div>
                 </div>
                 </a>
                 <hr>
             @endforeach
         </div>
-        
-        <h2>Órdenes listas</h2>
     </div>
 @endsection

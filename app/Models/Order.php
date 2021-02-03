@@ -16,9 +16,10 @@ class Order extends Model
      */
     public static function get_all_orders() 
     {
-        //Auth::user()->id
-        
-        return Order::get(['id', 'total', 'date', 'status', 'user_id']);
+        return DB::table('orders')
+                    ->join('users', 'orders.user_id', '=', 'users.id')
+                    ->select('orders.id', 'orders.total', 'orders.date', 'orders.status', 'orders.user_id', 'users.name')
+                    ->get();
     }
 
     /**
