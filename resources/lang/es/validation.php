@@ -184,6 +184,27 @@ return [
         'attribute_id' => [
             'required' => 'Seleccione un tipo de característica.',
         ],
+        //Users
+        'name' => [
+            'required' => 'El nombre de usuario es requerido.',
+            'max' => 'El nombre de usuario no puede tener más :max caractéres.',
+        ],
+        'role' => [
+            'required' => 'Seleccione un rol.'
+        ],
+        'email' => [
+            'required' => 'Seleccione un tipo de característica.',
+            'regex' => 'Debe ingresar una dirección de correo válida'
+        ],
+        'phone' => [
+            'required' => 'El número de teléfono es requerido.',
+            'numeric' => 'El número de teléfono debe ser numérico.',
+            'digits' =>  'El número de teléfono debe tener :digits dígitos.',
+        ],
+        'address' => [
+            'required' => 'La dirección es requerida.',
+            'max' => 'El nombre de usuario no puede tener más :max caractéres.',
+        ],
     ],
 
     /*

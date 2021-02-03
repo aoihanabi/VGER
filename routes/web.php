@@ -37,7 +37,7 @@ Route::resource('admin/products', AdminProductController::class, ['as' => 'admin
 
 Route::resource('admin/categories', CategoryController::class)->except('show')->middleware('auth.vip');
 Route::resource('admin/options', OptionController::class)->except('show')->middleware('auth.vip');
-Route::resource('users', UserController::class)->except('show');
+Route::resource('admin/users', UserController::class)->except('show')->middleware('auth.vip');
 
 Route::resource('orders', OrderController::class)->except(['create', 'edit', 'update', 'destroy'])->middleware('auth');
 Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function() 

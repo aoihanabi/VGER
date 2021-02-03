@@ -55,22 +55,20 @@
                                     <div class="block px-4 py-2 text-xs text-gray-400">
                                         {{ __('Administrar Productos') }}
                                     </div>
-
                                     <x-jet-dropdown-link href="{{ route('admin.products.create') }}">
                                         {{ __('Agregar producto') }}
                                     </x-jet-dropdown-link>
-                                    <div class="border-t border-gray-100"></div>
                                     <x-jet-dropdown-link href="{{ route('categories.create') }}">
                                         {{ __('Agregar categoría') }}
                                     </x-jet-dropdown-link>
-                                    <div class="border-t border-gray-100"></div>
                                     <x-jet-dropdown-link href="{{ route('options.create') }}">
                                         {{ __('Agregar caraterística') }}
                                     </x-jet-dropdown-link>
                                     <!-- <a href="products/create">Crear nuevo producto</a>
                                     {{ link_to(route('categories.create'), $title = 'Crear nueva categoría') }}
                                     {{ link_to(route('options.create'), $title = 'Crear nueva característica') }} -->
-
+                                    
+                                    <div class="border-t border-gray-100"></div>
                                     <!-- Order Management -->
                                     <div class="block px-4 py-2 text-xs text-gray-400">
                                         {{ __('Administrar Pedidos') }}
@@ -78,12 +76,23 @@
                                     <x-jet-dropdown-link href="{{ route('admin.orders.index') }}">
                                         {{ __('Ver pedidos') }}
                                     </x-jet-dropdown-link>
+
+                                    <div class="border-t border-gray-100"></div>
+                                    <!-- Users Management -->
+                                    <div class="block px-4 py-2 text-xs text-gray-400">
+                                        {{ __('Administrar Usuarios') }}
+                                    </div>
+                                    <x-jet-dropdown-link href="{{ route('users.index') }}">
+                                        {{ __('Ver usuarios') }}
+                                    </x-jet-dropdown-link>
+                                    <x-jet-dropdown-link href="{{ route('users.create') }}">
+                                        {{ __('Agregar Usuario') }}
+                                    </x-jet-dropdown-link>
                                 </x-slot>
                             </x-jet-dropdown>
                         </div>
                     @endif
                     <div class="hidden sm:flex sm:items-center sm:ml-5">
-                                    
                         <x-jet-dropdown align="right" width="48">
                             <x-slot name="trigger">
                                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())

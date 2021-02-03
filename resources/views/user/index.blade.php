@@ -3,14 +3,28 @@
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="py-10">
-            <h2 class="text-xl">Usuarios</h2>
+            <div class="inline-grid w-full">
+                <h2 class="justify-self-center text-lg font-medium text-gray-900">Usuarios</h2>
+
+                <div class="flex items-center justify-end py-3">
+                    {{ link_to(route('users.create'), $title = 'Crear nuevo usuario',
+                        ['class' => 'items-center px-4 py-2 pt-2 bg-gray-800 border border-transparent rounded-md font-semibold 
+                                    text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none 
+                                    focus:border-gray-900 focus:shadow-outline-gray disabled:opacity-25 transition ease-in-out duration-150']) }}
+                </div>
+            </div>
+            
             @foreach($users as $user)
                 <div class="py-5 "  x-data="{show{{$user->id}}:false}">
                     
                     <a x-on:click.prevent="show{{$user->id}}=!show{{$user->id}}" class="hover:bg-gray-100 cursor-pointer">
                         <div class="flex flex-row items-center">
-                            <p class="flex-1 font-semibold">{{ $user->name}}</p>
-                            <i class="p-3 justify-self-end rounded hover:bg-gray-200 cursor-pointer fas fa-plus"></i>
+                            <p class="flex-1 font-semibold">{{ $user->name}}
+                            @if ($user->isAdmin() || $user->isEmployee())
+                                <i class="fas fa-star"></i>
+                            @endif
+                            </p>
+                            <i class="p-3 justify-self-end rounded hover:bg-gray-200 cursor-pointer fas fa-angle-down"></i>
                         </div>
                     </a>
                     <div x-show="show{{$user->id}}" class="bg-gray-100 px-4 py-3 my-2 text-gray-700">

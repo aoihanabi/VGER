@@ -12,7 +12,7 @@ use App\Models\User;
 class UserController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Retrieves a listing of all the users except the one authenticated, only for admins.
      *
      * @return \Illuminate\Http\Response
      */
@@ -44,6 +44,13 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'role' => 'required',
+            'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'phone' => 'required|numeric|digits:8',
+            'address' => 'required|max:250',
+        ]);
         $user = new User;
         $user->name = $request->name;
         $user->role = $request->role;
@@ -87,6 +94,13 @@ class UserController extends Controller
      */
     public function update(Request $request, $id) 
     {
+        $validated = $request->validate([
+            'name' => 'required|max:255',
+            'role' => 'required',
+            'email' => 'required|regex:/^([a-z0-9\+_\-]+)(\.[a-z0-9\+_\-]+)*@([a-z0-9\-]+\.)+[a-z]{2,6}$/ix',
+            'phone' => 'required|numeric|digits:8',
+            'address' => 'required|max:250',
+        ]);
         $user = User::find($id);
         $user->name = $request->name;
         $user->role = $request->role;
