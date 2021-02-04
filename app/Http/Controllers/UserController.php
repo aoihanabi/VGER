@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Helpers\ConstantsHelper;
 
 
 class UserController extends Controller
@@ -30,7 +31,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $roles = user_roles();
+        $roles = ConstantsHelper::get_user_roles();
         unset($roles['user']);
         
         return view('user.create', ['user' => null, 'roles' => $roles]);
@@ -79,7 +80,7 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::find($id);
-        $roles = user_roles();
+        $roles = ConstantsHelper::get_user_roles();
         
         #print_r($roles);
         return view('user.edit', ['user' => $user, 'roles' => $roles]);
