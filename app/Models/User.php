@@ -98,6 +98,6 @@ class User extends Authenticatable
      */
     public static function get_all_users() {
 
-        return User::select('id', 'name', 'email', 'phone', 'address', 'role', 'profile_photo_path')->get();
+        return User::select('id', 'name', 'email', 'phone', 'address', 'role', 'profile_photo_path');
     }
 }

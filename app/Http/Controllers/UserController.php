@@ -19,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::get_all_users()->where("id", "!=", Auth::user()->id); 
+        $users = User::get_all_users()->where("id", "!=", Auth::user()->id)->orderBy('role', 'ASC')->get(); 
         
         return view('user.index', ['users' => $users]);
     }

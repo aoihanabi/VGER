@@ -15,7 +15,7 @@
             </div>
             
             @foreach($users as $user)
-                <div class="py-5 "  x-data="{show{{$user->id}}:false}">
+                <div class="py-5 "  x-data="{ show{{$user->id}}:false }">
                     
                     <a x-on:click.prevent="show{{$user->id}}=!show{{$user->id}}" class="hover:bg-gray-100 cursor-pointer">
                         <div class="flex flex-row items-center">
@@ -27,29 +27,10 @@
                             <i class="p-3 justify-self-end rounded hover:bg-gray-200 cursor-pointer fas fa-angle-down"></i>
                         </div>
                     </a>
-                    <div x-show="show{{$user->id}}" class="bg-gray-100 px-4 py-3 my-2 text-gray-700">
-                        <div class="grid grid-cols-2 justify-between">
-                            <div class="mb-2">
-                                <label class="block font-medium text-sm text-gray-700">Rol</label>
-                                <p>{{ $user->role }}</p>
-                            </div>
-                            <div class="mb-2">
-                                <label class="block font-medium text-sm text-gray-700">Correo</label>
-                                <p>{{ $user->email }}</p>
-                            </div>
-                            <div class="mb-2">
-                                <label class="block font-medium text-sm text-gray-700">Teléfono</label>
-                                <p>{{ $user->phone }}</p>
-                            </div>
-                            <div class="mb-2">
-                                <label class="block font-medium text-sm text-gray-700">Dirección</label>
-                                <p>{{ $user->address }}</p>
-                            </div>
-                        </div>
-                        <br>
+                    <div x-show="show{{$user->id}}" class="bg-gray-100 px-4 pt-3 my-2 text-gray-700">
                         @if (Auth::user()->isAdmin())
                             @if (!$user->isUser())
-                                <div class="flex flex-row">
+                                <div class="flex flex-row justify-end">
                                     <button class="px-2">
                                         <a href="{{ route('users.edit', $user->id) }}"><i class="fas fa-edit"></i> Editar </a>
                                     </button>
@@ -65,6 +46,25 @@
                             @endif
                             
                         @endif
+                        <div class="grid grid-cols-2 justify-between">
+                            <div class="my-4">
+                                <label class="block font-bold text-gray-700">Rol</label>
+                                <p>{{ ConstantsHelper::get_user_role_label($user->role) }}</p>
+                            </div>
+                            <div class="my-4">
+                                <label class="block font-bold text-gray-700">Correo</label>
+                                <p>{{ $user->email }}</p>
+                            </div>
+                            <div class="my-4">
+                                <label class="block font-bold text-gray-700">Teléfono</label>
+                                <p>{{ $user->phone }}</p>
+                            </div>
+                            <div class="my-4">
+                                <label class="block font-bold text-gray-700">Dirección</label>
+                                <p>{{ $user->address }}</p>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
                 <hr>
