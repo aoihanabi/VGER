@@ -9,7 +9,11 @@
             @foreach($p_orders as $order)
                 <a href="{{ route('orders.show', ['order' => $order->id]) }}">
                 <div class="py-5 grid grid-cols-3 content-center hover:bg-gray-100">
-                    <div class="text-lg font-semibold col-span-2">Pedido #{{$order->id}}</div>
+                    <div class="text-lg col-span-2 font-semibold"> Pedido #{{$order->id}} </div>
+                    <div class="col-span-2 row-span-2">
+                        <span class="font-semibold"> Estado: </span>
+                        {{ ConstantsHelper::get_order_status_label($order->status) }}
+                    </div>
                     <div class="text-lg font-semibold justify-self-end pr-4">₡{{number_format($order->total, 2, ".", " ")}}</div>
                 </div>
                 </a>
