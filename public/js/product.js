@@ -30,7 +30,7 @@ $(function() {
     //     });
     // });
 
-    // ************** Add option dropdows dynamically ****************
+    // ******************************* Add option dropdows dynamically *************************************
     // in _product.blade.php for product CREATE & EDIT
     var cont = $("#contador").val();//0;
     $("#btn_add_options").on('click', function(){
@@ -274,7 +274,7 @@ $(function() {
         $("#option_dropdowns").append('<input type="text" value='+val+'>');
     }
 
-    // ********* Dynamic product options restriction *********
+    // ***************************** Dynamic product options restriction *******************************
     // in _options_dropdown.blade.php for product SHOW when a user is making an order
     $(document).on('change', ".buy_dropdown", function() {
         
@@ -418,4 +418,41 @@ $(function() {
             });
         });
     }
+
+    // ******************* Decrement/Increment number input in product show page **********************
+    function decrement(e) {
+        const btn = e.target.parentNode.parentElement.querySelector(
+          'button[data-action="decrement"]'
+        );
+        const target = btn.nextElementSibling;
+        let value = Number(target.value);
+        value--;
+        target.value = value;
+      }
+    
+    function increment(e) {
+    const btn = e.target.parentNode.parentElement.querySelector(
+        'button[data-action="decrement"]'
+    );
+    const target = btn.nextElementSibling;
+    let value = Number(target.value);
+    value++;
+    target.value = value;
+    }
+
+    const decrementButtons = document.querySelectorAll(
+    `button[data-action="decrement"]`
+    );
+
+    const incrementButtons = document.querySelectorAll(
+    `button[data-action="increment"]`
+    );
+
+    decrementButtons.forEach(btn => {
+        btn.addEventListener("click", decrement);
+    });
+
+    incrementButtons.forEach(btn => {
+        btn.addEventListener("click", increment);
+    });
 });
