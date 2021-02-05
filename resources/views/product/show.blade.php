@@ -35,9 +35,9 @@
             
             <!-- Product amount (to purchase) selection area -->
             <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
-            <!-- <input type="number" id="purchase_quantity" min="1" class="col-span-3 form-input rounded-md shadow-sm mt-1 block w-full"> -->
-            {{ Form::selectRange('', 1, 50, 1, 
-                    ['id' => 'purchase_quantity', 'class' => 'col-span-3 form-input rounded-md shadow-sm mt-1 block w-full']) }}
+            <input type="number" id="purchase_quantity" min="1" class="col-span-3 form-input rounded-md shadow-sm mt-1 block w-full">
+            <!-- {{ Form::selectRange('', 1, 50, 1, 
+                    ['id' => 'purchase_quantity', 'class' => 'col-span-3 form-input rounded-md shadow-sm mt-1 block w-full']) }} -->
             
             <!-- To take attributes names and send them to VueJS -->
             <div id="options_json" data-product-options='@json($options_db)' hidden></div>

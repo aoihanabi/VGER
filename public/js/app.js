@@ -1991,6 +1991,32 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -2151,7 +2177,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".removeBtn[data-v-082b38fa] {\n  margin-right: 1rem;\n  color: red;\n}\n.fade-enter-active[data-v-082b38fa],\n.fade-leave-active[data-v-082b38fa] {\n  transition: all 0.4s;\n}\n.fade-enter[data-v-082b38fa],\n.fade-leave-to[data-v-082b38fa] {\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, ".fade-enter-active[data-v-082b38fa],\n.fade-leave-active[data-v-082b38fa] {\n  transition: all 0.4s;\n}\n.fade-enter[data-v-082b38fa],\n.fade-leave-to[data-v-082b38fa] {\n  opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -31344,7 +31370,7 @@ var render = function() {
                   "button",
                   {
                     staticClass:
-                      "absolute top-0 right-0 text-xl text-gray-500 my-2 mx-4",
+                      "absolute top-0 right-0 text-3xl text-gray-700 m-4",
                     attrs: { "aria-label": "close" },
                     on: {
                       click: function($event) {
@@ -31353,112 +31379,194 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\r\n          ×\r\n        ")]
+                  [_c("i", { staticClass: "fas fa-window-close" })]
                 ),
                 _vm._v(" "),
-                _c("a", { attrs: { href: "" } }, [
-                  _vm._v(
-                    "\r\n          Pedido (" +
-                      _vm._s(_vm.$store.state.allProdsCount) +
-                      ")\r\n        "
-                  )
-                ]),
+                _c(
+                  "label",
+                  { staticClass: "text-lg font-semibold text-gray-800" },
+                  [
+                    _vm._v(
+                      "\r\n          Pedido (" +
+                        _vm._s(_vm.$store.state.allProdsCount) +
+                        ")\r\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("hr", { staticClass: "my-2" }),
                 _vm._v(" "),
                 _vm.$store.state.order.length > 0
                   ? _c(
                       "div",
-                      {},
                       [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "p-2 grid grid-cols-4 gap-3 md:grid-cols-8 text-sm lg:text-base"
+                          },
+                          [
+                            _c(
+                              "label",
+                              { staticClass: "md:col-span-4 font-bold" },
+                              [_vm._v("Producto")]
+                            ),
+                            _vm._v(" "),
+                            _c("label", { staticClass: "font-bold" }, [
+                              _vm._v("Cantidad")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              { staticClass: "md:col-span-2 font-bold" },
+                              [_vm._v("Subtotal")]
+                            ),
+                            _vm._v(" "),
+                            _c("label", { staticClass: "font-bold" }, [
+                              _vm._v("Quitar")
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("hr"),
+                        _vm._v(" "),
                         _vm._l(_vm.$store.state.order, function(item) {
                           return _c(
                             "div",
                             { key: item.id },
                             _vm._l(item.details, function(detail, det_index) {
-                              return _c(
-                                "div",
-                                {
-                                  key: det_index,
-                                  staticClass: "flex flex-row"
-                                },
-                                [
-                                  _c("div", [
-                                    _vm._v(_vm._s(item.name) + " - ")
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm._l(
-                                    item.details[det_index].description,
-                                    function(description_item) {
-                                      return _c(
-                                        "div",
-                                        { key: description_item.id },
-                                        [
-                                          _vm._v(
-                                            "\r\n                  " +
-                                              _vm._s(description_item.label) +
-                                              " \r\n                "
-                                          )
-                                        ]
-                                      )
-                                    }
-                                  ),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    attrs: {
-                                      type: "number",
-                                      min: "1",
-                                      id:
-                                        "prod" +
-                                        item.id +
-                                        "_det" +
-                                        det_index +
-                                        "_purchase_update"
-                                    },
-                                    domProps: {
-                                      value: item.details[det_index].cart_amount
-                                    },
-                                    on: {
-                                      change: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.recalculate(item, det_index)
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("div", [
-                                    _vm._v(
-                                      " ₡" +
-                                        _vm._s(
-                                          _vm.formatPrice(
-                                            item.details[det_index].total_price
-                                          )
+                              return _c("div", { key: det_index }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "my-2 grid md:grid-cols-8 grid-cols-4 gap-3 "
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "md:col-span-4 flex sm:flex-row flex-col items-center"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "text-sm md:text-base"
+                                          },
+                                          [_vm._v(_vm._s(item.name) + "  ")]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(
+                                          item.details[det_index].description,
+                                          function(description_item) {
+                                            return _c(
+                                              "div",
+                                              {
+                                                key: description_item.id,
+                                                staticClass:
+                                                  "text-sm md:text-base"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\r\n                      " +
+                                                    _vm._s(
+                                                      description_item.label
+                                                    ) +
+                                                    " \r\n                    "
+                                                )
+                                              ]
+                                            )
+                                          }
                                         )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "removeBtn",
-                                      attrs: { title: "Remove from cart" },
+                                      ],
+                                      2
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass:
+                                        "outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
+                                      attrs: {
+                                        type: "number",
+                                        min: "1",
+                                        id:
+                                          "prod" +
+                                          item.id +
+                                          "_det" +
+                                          det_index +
+                                          "_purchase_update"
+                                      },
+                                      domProps: {
+                                        value:
+                                          item.details[det_index].cart_amount
+                                      },
                                       on: {
-                                        click: function($event) {
+                                        change: function($event) {
                                           $event.preventDefault()
-                                          return _vm.removeFromOrder(
+                                          return _vm.recalculate(
                                             item,
                                             det_index
                                           )
                                         }
                                       }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\r\n                  X\r\n                "
-                                      )
-                                    ]
-                                  )
-                                ],
-                                2
-                              )
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "md:col-span-2 flex flex-row items-center text-right"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "text-sm md:text-base"
+                                          },
+                                          [
+                                            _vm._v(
+                                              " ₡" +
+                                                _vm._s(
+                                                  _vm.formatPrice(
+                                                    item.details[det_index]
+                                                      .total_price
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "removeBtn m-2 text-red-500 text-lg",
+                                        attrs: { title: "Remove from cart" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.removeFromOrder(
+                                              item,
+                                              det_index
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-window-close"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("hr")
+                              ])
                             }),
                             0
                           )
@@ -31466,36 +31574,51 @@ var render = function() {
                         _vm._v(" "),
                         _c("br"),
                         _vm._v(" "),
-                        _c("a", { attrs: { href: "" } }, [
-                          _vm._v(
-                            "\r\n              \r\n              Total: ₡" +
-                              _vm._s(_vm.totalPriceAll) +
-                              "\r\n            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("hr", {}),
-                        _vm._v(" "),
-                        _c("a", { attrs: { href: "" } }, [
-                          _c(
-                            "span",
-                            {
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.processOrder()
-                                }
-                              }
-                            },
-                            [_vm._v("Checkout")]
-                          )
+                        _c("div", { staticClass: "flex flex-row" }, [
+                          _c("label", { staticClass: "w-full" }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex flex-col" }, [
+                            _c("label", { staticClass: "my-3 text-lg" }, [
+                              _c("span", { staticClass: "font-bold text-lg" }, [
+                                _vm._v("Total: ")
+                              ]),
+                              _vm._v(
+                                "\r\n                  ₡" +
+                                  _vm._s(_vm.formatPrice(_vm.totalPriceAll)) +
+                                  "\r\n                "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "p-2 bg-gray-700 rounded flex-shrink w-60"
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "text-white",
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.processOrder()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Procesar Pedido")]
+                                )
+                              ]
+                            )
+                          ])
                         ])
                       ],
                       2
                     )
-                  : _c("div", {}, [
-                      _c("a", { attrs: { href: "" } }, [
-                        _vm._v("\r\n            Cart is empty\r\n          ")
+                  : _c("div", { staticClass: "my-3" }, [
+                      _c("label", { staticClass: "italic text-gray-500" }, [
+                        _vm._v("\r\n            (Cart is empty)\r\n          ")
                       ])
                     ])
               ]
