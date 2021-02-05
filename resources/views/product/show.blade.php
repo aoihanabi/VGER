@@ -34,11 +34,23 @@
             @include('product._options_dropdown', ['attr' => $attrs])
             
             <!-- Product amount (to purchase) selection area -->
-            <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
-            <input type="number" id="purchase_quantity" min="1" class="col-span-3 form-input rounded-md shadow-sm mt-1 block w-full">
-            <!-- {{ Form::selectRange('', 1, 50, 1, 
-                    ['id' => 'purchase_quantity', 'class' => 'col-span-3 form-input rounded-md shadow-sm mt-1 block w-full']) }} -->
-            
+            <div class="custom-number-input col-span-3">
+              <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
+              
+              <div class="flex flex-row h-10 w-full rounded-lg relative bg-transparent mt-1">
+                <button data-action="decrement" class=" bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-l cursor-pointer outline-none">
+                  <span class="fas fa-minus mx-5"></span>
+                </button>
+
+                <input type="number" id="purchase_quantity" min="1" 
+                  class="outline-none focus:outline-none text-center w-full bg-gray-300 font-semibold text-md hover:text-black focus:text-black  md:text-basecursor-default flex items-center text-gray-700  outline-none">
+                
+                <button data-action="increment" class="bg-gray-300 text-gray-600 hover:text-gray-700 hover:bg-gray-400 h-full w-20 rounded-r cursor-pointer">
+                  <span class="fas fa-plus mx-5"></span>
+                </button>
+              </div>
+            </div>
+
             <!-- To take attributes names and send them to VueJS -->
             <div id="options_json" data-product-options='@json($options_db)' hidden></div>
           </div>
@@ -59,5 +71,5 @@
 
     </div>
   </div>
-  
+
 @endsection
