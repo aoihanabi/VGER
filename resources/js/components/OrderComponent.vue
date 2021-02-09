@@ -57,8 +57,8 @@
                         :id="'prod'+item.id+'_det'+ det_index +'_purchase_update'"
                         :value="item.details[det_index].cart_amount" 
                         @change.prevent="recalculate(item, det_index)"
-                        class="outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base"
-                  >
+                        class="w-15 p-2 outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base"
+                  >                  
                   <div class="md:col-span-2 flex flex-row items-center text-right">
                     <div class="text-sm md:text-base"> ₡{{ formatPrice(item.details[det_index].total_price) }}</div>
                     
@@ -140,7 +140,7 @@
         return total.toFixed(2);
       }
     }
-  }
+  }    
 </script>
 
 <style scoped>

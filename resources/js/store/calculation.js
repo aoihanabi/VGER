@@ -250,7 +250,7 @@ let store = {
       this.commit('saveOrder');
     },
     recalculate(state, params) {
-      //console.log("From recalculate");
+      console.log("From recalculate");
       
       let prod_index = state.order.indexOf(params.item);
 

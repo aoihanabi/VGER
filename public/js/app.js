@@ -31487,7 +31487,7 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("input", {
                                       staticClass:
-                                        "outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
+                                        "w-15 p-2 outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
                                       attrs: {
                                         type: "number",
                                         min: "1",
@@ -45686,7 +45686,7 @@ var store = {
       this.commit('saveOrder');
     },
     recalculate: function recalculate(state, params) {
-      //console.log("From recalculate");
+      console.log("From recalculate");
       var prod_index = state.order.indexOf(params.item);
 
       if (prod_index > -1 && params.detail_index > -1) {
