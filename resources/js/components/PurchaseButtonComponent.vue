@@ -1,7 +1,8 @@
 <template>
   <div class="flex items-center">
     
-    <button class="flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded " 
+    <button id="btn_add_cart" 
+            class="flex-1 p-2 text-center text-white bg-gray-500 active:bg-gray-700 rounded disabled:opacity-50" 
             @click="addToOrder(product, attributes)">Add product to order</button>
   </div>
 </template>
