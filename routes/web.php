@@ -7,6 +7,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\UserController;
 
 
@@ -47,6 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function()
     Route::post('orders/sort', [AdminOrderController::class, 'sort_orders']);//add params
 });
 
+Route::get('products-search', [SearchController::class, 'products_search'])->name('products.search');
 
 // Route::group(['prefix' => 'general',  'middleware' => ['jwt.verify','admin']], function()
 // {

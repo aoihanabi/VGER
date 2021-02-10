@@ -6,6 +6,18 @@
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div id="product_masthead" class="py-5 text-center">
       <h1 class="m-5 text-xl">Productos Disponibles</h1>
+      <!-- {{ Form::open(['route' => ('products.search'), 'method' => 'GET'])}} -->
+      <form action="{{route('products.search')}}" method="GET">
+        <input type="text" name="keyword_search">
+        <input type="text" name="category_search">
+        <input type="text" name="price_search">
+
+        <button type="submit">Buscar form</button>
+        <!-- {{ Form::submit('Send') }} -->
+      <!-- {{ Form::close() }} -->
+      </form>
+      
+      <a href="/products/search">Buscar</a>
     </div>
     
     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
