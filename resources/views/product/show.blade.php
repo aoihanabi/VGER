@@ -34,10 +34,6 @@
             @include('product._options_dropdown', ['attr' => $attrs])
             
             <!-- Product amount (to purchase) selection area -->
-<<<<<<< HEAD
-            <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
-            <input type="number" id="purchase_quantity" min="1" class="col-span-3 form-input rounded-md shadow-sm mt-1 block w-full">
-=======
             <div class="custom-number-input col-span-3">
               <label class="col-span-3 text-lg font-semibold">Cantidad: </label>
               
@@ -55,7 +51,6 @@
                 </button>
               </div>
             </div>
->>>>>>> cart-functionality
             
             <!-- To take attributes names and send them to VueJS -->
             <div id="options_json" data-product-options='@json($options_db)' hidden></div>
