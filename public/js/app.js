@@ -1991,6 +1991,32 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     showing: {
@@ -2108,6 +2134,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     product: {
@@ -2151,7 +2178,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".removeBtn[data-v-082b38fa] {\n  margin-right: 1rem;\n  color: red;\n}\n.fade-enter-active[data-v-082b38fa],\n.fade-leave-active[data-v-082b38fa] {\n  transition: all 0.4s;\n}\n.fade-enter[data-v-082b38fa],\n.fade-leave-to[data-v-082b38fa] {\n  opacity: 0;\n}\n", ""]);
+exports.push([module.i, ".fade-enter-active[data-v-082b38fa],\n.fade-leave-active[data-v-082b38fa] {\n  transition: all 0.4s;\n}\n.fade-enter[data-v-082b38fa],\n.fade-leave-to[data-v-082b38fa] {\n  opacity: 0;\n}\n", ""]);
 
 // exports
 
@@ -31344,7 +31371,7 @@ var render = function() {
                   "button",
                   {
                     staticClass:
-                      "absolute top-0 right-0 text-xl text-gray-500 my-2 mx-4",
+                      "absolute top-0 right-0 text-3xl text-gray-700 m-4",
                     attrs: { "aria-label": "close" },
                     on: {
                       click: function($event) {
@@ -31353,112 +31380,194 @@ var render = function() {
                       }
                     }
                   },
-                  [_vm._v("\r\n          ×\r\n        ")]
+                  [_c("i", { staticClass: "fas fa-window-close" })]
                 ),
                 _vm._v(" "),
-                _c("a", { attrs: { href: "" } }, [
-                  _vm._v(
-                    "\r\n          Pedido (" +
-                      _vm._s(_vm.$store.state.allProdsCount) +
-                      ")\r\n        "
-                  )
-                ]),
+                _c(
+                  "label",
+                  { staticClass: "text-lg font-semibold text-gray-800" },
+                  [
+                    _vm._v(
+                      "\r\n          Pedido (" +
+                        _vm._s(_vm.$store.state.allProdsCount) +
+                        ")\r\n        "
+                    )
+                  ]
+                ),
+                _vm._v(" "),
+                _c("hr", { staticClass: "my-2" }),
                 _vm._v(" "),
                 _vm.$store.state.order.length > 0
                   ? _c(
                       "div",
-                      {},
                       [
+                        _c(
+                          "div",
+                          {
+                            staticClass:
+                              "p-2 grid grid-cols-4 gap-3 md:grid-cols-8 text-sm lg:text-base"
+                          },
+                          [
+                            _c(
+                              "label",
+                              { staticClass: "md:col-span-4 font-bold" },
+                              [_vm._v("Producto")]
+                            ),
+                            _vm._v(" "),
+                            _c("label", { staticClass: "font-bold" }, [
+                              _vm._v("Cantidad")
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "label",
+                              { staticClass: "md:col-span-2 font-bold" },
+                              [_vm._v("Subtotal")]
+                            ),
+                            _vm._v(" "),
+                            _c("label", { staticClass: "font-bold" }, [
+                              _vm._v("Quitar")
+                            ])
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c("hr"),
+                        _vm._v(" "),
                         _vm._l(_vm.$store.state.order, function(item) {
                           return _c(
                             "div",
                             { key: item.id },
                             _vm._l(item.details, function(detail, det_index) {
-                              return _c(
-                                "div",
-                                {
-                                  key: det_index,
-                                  staticClass: "flex flex-row"
-                                },
-                                [
-                                  _c("div", [
-                                    _vm._v(_vm._s(item.name) + " - ")
-                                  ]),
-                                  _vm._v(" "),
-                                  _vm._l(
-                                    item.details[det_index].description,
-                                    function(description_item) {
-                                      return _c(
-                                        "div",
-                                        { key: description_item.id },
-                                        [
-                                          _vm._v(
-                                            "\r\n                  " +
-                                              _vm._s(description_item.label) +
-                                              " \r\n                "
-                                          )
-                                        ]
-                                      )
-                                    }
-                                  ),
-                                  _vm._v(" "),
-                                  _c("input", {
-                                    attrs: {
-                                      type: "number",
-                                      min: "1",
-                                      id:
-                                        "prod" +
-                                        item.id +
-                                        "_det" +
-                                        det_index +
-                                        "_purchase_update"
-                                    },
-                                    domProps: {
-                                      value: item.details[det_index].cart_amount
-                                    },
-                                    on: {
-                                      change: function($event) {
-                                        $event.preventDefault()
-                                        return _vm.recalculate(item, det_index)
-                                      }
-                                    }
-                                  }),
-                                  _vm._v(" "),
-                                  _c("div", [
-                                    _vm._v(
-                                      " ₡" +
-                                        _vm._s(
-                                          _vm.formatPrice(
-                                            item.details[det_index].total_price
-                                          )
+                              return _c("div", { key: det_index }, [
+                                _c(
+                                  "div",
+                                  {
+                                    staticClass:
+                                      "my-2 grid md:grid-cols-8 grid-cols-4 gap-3 "
+                                  },
+                                  [
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "md:col-span-4 flex sm:flex-row flex-col items-center"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "text-sm md:text-base"
+                                          },
+                                          [_vm._v(_vm._s(item.name) + "  ")]
+                                        ),
+                                        _vm._v(" "),
+                                        _vm._l(
+                                          item.details[det_index].description,
+                                          function(description_item) {
+                                            return _c(
+                                              "div",
+                                              {
+                                                key: description_item.id,
+                                                staticClass:
+                                                  "text-sm md:text-base"
+                                              },
+                                              [
+                                                _vm._v(
+                                                  "\r\n                      " +
+                                                    _vm._s(
+                                                      description_item.label
+                                                    ) +
+                                                    " \r\n                    "
+                                                )
+                                              ]
+                                            )
+                                          }
                                         )
-                                    )
-                                  ]),
-                                  _vm._v(" "),
-                                  _c(
-                                    "span",
-                                    {
-                                      staticClass: "removeBtn",
-                                      attrs: { title: "Remove from cart" },
+                                      ],
+                                      2
+                                    ),
+                                    _vm._v(" "),
+                                    _c("input", {
+                                      staticClass:
+                                        "w-15 p-2 outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
+                                      attrs: {
+                                        type: "number",
+                                        min: "1",
+                                        id:
+                                          "prod" +
+                                          item.id +
+                                          "_det" +
+                                          det_index +
+                                          "_purchase_update"
+                                      },
+                                      domProps: {
+                                        value:
+                                          item.details[det_index].cart_amount
+                                      },
                                       on: {
-                                        click: function($event) {
+                                        change: function($event) {
                                           $event.preventDefault()
-                                          return _vm.removeFromOrder(
+                                          return _vm.recalculate(
                                             item,
                                             det_index
                                           )
                                         }
                                       }
-                                    },
-                                    [
-                                      _vm._v(
-                                        "\r\n                  X\r\n                "
-                                      )
-                                    ]
-                                  )
-                                ],
-                                2
-                              )
+                                    }),
+                                    _vm._v(" "),
+                                    _c(
+                                      "div",
+                                      {
+                                        staticClass:
+                                          "md:col-span-2 flex flex-row items-center text-right"
+                                      },
+                                      [
+                                        _c(
+                                          "div",
+                                          {
+                                            staticClass: "text-sm md:text-base"
+                                          },
+                                          [
+                                            _vm._v(
+                                              " ₡" +
+                                                _vm._s(
+                                                  _vm.formatPrice(
+                                                    item.details[det_index]
+                                                      .total_price
+                                                  )
+                                                )
+                                            )
+                                          ]
+                                        )
+                                      ]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "span",
+                                      {
+                                        staticClass:
+                                          "removeBtn m-2 text-red-500 text-lg",
+                                        attrs: { title: "Remove from cart" },
+                                        on: {
+                                          click: function($event) {
+                                            $event.preventDefault()
+                                            return _vm.removeFromOrder(
+                                              item,
+                                              det_index
+                                            )
+                                          }
+                                        }
+                                      },
+                                      [
+                                        _c("i", {
+                                          staticClass: "fas fa-window-close"
+                                        })
+                                      ]
+                                    )
+                                  ]
+                                ),
+                                _vm._v(" "),
+                                _c("hr")
+                              ])
                             }),
                             0
                           )
@@ -31466,36 +31575,51 @@ var render = function() {
                         _vm._v(" "),
                         _c("br"),
                         _vm._v(" "),
-                        _c("a", { attrs: { href: "" } }, [
-                          _vm._v(
-                            "\r\n              \r\n              Total: ₡" +
-                              _vm._s(_vm.totalPriceAll) +
-                              "\r\n            "
-                          )
-                        ]),
-                        _vm._v(" "),
-                        _c("hr", {}),
-                        _vm._v(" "),
-                        _c("a", { attrs: { href: "" } }, [
-                          _c(
-                            "span",
-                            {
-                              on: {
-                                click: function($event) {
-                                  $event.preventDefault()
-                                  return _vm.processOrder()
-                                }
-                              }
-                            },
-                            [_vm._v("Checkout")]
-                          )
+                        _c("div", { staticClass: "flex flex-row" }, [
+                          _c("label", { staticClass: "w-full" }),
+                          _vm._v(" "),
+                          _c("div", { staticClass: "flex flex-col" }, [
+                            _c("label", { staticClass: "my-3 text-lg" }, [
+                              _c("span", { staticClass: "font-bold text-lg" }, [
+                                _vm._v("Total: ")
+                              ]),
+                              _vm._v(
+                                "\r\n                  ₡" +
+                                  _vm._s(_vm.formatPrice(_vm.totalPriceAll)) +
+                                  "\r\n                "
+                              )
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass:
+                                  "p-2 bg-gray-700 rounded flex-shrink w-60"
+                              },
+                              [
+                                _c(
+                                  "span",
+                                  {
+                                    staticClass: "text-white",
+                                    on: {
+                                      click: function($event) {
+                                        $event.preventDefault()
+                                        return _vm.processOrder()
+                                      }
+                                    }
+                                  },
+                                  [_vm._v("Procesar Pedido")]
+                                )
+                              ]
+                            )
+                          ])
                         ])
                       ],
                       2
                     )
-                  : _c("div", {}, [
-                      _c("a", { attrs: { href: "" } }, [
-                        _vm._v("\r\n            Cart is empty\r\n          ")
+                  : _c("div", { staticClass: "my-3" }, [
+                      _c("label", { staticClass: "italic text-gray-500" }, [
+                        _vm._v("\r\n            (Cart is empty)\r\n          ")
                       ])
                     ])
               ]
@@ -31562,7 +31686,8 @@ var render = function() {
       "button",
       {
         staticClass:
-          "flex-1 p-2 text-center text-white bg-gray-400 hover:bg-gray-500 rounded ",
+          "flex-1 p-2 text-center text-white bg-gray-500 active:bg-gray-700 rounded disabled:opacity-50",
+        attrs: { id: "btn_add_cart" },
         on: {
           click: function($event) {
             return _vm.addToOrder(_vm.product, _vm.attributes)
@@ -45404,6 +45529,37 @@ function getSpecificAmount(json_options, prod_details) {
   return 0;
 }
 
+function validateAddToOrder() {
+  var val_color = $("#color_selected").children("option:selected").val();
+  var val_talla = $("#talla_selected").children("option:selected").val();
+  var val_estilo = $("#estilo_selected").children("option:selected").val();
+  var valido = true;
+
+  if (val_color != undefined) {
+    if (val_color == "none") {
+      valido = false;
+    }
+  }
+
+  if (val_talla != undefined) {
+    if (val_talla == "none") {
+      valido = false;
+    }
+  }
+
+  if (val_estilo != undefined) {
+    if (val_estilo == "none") {
+      valido = false;
+    }
+  }
+
+  console.log("color " + val_color);
+  console.log("talla " + val_talla);
+  console.log("color " + val_estilo);
+  console.log(valido);
+  return valido;
+}
+
 var store = {
   state: {
     order: order ? JSON.parse(order) : [],
@@ -45411,128 +45567,132 @@ var store = {
   },
   mutations: {
     addToOrder: function addToOrder(state, params) {
-      var purchase_quantity = $('#purchase_quantity').val(); //Product amount the user wants to purchase
+      if (validateAddToOrder()) {
+        var purchase_quantity = $('#purchase_quantity').val(); //Product amount the user wants to purchase
 
-      var prod_found = state.order.find(function (product) {
-        return product.id == params.item.id;
-      });
+        var prod_found = state.order.find(function (product) {
+          return product.id == params.item.id;
+        });
 
-      if (params.item.quantity >= 1) {
-        if (prod_found) {
-          remaining = remaining < prod_found.quantity && remaining > 0 ? remaining : prod_found.quantity - prod_found.totalProdAmount;
-          var same_details_prod = false;
-          var temp_descrip = new Object(); //Get options from dropdowns
+        if (params.item.quantity >= 1) {
+          if (prod_found) {
+            remaining = remaining < prod_found.quantity && remaining > 0 ? remaining : prod_found.quantity - prod_found.totalProdAmount;
+            var same_details_prod = false;
+            var temp_descrip = new Object(); //Get options from dropdowns
 
-          getOptionValues(params, temp_descrip); //Check all details of the product
+            getOptionValues(params, temp_descrip); //Check all details of the product
 
-          for (var h in prod_found.details) {
-            //If those options coming are equal to the existing ones just add up to that product's quantity in cart
-            if (isEqual(prod_found.details[h].description, temp_descrip)) {
-              console.log("............. SAME PROD, ADDING MORE OF IT ...............");
-              var prod_details = prod_found.details[h];
-              var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity); //console.log("Remaining before: " + prod_found.quantityLeft);
+            for (var h in prod_found.details) {
+              //If those options coming are equal to the existing ones just add up to that product's quantity in cart
+              if (isEqual(prod_found.details[h].description, temp_descrip)) {
+                console.log("............. SAME PROD, ADDING MORE OF IT ...............");
+                var prod_details = prod_found.details[h];
+                var new_amount = parseInt(prod_details.cart_amount) + parseInt(purchase_quantity); //console.log("Remaining before: " + prod_found.quantityLeft);
 
-              if (new_amount <= prod_found.quantityLeft) {
-                //Check if there's enough amount left of the product with those specific options
-                if (prod_details.option_amount_left >= purchase_quantity) {
-                  prod_details.cart_amount = new_amount;
-                  prod_details.option_amount_left -= purchase_quantity;
-                  prod_found.totalProdAmount = new_amount;
-                  prod_found.quantityLeft -= purchase_quantity; //prod_found.totalProdAmount;
+                if (new_amount <= prod_found.quantityLeft) {
+                  //Check if there's enough amount left of the product with those specific options
+                  if (prod_details.option_amount_left >= purchase_quantity) {
+                    prod_details.cart_amount = new_amount;
+                    prod_details.option_amount_left -= purchase_quantity;
+                    prod_found.totalProdAmount = new_amount;
+                    prod_found.quantityLeft -= purchase_quantity; //prod_found.totalProdAmount;
 
-                  prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
+                    prod_found.totalProdPrice -= prod_details.total_price; //le resto el total_price viejo
 
-                  prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
+                    prod_details.total_price = prod_found.price * new_amount; //Lo recalculo con el new amount
 
-                  prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
+                    prod_found.totalProdPrice += prod_details.total_price; //Lo sumo
 
-                  state.allProdsCount += parseInt(purchase_quantity);
+                    state.allProdsCount += parseInt(purchase_quantity);
+                  } else {
+                    alert("Solo quedan " + prod_details.option_amount_left + " disponibles con las características seleccionadas.");
+                  }
                 } else {
-                  alert("Solo quedan " + prod_details.option_amount_left + " disponibles con las características seleccionadas.");
-                }
-              } else {
-                alert("There's only " + prod_found.quantityLeft + " left you can purchase");
-                $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
-              } //console.log("Remaining after: " + prod_found.quantityLeft);
+                  alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+                  $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
+                } //console.log("Remaining after: " + prod_found.quantityLeft);
 
 
-              same_details_prod = true;
-              break;
-            }
-          }
-
-          if (!same_details_prod) {
-            console.log("------------- SAME PROD, DIFF DETAILS -----------");
-            console.log("before: " + prod_found.quantityLeft); //if(remaining < 0) { °
-
-            if (prod_found.quantityLeft < 0) {
-              alert("There's only " + prod_found.quantityLeft + " left you can purchase");
-              $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
-            } else {
-              var options = {
-                description: temp_descrip,
-                cart_amount: parseInt(purchase_quantity),
-                option_amount_left: 0,
-                total_price: purchase_quantity * prod_found.price
-              }; //Get the amount available of the product with those specific options.
-
-              var specific_amount = getSpecificAmount(parseOptionsJson(), options.description); //Check if there is enough amount left of the product with those specific options
-
-              if (specific_amount >= purchase_quantity) {
-                options.option_amount_left = specific_amount - purchase_quantity;
-                prod_found.details.push(options);
-                prod_found.quantityLeft -= options.cart_amount; //console.log("remaining: " + prod_found.quantityLeft); 
-
-                prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
-                prod_found.totalProdPrice += options.total_price;
-                state.allProdsCount += parseInt(purchase_quantity);
+                same_details_prod = true;
+                break;
               }
             }
+
+            if (!same_details_prod) {
+              console.log("------------- SAME PROD, DIFF DETAILS -----------");
+              console.log("before: " + prod_found.quantityLeft); //if(remaining < 0) { °
+
+              if (prod_found.quantityLeft < 0) {
+                alert("There's only " + prod_found.quantityLeft + " left you can purchase");
+                $('#purchase_quantity').val(parseInt(prod_found.quantityLeft));
+              } else {
+                var options = {
+                  description: temp_descrip,
+                  cart_amount: parseInt(purchase_quantity),
+                  option_amount_left: 0,
+                  total_price: purchase_quantity * prod_found.price
+                }; //Get the amount available of the product with those specific options.
+
+                var specific_amount = getSpecificAmount(parseOptionsJson(), options.description); //Check if there is enough amount left of the product with those specific options
+
+                if (specific_amount >= purchase_quantity) {
+                  options.option_amount_left = specific_amount - purchase_quantity;
+                  prod_found.details.push(options);
+                  prod_found.quantityLeft -= options.cart_amount; //console.log("remaining: " + prod_found.quantityLeft); 
+
+                  prod_found.totalProdAmount = parseInt(prod_found.totalProdAmount) + parseInt(options.cart_amount);
+                  prod_found.totalProdPrice += options.total_price;
+                  state.allProdsCount += parseInt(purchase_quantity);
+                }
+              }
+            }
+
+            console.log(params.item); //If product is not in the order list
+          } else {
+            console.log("*************** COMPLETELY NEW PROD **************"); //console.log("Remaining before: " +  remaining);
+
+            remaining = params.item.quantity - purchase_quantity;
+
+            if (remaining < 0) {
+              alert("There's only " + params.item.quantity + " left you can purchase");
+            } else {
+              var details = [];
+              var _options = {
+                description: new Object(),
+                cart_amount: parseInt(purchase_quantity),
+                option_amount_left: 0,
+                total_price: purchase_quantity * params.item.price
+              }; //Get options from dropdowns
+
+              getOptionValues(params, _options.description); //Get the amount available of the product with those specific options.
+
+              var specific_amount = getSpecificAmount(parseOptionsJson(), _options.description); //Check if there is enough amount left of the product with those specific options
+
+              if (specific_amount >= purchase_quantity) {
+                _options.option_amount_left = specific_amount - purchase_quantity;
+                details.push(_options);
+                vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
+                vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
+
+                vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
+                vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'quantityLeft', remaining);
+                state.allProdsCount += parseInt(purchase_quantity);
+                state.order.push(params.item);
+              } else {
+                alert("Solo quedan " + specific_amount + " disponibles con las características seleccionadas.");
+              }
+            } //console.log("Remaining after:" +  params.item.quantityLeft);
+
+
+            console.log(params.item);
           }
 
-          console.log(params.item); //If product is not in the order list
-        } else {
-          console.log("*************** COMPLETELY NEW PROD **************"); //console.log("Remaining before: " +  remaining);
-
-          remaining = params.item.quantity - purchase_quantity;
-
-          if (remaining < 0) {
-            alert("There's only " + params.item.quantity + " left you can purchase");
-          } else {
-            var details = [];
-            var _options = {
-              description: new Object(),
-              cart_amount: parseInt(purchase_quantity),
-              option_amount_left: 0,
-              total_price: purchase_quantity * params.item.price
-            }; //Get options from dropdowns
-
-            getOptionValues(params, _options.description); //Get the amount available of the product with those specific options.
-
-            var specific_amount = getSpecificAmount(parseOptionsJson(), _options.description); //Check if there is enough amount left of the product with those specific options
-
-            if (specific_amount >= purchase_quantity) {
-              _options.option_amount_left = specific_amount - purchase_quantity;
-              details.push(_options);
-              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'details', details);
-              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdAmount', parseInt(_options.cart_amount)); //cart_quantity
-
-              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'totalProdPrice', _options.total_price);
-              vue__WEBPACK_IMPORTED_MODULE_3___default.a.set(params.item, 'quantityLeft', remaining);
-              state.allProdsCount += parseInt(purchase_quantity);
-              state.order.push(params.item);
-            } else {
-              alert("Solo quedan " + specific_amount + " disponibles con las características seleccionadas.");
-            }
-          } //console.log("Remaining after:" +  params.item.quantityLeft);
-
-
-          console.log(params.item);
+          console.log("####### Order #######");
+          console.log(state.order);
+          this.commit('saveOrder');
         }
-
-        console.log("####### Order #######");
-        console.log(state.order);
-        this.commit('saveOrder');
+      } else {
+        alert("Debe seleccionar la/s característica/s de producto que prefiera.");
       }
     },
     removeFromOrder: function removeFromOrder(state, params) {
@@ -45563,7 +45723,7 @@ var store = {
       this.commit('saveOrder');
     },
     recalculate: function recalculate(state, params) {
-      //console.log("From recalculate");
+      console.log("From recalculate");
       var prod_index = state.order.indexOf(params.item);
 
       if (prod_index > -1 && params.detail_index > -1) {
