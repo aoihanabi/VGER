@@ -24,6 +24,12 @@ class Product extends Model
     return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
   }
 
+  public static function search_by_keyword($param) 
+  {
+    return Product::select('id', 'name')->where('name', 'like', '%'. $param .'%')
+                                        ->orWhere('keywords', 'like', '%'. $param .'%')
+                                        ->get();
+  }
   /**
    * Get the images for the product.
    */
