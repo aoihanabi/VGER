@@ -13,11 +13,11 @@ class SearchController extends Controller
      */
     public function products_search(Request $request)
     {
-        //$users = User::get_all_users()->where("id", "!=", Auth::user()->id)->orderBy('role', 'ASC')->get(); 
-        $category = $request->input('categ');
-        echo($category);
-        //echo('| ' . $text);
-        //return view('user.index', ['users' => $users]);
+        $keyword = $request->input('keyword_search');
+        //$category = $request->input('category_search');
+        //$price = $request->input('price_search');
+
+        $users = User::get_all_users()->where("id", "!=", Auth::user()->id)->orderBy('role', 'ASC')->get(); 
 
         //return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
     }
