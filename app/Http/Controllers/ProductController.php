@@ -44,7 +44,10 @@ class ProductController extends Controller
             array_push($mains, $image->url);
         }
 
-        return view('product.index', ['products' => $products, 'main_imgs' => $mains]);
+        $search_categories = Category::get_all_categories()->toArray();
+
+        return view('product.index', ['products' => $products, 'main_imgs' => $mains, 
+                                      'search_categories' => $search_categories]);
     }
     
     /**

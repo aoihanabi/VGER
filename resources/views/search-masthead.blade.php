@@ -9,8 +9,13 @@
         </div>
 
         <div class="py-4 px-5">
-            <input name="category_search" type="text" class="form-input">
-            <input name="price_search" type="text" class="form-input">
+            <select name="category_search" class="form-input w-1/3">
+                <option value="none">Categoría a buscar</option>
+                @foreach($search_categories as $categ) {
+                    <option value="{{ $categ['id']}}">{{ $categ['name'] }}</option>
+                @endforeach
+            </select>
+            <input name="price_search" type="text" class="form-input w-1/3">
         </div>
         
     {{ Form::close() }}
