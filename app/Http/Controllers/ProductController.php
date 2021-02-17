@@ -26,7 +26,7 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth.vip')->except(['index', 'show']);
+        //$this->middleware('auth.vip')->except(['index', 'show']);
     }
     
     /**
@@ -37,13 +37,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::get_all_products(); 
+        //echo($products);
+        $mains = $this->get_main_images_only($products);
         
-        $mains = array();
-        foreach ($products as $p) {
-            $image = Product::find($p->id)->main_image->first();
-            array_push($mains, $image->url);
-        }
-
         $search_categories = Category::get_all_categories()->toArray();
 
         return view('product.index', ['products' => $products, 'main_imgs' => $mains, 
@@ -78,5 +74,40 @@ class ProductController extends Controller
             return redirect()->action([ProductController::class, 'index'])->withErrors([Lang::get('validation.product_not_found')]);
         }
         
+    }
+
+    /**
+     * Calls a method to search in the database products with the indicated attributes
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function search_products(Request $request) {
+        
+        $keyword = $request->keyword_search; 
+        $category = $request->category_search == "none" ? 0 : $request->category_search;
+        $price = empty($request->price_search) ? 100000 : intval($request->price_search);
+        
+        
+        //DB::enableQueryLog();
+        $products_result = Product::search_products($keyword, $category, $price);
+        //dd(DB::getQueryLog());
+        //echo($products_result);
+
+        $mains = $this->get_main_images_only($products_result);
+        
+        $search_categories = Category::get_all_categories()->toArray();
+
+        return view('product.index', ['products' => $products_result, 'main_imgs' => $mains, 
+                                      'search_categories' => $search_categories]);
+    }
+
+    public function get_main_images_only($products) {
+        
+        $mains = array();
+        foreach ($products as $p) {
+            $image = Product::find($p->id)->main_image->first();
+            array_push($mains, $image->url);
+        }
+        return $mains;
     }
 }

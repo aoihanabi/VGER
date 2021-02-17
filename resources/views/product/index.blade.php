@@ -11,7 +11,7 @@
       <h1 class="m-5 text-xl">Productos Disponibles</h1>
     </div>
     
-    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div class="py-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       @foreach($products as $key => $prod)
         <div class="border-solid border border-gray-300 rounded shadow-md">
           <div class="m-5">

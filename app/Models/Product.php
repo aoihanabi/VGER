@@ -24,11 +24,33 @@ class Product extends Model
     return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
   }
 
-  public static function search_by_keyword($param) 
+  public static function search_products($name_or_keyword, $categ_id, $max_price)
   {
-    return Product::select('id', 'name')->where('name', 'like', '%'. $param .'%')
-                                        ->orWhere('keywords', 'like', '%'. $param .'%')
-                                        ->get();
+    //$categ_id = !empty($categ_id) ? $categ_id : 0;
+    //$max_price = !empty($max_price) ? intval($max_price) : 100000;
+
+    // SELECT DISTINCT products.id, products.name 
+    //                 FROM `products` 
+    //                 INNER JOIN prodxcateg ON products.id = prodxcateg.product_id
+    //                 WHERE (prodxcateg.category_id = IFNULL( NULLIF(0,0), prodxcateg.category_id))
+    //                 AND (products.name LIKE '%luz%' OR products.keywords LIKE '%luz%')
+    //                 AND (products.price < 100000)
+
+    $result = Product::select('products.id', 'products.name')->distinct()
+                    ->join('prodxcateg', 'prodxcateg.product_id', '=', 'products.id')
+                    ->whereRaw('prodxcateg.category_id = IFNULL(NULLIF('. $categ_id .', 0), prodxcateg.category_id)')
+                    ->where(
+                      function ($query) use ($name_or_keyword) {
+                        $query->where('products.name', 'like', '%'.$name_or_keyword.'%')
+                              ->orWhere('products.keywords', 'like', '%'.$name_or_keyword.'%');
+                      }
+                    )
+                    ->where('products.price', '<=', $max_price)
+                    ->get();
+    
+    //echo($result);
+    return $result;
+    
   }
   /**
    * Get the images for the product.

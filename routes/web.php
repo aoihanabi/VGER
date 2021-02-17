@@ -48,7 +48,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function()
     Route::post('orders/sort', [AdminOrderController::class, 'sort_orders']);//add params
 });
 
-Route::get('products-search', [SearchController::class, 'products_search'])->name('products.search');
+Route::get('products-search', [ProductController::class, 'search_products'])->name('products.search');
 
 // Route::group(['prefix' => 'general',  'middleware' => ['jwt.verify','admin']], function()
 // {
