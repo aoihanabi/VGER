@@ -456,21 +456,32 @@ $(function() {
         btn.addEventListener("click", increment);
     });
 
-    //require('webpack-jquery-ui/widgets');
-    // ******************* Range Slider functionality **********************
+    // ******************* Range Slider functionality for prices search **********************
     $( function() {
+        var formatter = new Intl.NumberFormat(undefined, {
+            style: 'currency',
+            currency: 'CRC',
+            // These options are needed to round to whole numbers if that's what you want.
+            minimumFractionDigits: 0, // (this suffices for whole numbers, but will print 2500.10 as $2,500.1)
+            maximumFractionDigits: 0, // (causes 2500.99 to be printed as $2,501)
+        });
+
+        var hiddenMin = parseInt($("#hidden_min_price").text());
+        var hiddenMax = parseInt($("#hidden_max_price").text());
+
         $( "#slider-range" ).slider({
             range: true,
-            min: 0,
-            max: 10000,
-            values: [ 1500, 5000 ],
+            min: hiddenMin,
+            max: hiddenMax,
+            values: [ hiddenMin, hiddenMax ],
             step: 100,
             slide: function( event, ui ) {
-            $( "#min_price_search" ).val("₡ " + ui.values[ 0 ] );
-            $( "#max_price_search" ).val("₡ " + ui.values[ 1 ] );
+                $( "#min_price_search" ).val( formatter.format(ui.values[ 0 ]) );
+                $( "#max_price_search" ).val( formatter.format(ui.values[ 1 ]) );
             }
         });
-        $( "#price_search" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
-            " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+        // $( "#price_search" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+        //     " - $" + $( "#slider-range" ).slider( "values", 1 ) );
     });
+
 });

@@ -37,13 +37,18 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::get_all_products(); 
-        //echo($products);
+
         $mains = $this->get_main_images_only($products);
         
         $search_categories = Category::get_all_categories()->toArray();
 
+        $max_price = Product::max('price');
+        $min_price = Product::min('price');
+
         return view('product.index', ['products' => $products, 'main_imgs' => $mains, 
-                                      'search_categories' => $search_categories]);
+                                      'search_categories' => $search_categories,
+                                      'min_price' => $min_price,
+                                      'max_price' => $max_price]);
     }
     
     /**
@@ -85,20 +90,23 @@ class ProductController extends Controller
         
         $keyword = $request->keyword_search; 
         $category = $request->category_search == "none" ? 0 : $request->category_search;
-        $price = empty($request->price_search) ? 100000 : intval($request->price_search);
-        
+        //$price = empty($request->price_search) ? 100000 : intval($request->price_search);
         
         //DB::enableQueryLog();
         $products_result = Product::search_products($keyword, $category, $price);
         //dd(DB::getQueryLog());
-        //echo($products_result);
 
         $mains = $this->get_main_images_only($products_result);
         
         $search_categories = Category::get_all_categories()->toArray();
 
-        return view('product.index', ['products' => $products_result, 'main_imgs' => $mains, 
-                                      'search_categories' => $search_categories]);
+        $max_price = Product::max('price');
+        $min_price = Product::min('price');
+
+        return view('product.index', ['products' => $products, 'main_imgs' => $mains, 
+                                      'search_categories' => $search_categories,
+                                      'min_price' => $min_price,
+                                      'max_price' => $max_price]);
     }
 
     public function get_main_images_only($products) {
