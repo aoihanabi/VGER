@@ -33,7 +33,7 @@ class AdminProductController extends Controller
 
         $max_price = Product::max('price');
         $min_price = Product::min('price');
-        
+
         return view('admin_product.index', ['products' => $products, 'main_imgs' => $mains, 
                                             'search_categories' => $search_categories,
                                             'min_price' => $min_price,
@@ -100,6 +100,7 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
+        $product->keywords = $request->keywords;
         $product->save();
         
         #OPTIONS
@@ -237,6 +238,7 @@ class AdminProductController extends Controller
         $product->description = $request->description;
         $product->quantity = $request->quantity;
         $product->price = $request->price;
+        $product->keywords = $request->keywords;
         $product->save();
 
         #CATEGORIES

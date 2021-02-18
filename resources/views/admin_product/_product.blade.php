@@ -179,6 +179,13 @@
           {{ Form::text('price', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
         </div>
       </div>
+      
+      <!-- Product Search Keywords -->
+      <div id="product_keywords" class="col-span-6 sm:col-span-4">
+        {{ Form::label('keywords', 'Palabras clave para búsqueda', ['class' => 'block font-medium text-sm text-gray-700']) }}
+        {{ Form::text('keywords', null, ['class' => 'form-input rounded-md shadow-sm mt-1 block w-full']) }}
+      </div>
+
       <!-- Product Categories -->
       <div id="product_categories" class="col-span-6 sm:col-span-4">
         {{ Form::label('', 'Categorías', ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
@@ -191,7 +198,7 @@
           @endforeach
         </div>
       </div>
-
+      
       <!-- Product Images -->
       <div id="product_images" class="col-span-6 sm:col-span-4">
           {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
