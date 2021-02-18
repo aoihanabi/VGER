@@ -28,8 +28,16 @@ class AdminProductController extends Controller
             $image = Product::find($p->id)->main_image->first();
             array_push($mains, $image->url);
         }
+        
+        $search_categories = Category::get_all_categories()->toArray();
 
-        return view('admin_product.index', ['products' => $products, 'main_imgs' => $mains]);
+        $max_price = Product::max('price');
+        $min_price = Product::min('price');
+        
+        return view('admin_product.index', ['products' => $products, 'main_imgs' => $mains, 
+                                            'search_categories' => $search_categories,
+                                            'min_price' => $min_price,
+                                            'max_price' => $max_price]);
     }
 
     /**

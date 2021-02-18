@@ -5,13 +5,12 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div id="product_masthead" class="py-5 text-center bg-gray-200">
-      <h1 class="m-5 text-xl"></h1>
       @include ('search-masthead')
 
       <h1 class="m-5 text-xl">Productos Disponibles</h1>
     </div>
     
-    <div class="py-10 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-10">
       @foreach($products as $key => $prod)
         <div class="border-solid border border-gray-300 rounded shadow-md">
           <div class="m-5">

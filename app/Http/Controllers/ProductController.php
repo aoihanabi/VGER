@@ -92,7 +92,6 @@ class ProductController extends Controller
         $category = $request->category_search == "none" ? 0 : $request->category_search;
         $min_price_searched = str_replace(["₡", " "], ["",""], $request->min_price_search);
         $max_price_searched = str_replace(["₡", " "], ["",""], $request->max_price_search);
-        //echo($min_price . " | " . $max_price);
 
         //DB::enableQueryLog();
         $products_result = Product::search_products($keyword, $category, $min_price_searched, $max_price_searched);
@@ -105,10 +104,19 @@ class ProductController extends Controller
         $max_price = Product::max('price');
         $min_price = Product::min('price');
 
-        return view('product.index', ['products' => $products_result, 'main_imgs' => $mains, 
-                                      'search_categories' => $search_categories,
-                                      'min_price' => $min_price,
-                                      'max_price' => $max_price]);
+        if(Auth::check() && Auth::user()->isAdmin()){
+            //echo("Auth user and admin");
+            return view('admin_product.index', ['products' => $products_result, 'main_imgs' => $mains, 
+                                                'search_categories' => $search_categories,
+                                                'min_price' => $min_price,
+                                                'max_price' => $max_price]);
+        } else {
+            //echo("Not auth or not admin, supposedly");
+            return view('product.index', ['products' => $products_result, 'main_imgs' => $mains, 
+                                          'search_categories' => $search_categories,
+                                          'min_price' => $min_price,
+                                          'max_price' => $max_price]);
+        }
     }
 
     public function get_main_images_only($products) {
