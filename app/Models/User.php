@@ -12,6 +12,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\ConstantsHelper;
 
 class User extends Authenticatable
 {
@@ -72,7 +73,7 @@ class User extends Authenticatable
       */
     public function isAdmin() {
 
-        return $this->role === 'admin';
+        return $this->role === ConstantsHelper::USER_ADMIN_ROLE;
     }
 
     /**
@@ -81,7 +82,7 @@ class User extends Authenticatable
       */    
     public function isEmployee() {
 
-        return $this->role === 'employee';
+        return $this->role === ConstantsHelper::USER_EMPLOYEE_ROLE;
     }
 
     /**
@@ -90,7 +91,7 @@ class User extends Authenticatable
       */
     public function isUser() {
 
-        return $this->role === 'user';
+        return $this->role === ConstantsHelper::USER_NORMAL_ROLE;
     }
 
     /**
