@@ -27,10 +27,10 @@
                 </div>
                 
                 <!-- <input name="price_search" type="text" class="form-input w-1/3"> -->
-                <div class="px-2 w-2/3 place-self-center">
-                    <label class="">Precio:</label>
+                <div class="px-2 w-full place-self-center">
+                    <!-- <label class="">Rango de precio:</label>
                     <div class="flex h-16 w-full m-auto items-center justify-center">
-                        <div class="py-1 relative min-w-full">
+                        <div id="slider-ranger" class="py-1 relative min-w-full">
                             <div class="h-2 bg-gray-200 rounded-full">
                                 <div class="absolute h-2 rounded-full bg-teal-600 w-0" style="width: 58.5714%;"></div>
                                 <div class="absolute h-4 flex items-center justify-center w-4 rounded-full bg-white shadow border border-gray-300 -ml-2 top-0 cursor-pointer" unselectable="on" onselectstart="return false;" style="left: 58.5714%;">
@@ -49,7 +49,17 @@
                                 <div class="absolute text-gray-800 -mr-1 bottom-0 right-0 -mb-6">150</div>
                             </div>
                         </div>
+                    </div> -->
+                    <div>
+                        <label for="price_search">Rango de precio:</label>
+                            
+                        <div id="slider-range"></div>
+                        <div class="flex flex-row justify-between">
+                            <input type="text" id="min_price_search" name="min_price_search" readonly class="w-1/2 bg-gray-200" value="₡ 100">
+                            <input type="text" id="max_price_search" name="max_price_search" readonly class="w-1/2 bg-gray-200 text-right" value="₡ 10 000">
+                        </div>
                     </div>
+
                 </div>
                 
             </div>

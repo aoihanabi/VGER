@@ -9,7 +9,7 @@
     
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-    
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <!--Scripts-->
     <script src="{{ asset('js/app.js') }}" defer></script>
     <script src="{{ asset('js/product.js') }}" defer></script>

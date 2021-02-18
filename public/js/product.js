@@ -455,4 +455,22 @@ $(function() {
     incrementButtons.forEach(btn => {
         btn.addEventListener("click", increment);
     });
+
+    //require('webpack-jquery-ui/widgets');
+    // ******************* Range Slider functionality **********************
+    $( function() {
+        $( "#slider-range" ).slider({
+            range: true,
+            min: 0,
+            max: 10000,
+            values: [ 1500, 5000 ],
+            step: 100,
+            slide: function( event, ui ) {
+            $( "#min_price_search" ).val("₡ " + ui.values[ 0 ] );
+            $( "#max_price_search" ).val("₡ " + ui.values[ 1 ] );
+            }
+        });
+        $( "#price_search" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ) +
+            " - $" + $( "#slider-range" ).slider( "values", 1 ) );
+    });
 });

@@ -3,7 +3,7 @@ window.axios = require('axios');
 window.Vue = require('vue');
 window.Vuex = require('vuex');
 
-
+import 'jquery-ui/ui/widgets/slider.js';
 import store from './store/calculation.js'
 import axios from 'axios';
 
