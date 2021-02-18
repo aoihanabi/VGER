@@ -82,7 +82,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Calls a method to search in the database products with the indicated attributes
+     * Calls a method to search for products with the indicated parameters, in the database
      * 
      * @return \Illuminate\Http\Response
      */
@@ -90,10 +90,12 @@ class ProductController extends Controller
         
         $keyword = $request->keyword_search; 
         $category = $request->category_search == "none" ? 0 : $request->category_search;
-        //$price = empty($request->price_search) ? 100000 : intval($request->price_search);
-        
+        $min_price_searched = str_replace(["₡", " "], ["",""], $request->min_price_search);
+        $max_price_searched = str_replace(["₡", " "], ["",""], $request->max_price_search);
+        //echo($min_price . " | " . $max_price);
+
         //DB::enableQueryLog();
-        $products_result = Product::search_products($keyword, $category, $price);
+        $products_result = Product::search_products($keyword, $category, $min_price_searched, $max_price_searched);
         //dd(DB::getQueryLog());
 
         $mains = $this->get_main_images_only($products_result);
@@ -103,7 +105,7 @@ class ProductController extends Controller
         $max_price = Product::max('price');
         $min_price = Product::min('price');
 
-        return view('product.index', ['products' => $products, 'main_imgs' => $mains, 
+        return view('product.index', ['products' => $products_result, 'main_imgs' => $mains, 
                                       'search_categories' => $search_categories,
                                       'min_price' => $min_price,
                                       'max_price' => $max_price]);

@@ -24,11 +24,8 @@ class Product extends Model
     return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->get();
   }
 
-  public static function search_products($name_or_keyword, $categ_id, $max_price)
+  public static function search_products($name_or_keyword, $categ_id, $min_price, $max_price)
   {
-    //$categ_id = !empty($categ_id) ? $categ_id : 0;
-    //$max_price = !empty($max_price) ? intval($max_price) : 100000;
-
     // SELECT DISTINCT products.id, products.name 
     //                 FROM `products` 
     //                 INNER JOIN prodxcateg ON products.id = prodxcateg.product_id
@@ -45,7 +42,8 @@ class Product extends Model
                               ->orWhere('products.keywords', 'like', '%'.$name_or_keyword.'%');
                       }
                     )
-                    ->where('products.price', '<=', $max_price)
+                    ->where('products.price', '>=', intval($min_price))
+                    ->where('products.price', '<=', intval($max_price))
                     ->get();
     
     //echo($result);
