@@ -7,3 +7,5 @@ This is an e-commerce website for a small business that sells a variety of items
 * PHP 7.4.8
 * MySQL
 * Apache
+* VueJS
+* TailwindCSS
