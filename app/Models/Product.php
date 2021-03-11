@@ -44,7 +44,7 @@ class Product extends Model
                     )
                     ->where('products.price', '>=', intval($min_price))
                     ->where('products.price', '<=', intval($max_price))
-                    ->get();
+                    ->paginate(5);//->get();
     
     //echo($result);
     return $result;
