@@ -36,6 +36,7 @@
         </div>
       @endforeach
     </div>
+    {{ $products->onEachSide(3)->links() }}
   </div>
   
   
