@@ -5,7 +5,7 @@
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <div id="product_masthead" class="py-5 text-center bg-gray-200">
-      @include ('search-masthead')
+      @include ('shared.product-search-masthead')
 
       <h1 class="m-5 text-xl">Productos Disponibles</h1>
     </div>
