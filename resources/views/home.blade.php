@@ -1,5 +1,16 @@
 @extends('layouts.application')
 
 @section('content') 
-  <h1>Bienvenido a Ventas Gerizim</h1>
+  <div id="" class="w-full h-full ">
+    @include ('shared.home-masthead')
+    
+    @include ('shared.home-categories')
+
+    <div id="footer">
+      <div class="w-full h-36 bg-gray-700">
+      
+      </div>
+    </div>
+  </div>
+  
 @endsection

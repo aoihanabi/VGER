@@ -17,7 +17,7 @@
   </head>
   <body class="relative">
     @livewire('navigation-dropdown')
-    <div id="app">
+    <div id="app" class="w-full h-screen bg-cover bg-fixed" style="background-image: url(images/page/masthead-bg.jpg);">
       
 
       <div  class="">
