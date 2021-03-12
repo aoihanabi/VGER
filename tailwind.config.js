@@ -10,7 +10,9 @@ module.exports = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+                sans: ['Lato', 'Nunito', ...defaultTheme.fontFamily.sans],
+                title: ['Poppins'],
+                display: ['Merienda']
             },
         },
     },
