@@ -2,12 +2,14 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-@import '~@fortawesome/fontawesome-free/scss/fontawesome';
-@import '~@fortawesome/fontawesome-free/scss/solid';
-
 @import url('https://fonts.googleapis.com/css2?family=Merienda:wght@700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import '~@fortawesome/fontawesome-free/scss/brands';
+// @import '~@fortawesome/fontawesome-free/scss/regular';
 
 // input[type=number]::-webkit-inner-spin-button, 
 // input[type=number]::-webkit-outer-spin-button { 
