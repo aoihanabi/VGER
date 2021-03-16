@@ -1,4 +1,4 @@
-<div id="welcome-masthead" class="h-96 relative">
+<div id="welcome-masthead" class="h-4/5 relative">
     <div class="absolute inset-0 z-10 bg-gray-200 bg-opacity-50">
         <div class="h-full mx:36 md:mx-96 flex flex-col items-center justify-center">
             <h1 class="my-2 font-display text-3xl text-gray-800">Bienvenido a Ventas Gerizim</h1>
