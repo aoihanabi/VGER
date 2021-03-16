@@ -5,9 +5,10 @@
             <div class="-mt-5 right-3 absolute rounded-full h-16 w-16 bg-gray-200 flex items-center justify-center">
                 <i class="fas fa-caret-up text-gray-800 text-4xl"></i>
             </div>
-
+        </a>
+        <div class="grid grid-cols-2 items-center h-full px-8">
             <!-- Nav-links -->
-            <div class="hidden space-x-8 sm:-my-px sm:ml-5 sm:flex">
+            <div class="col-start-1 text-base text-white font-title flex space-x-4">
                 
                 <a href="/"> {{ __('Inicio') }} </a>
 
@@ -37,11 +38,14 @@
                 @endif
             </div>
             <!-- Socials -->
-            <div class="text-white text-3xl">
+            <div class="col-start-1 row-start-2 text-white text-3xl flex space-x-6 place-self-start">
                 <a href=""><i class="fab fa-whatsapp-square"></i></a>
                 <a href=""><i class="fab fa-facebook-square"></i></a>
                 <a href=""><i class="fab fa-instagram-square"></i></a>
             </div>
-        </a>
+            <div class="px-10 py-5 row-span-2 justify-self-end place-self-end">logo</div>
+        </div>
+        
+    
     </div>
 </div>
