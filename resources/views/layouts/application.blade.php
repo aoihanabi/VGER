@@ -17,34 +17,30 @@
   </head>
   <body class="relative">
     @livewire('navigation-dropdown')
-    <div id="app" class="w-full h-screen bg-cover bg-fixed overflow" style="background-image: url(images/page/masthead-bg.jpg);">
+    <div id="app" class="w-full h-screen bg-cover bg-fixed" style="background-image: url(images/page/masthead-bg.jpg);">
       
-      <div  class="">
-        @if($errors->any())
-          @include('error-message')
-        @endif
+      @if($errors->any())
+        @include('error-message')
+      @endif
+      
+      @yield('content')    
         
-        @yield('content')        
+      <!-- Show cart modal button -->
+      <button  
+        class="rounded-full bg-white border-2 h-24 w-24 flex items-center justify-center"
+        @click="modal_showing = true"
+      >
+        <order-counter />
+      </button>
+      <div class="">
+        <order-component :showing="modal_showing" @close="modal_showing = false"/>
       </div>
-      
-      <div class="">         
-        <!-- Show cart modal button -->
-        <button  
-          class="rounded-full bg-white border-2 h-24 w-24 flex items-center justify-center"
-          @click="modal_showing = true"
-        >
-          <order-counter />
-        </button>
 
-        <div class="">
-          <order-component :showing="modal_showing" @close="modal_showing = false"/>
-        </div>        
-      </div>
+      <footer class="">
+        @include ('shared.footer')
+      </footer>
     </div>
     
     @livewireScripts
   </body>
-  <footer class="">
-    @include ('shared.footer')
-  </footer>
 </html>
