@@ -6,9 +6,10 @@
                 <i class="fas fa-caret-up text-gray-800 text-4xl"></i>
             </div>
         </a>
-        <div class="grid grid-cols-2 items-center h-full px-8">
+        <div class="grid grid-cols-2 items-center h-full px-2 md:px-8">
             <!-- Nav-links -->
-            <div class="col-start-1 text-base text-white font-title flex space-x-4">
+            <div class="col-start-1 text-sm md:text-base text-white font-title 
+                        flex md:space-x-4 flex-col md:flex-row">
                 
                 <a href="/"> {{ __('Inicio') }} </a>
 
