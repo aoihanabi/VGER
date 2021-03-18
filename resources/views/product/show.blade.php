@@ -16,6 +16,8 @@
             </div>
           @endforeach
         </div>
+
+        <product-images-component />
       </div>
       <!-- Product Information -->
       <div class="px-5">

@@ -21,6 +21,7 @@ if (token) {
 Vue.component('purchase-button', require('./components/PurchaseButtonComponent.vue').default);
 Vue.component('order-counter', require('./components/OrderCounterComponent.vue').default);
 Vue.component('order-component', require('./components/OrderComponent.vue').default);
+Vue.component('product-images-component', require('./components/ProductImageManagement.vue').default);
 
 const app = new Vue({
   el: '#app',
