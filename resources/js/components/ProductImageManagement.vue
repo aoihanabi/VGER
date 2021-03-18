@@ -1,23 +1,41 @@
 <template>
     <div>
-        <p v-if="product_image">
-            <img :src=product_image alt="" style="width:200px height:200px">
-        </p>
-        <button @click="showProductImage()">Show Image</button>
+        <div class="mb-2 p-0.5 box-border border-1 rounded shadow-md">
+            <p v-if="product_image">
+                <img :src=product_image alt="" class="relative w-full h-full">
+            </p>
+        </div>
+        <div v-for="img in second_imgs" 
+            :key="img.id" 
+            class="grid grid-cols-4 gap-2">
+          
+            <div class="p-0.5 box-border border-1 rounded shadow-md">
+              <img :src="'..'+img.url" class="object-cover h-28 w-full rounded" style="">    
+            </div>
+        </div>
+
+        <button @click="showProductImage(image_url)">Show Image</button>
     </div>
-    
 </template>
 
 <script>
 export default {
+    props: {
+        image_url: {
+            type: String,
+        },
+        second_imgs: {
+            type: Array,
+        }
+    },
     data() {
         return {
-            product_image: null
+            product_image: this.image_url
         };
     },
     methods: {
-        showProductImage() {
-            this.product_image = 'http://localhost:8000/images/products/zB4DrYBrZbbnbP1O76pPO0si8BX2Te1mTjnv4VCY.jpeg';
+        showProductImage(url) {
+            this.product_image = url;//'http://localhost:8000/images/products/zB4DrYBrZbbnbP1O76pPO0si8BX2Te1mTjnv4VCY.jpeg';
         }
     }
 }

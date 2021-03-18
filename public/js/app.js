@@ -2183,15 +2183,33 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: {
+    image_url: {
+      type: String
+    },
+    second_imgs: {
+      type: Array
+    }
+  },
   data: function data() {
     return {
-      product_image: null
+      product_image: this.image_url
     };
   },
   methods: {
-    showProductImage: function showProductImage() {
-      this.product_image = 'http://localhost:8000/images/products/zB4DrYBrZbbnbP1O76pPO0si8BX2Te1mTjnv4VCY.jpeg';
+    showProductImage: function showProductImage(url) {
+      this.product_image = url; //'http://localhost:8000/images/products/zB4DrYBrZbbnbP1O76pPO0si8BX2Te1mTjnv4VCY.jpeg';
     }
   }
 });
@@ -33610,28 +33628,57 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm.product_image
-      ? _c("p", [
-          _c("img", {
-            staticStyle: { width: "200px height:200px" },
-            attrs: { src: _vm.product_image, alt: "" }
-          })
-        ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        on: {
-          click: function($event) {
-            return _vm.showProductImage()
+  return _c(
+    "div",
+    [
+      _c(
+        "div",
+        { staticClass: "mb-2 p-0.5 box-border border-1 rounded shadow-md" },
+        [
+          _vm.product_image
+            ? _c("p", [
+                _c("img", {
+                  staticClass: "relative w-full h-full",
+                  attrs: { src: _vm.product_image, alt: "" }
+                })
+              ])
+            : _vm._e()
+        ]
+      ),
+      _vm._v(" "),
+      _vm._l(_vm.second_imgs, function(img) {
+        return _c(
+          "div",
+          { key: img.id, staticClass: "grid grid-cols-4 gap-2" },
+          [
+            _c(
+              "div",
+              { staticClass: "p-0.5 box-border border-1 rounded shadow-md" },
+              [
+                _c("img", {
+                  staticClass: "object-cover h-28 w-full rounded",
+                  attrs: { src: ".." + img.url }
+                })
+              ]
+            )
+          ]
+        )
+      }),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          on: {
+            click: function($event) {
+              return _vm.showProductImage(_vm.image_url)
+            }
           }
-        }
-      },
-      [_vm._v("Show Image")]
-    )
-  ])
+        },
+        [_vm._v("Show Image")]
+      )
+    ],
+    2
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

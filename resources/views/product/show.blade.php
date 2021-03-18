@@ -16,8 +16,8 @@
             </div>
           @endforeach
         </div>
-
-        <product-images-component />
+        
+        <product-images-component :image_url="'{{ url($main_img->url) }}'" :second_imgs="{{ $secondary_imgs }}" />
       </div>
       <!-- Product Information -->
       <div class="px-5">
