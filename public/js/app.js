@@ -2206,7 +2206,7 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      product_image: this.image_url
+      product_image: this.second_imgs[0]
     };
   },
   methods: {
@@ -33632,18 +33632,20 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c(
     "div",
+    { staticClass: "h-full md:mx-6 mx-auto", attrs: { id: "images" } },
     [
       _c(
         "div",
-        { staticClass: "mb-2 p-0.5 box-border border-1 rounded shadow-md" },
+        {
+          staticClass:
+            "h-1/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md"
+        },
         [
           _vm.product_image
-            ? _c("p", [
-                _c("img", {
-                  staticClass: "relative w-full h-full",
-                  attrs: { src: _vm.product_image, alt: "" }
-                })
-              ])
+            ? _c("img", {
+                staticClass: "relative w-full h-full",
+                attrs: { src: _vm.product_image, alt: "" }
+              })
             : _vm._e()
         ]
       ),
