@@ -5,12 +5,12 @@
                 <img :src=product_image alt="" class="relative w-full h-full">
             </p>
         </div>
-        <div v-for="img in second_imgs" 
-            :key="img.id" 
+        <div v-for="(img, index) in second_imgs" 
+            :key="index" 
             class="grid grid-cols-4 gap-2">
           
             <div class="p-0.5 box-border border-1 rounded shadow-md">
-              <img :src="'..'+img.url" class="object-cover h-28 w-full rounded" style="">    
+              <img :src="img" class="object-cover h-28 w-full rounded" style="">    
             </div>
         </div>
 

@@ -10,14 +10,21 @@
         </div>
 
         <div class="grid grid-cols-4 gap-2">
+            <?php 
+              $full_sec_url = []
+            ?>
           @foreach ($secondary_imgs as $img)
             <div class="p-0.5 box-border border-1 rounded shadow-md">
               <img src="{{ url($img->url) }}" class="object-cover h-28 w-full rounded" style=""></img>    
             </div>
+            <?php 
+              array_push($full_sec_url, url($img->url));
+            ?>
           @endforeach
         </div>
         
-        <product-images-component :image_url="'{{ url($main_img->url) }}'" :second_imgs="{{ $secondary_imgs }}" />
+        <product-images-component :image_url="'{{ url($main_img->url) }}'" :second_imgs="{{ json_encode($full_sec_url) }}"/>
+        
       </div>
       <!-- Product Information -->
       <div class="px-5">

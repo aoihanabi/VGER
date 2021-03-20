@@ -33646,10 +33646,10 @@ var render = function() {
         ]
       ),
       _vm._v(" "),
-      _vm._l(_vm.second_imgs, function(img) {
+      _vm._l(_vm.second_imgs, function(img, index) {
         return _c(
           "div",
-          { key: img.id, staticClass: "grid grid-cols-4 gap-2" },
+          { key: index, staticClass: "grid grid-cols-4 gap-2" },
           [
             _c(
               "div",
@@ -33657,7 +33657,7 @@ var render = function() {
               [
                 _c("img", {
                   staticClass: "object-cover h-28 w-full rounded",
-                  attrs: { src: ".." + img.url }
+                  attrs: { src: img }
                 })
               ]
             )
