@@ -2193,6 +2193,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
     image_url: {
@@ -33655,10 +33657,22 @@ var render = function() {
               "div",
               { staticClass: "p-0.5 box-border border-1 rounded shadow-md" },
               [
-                _c("img", {
-                  staticClass: "object-cover h-28 w-full rounded",
-                  attrs: { src: img }
-                })
+                _c(
+                  "a",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.showProductImage(img)
+                      }
+                    }
+                  },
+                  [
+                    _c("img", {
+                      staticClass: "object-cover h-28 w-full rounded",
+                      attrs: { src: img }
+                    })
+                  ]
+                )
               ]
             )
           ]

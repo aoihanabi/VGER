@@ -10,7 +10,9 @@
             class="grid grid-cols-4 gap-2">
           
             <div class="p-0.5 box-border border-1 rounded shadow-md">
-              <img :src="img" class="object-cover h-28 w-full rounded" style="">    
+                <a @click="showProductImage(img)">
+                    <img :src="img" class="object-cover h-28 w-full rounded" style="">
+                </a> 
             </div>
         </div>
 
