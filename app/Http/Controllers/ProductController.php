@@ -66,13 +66,19 @@ class ProductController extends Controller
             $attrs = Attribute::select('attributes.name', 'attributes.id')
                                 ->join('product_attributes', 'attributes.id', '=', 'product_attributes.attribute_id')
                                 ->where('product_attributes.product_id','=', $id)->get();//->distinct()->get();
-            //$attrs = $product->attributes()->get();
-            //echo($attrs . PHP_EOL);
             $options_db = Product::get_product_options($product->id);
-            //echo($options_db . PHP_EOL);
+
+            //Send array with complete url of each image so it can be properly renderer by VueJS
+            $imgs_full_url = [];
+            array_push($imgs_full_url, url($main_img->url));
+            foreach ($secondary_imgs as $img) {
+                array_push($imgs_full_url, url($img->url));
+            }
+            
             return view('product.show', ['product' => $product,
-                                        'main_img' => $main_img, 
-                                        'secondary_imgs' => $secondary_imgs, 
+                                        //'main_img' => $main_img, 
+                                        //'secondary_imgs' => $secondary_imgs, 
+                                        'images_url' => $imgs_full_url,
                                         'attrs' => $attrs, 
                                         'options_db' => $options_db]);
         } catch (Exception $e) {

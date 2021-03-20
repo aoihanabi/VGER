@@ -1,38 +1,33 @@
 <template>
-    <div id="images" class="h-full md:mx-6 mx-auto">
-        <div class="h-1/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md">
+    <div class="h-full md:mx-6 mx-auto">
+        <div class="h-2/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md">
             <img v-if="product_image" 
                 :src=product_image alt="" 
-                class="relative w-full h-full">
+                class="relative object-cover h-full w-full rounded">
         </div>
-        <div v-for="(img, index) in second_imgs" 
-            :key="index" 
-            class="grid grid-cols-4 gap-2">
+        <div class="grid grid-cols-4 gap-2">
           
-            <div class="p-0.5 box-border border-1 rounded shadow-md">
+            <div v-for="(img, index) in imgs_url" 
+                :key="index" 
+                class="p-0.5 box-border border-1 rounded shadow-md">
                 <a @click="showProductImage(img)">
-                    <img :src="img" class="object-cover h-28 w-full rounded" style="">
+                    <img :src="img" class="object-cover h-28 w-full rounded">
                 </a> 
             </div>
         </div>
-
-        <button @click="showProductImage(image_url)">Show Image</button>
     </div>
 </template>
 
 <script>
 export default {
     props: {
-        image_url: {
-            type: String,
-        },
-        second_imgs: {
+        imgs_url: {
             type: Array,
         }
     },
     data() {
         return {
-            product_image: this.second_imgs[0]
+            product_image: this.imgs_url[0]
         };
     },
     methods: {

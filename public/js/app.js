@@ -2193,20 +2193,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: {
-    image_url: {
-      type: String
-    },
-    second_imgs: {
+    imgs_url: {
       type: Array
     }
   },
   data: function data() {
     return {
-      product_image: this.second_imgs[0]
+      product_image: this.imgs_url[0]
     };
   },
   methods: {
@@ -33630,71 +33625,56 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "h-full md:mx-6 mx-auto", attrs: { id: "images" } },
-    [
-      _c(
-        "div",
-        {
-          staticClass:
-            "h-1/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md"
-        },
-        [
-          _vm.product_image
-            ? _c("img", {
-                staticClass: "relative w-full h-full",
-                attrs: { src: _vm.product_image, alt: "" }
-              })
-            : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _vm._l(_vm.second_imgs, function(img, index) {
+  return _c("div", { staticClass: "h-full md:mx-6 mx-auto" }, [
+    _c(
+      "div",
+      {
+        staticClass:
+          "h-2/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md"
+      },
+      [
+        _vm.product_image
+          ? _c("img", {
+              staticClass: "relative object-cover h-full w-full rounded",
+              attrs: { src: _vm.product_image, alt: "" }
+            })
+          : _vm._e()
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "grid grid-cols-4 gap-2" },
+      _vm._l(_vm.imgs_url, function(img, index) {
         return _c(
           "div",
-          { key: index, staticClass: "grid grid-cols-4 gap-2" },
+          {
+            key: index,
+            staticClass: "p-0.5 box-border border-1 rounded shadow-md"
+          },
           [
             _c(
-              "div",
-              { staticClass: "p-0.5 box-border border-1 rounded shadow-md" },
+              "a",
+              {
+                on: {
+                  click: function($event) {
+                    return _vm.showProductImage(img)
+                  }
+                }
+              },
               [
-                _c(
-                  "a",
-                  {
-                    on: {
-                      click: function($event) {
-                        return _vm.showProductImage(img)
-                      }
-                    }
-                  },
-                  [
-                    _c("img", {
-                      staticClass: "object-cover h-28 w-full rounded",
-                      attrs: { src: img }
-                    })
-                  ]
-                )
+                _c("img", {
+                  staticClass: "object-cover h-28 w-full rounded",
+                  attrs: { src: img }
+                })
               ]
             )
           ]
         )
       }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          on: {
-            click: function($event) {
-              return _vm.showProductImage(_vm.image_url)
-            }
-          }
-        },
-        [_vm._v("Show Image")]
-      )
-    ],
-    2
-  )
+      0
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true

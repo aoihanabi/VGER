@@ -3,29 +3,12 @@
 @section('content')
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="py-10 mx-auto grid grid-cols-1 md:grid-cols-2">
+      
       <!-- Images -->
-      <div id="images" class="h-full md:mx-6 mx-auto">
-        <div class="h-1/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md ">
-          <img src="{{ url($main_img->url) }}" class="object-cover h-full w-full rounded" style=""></img>
-        </div>
-
-        <div class="grid grid-cols-4 gap-2">
-            <?php 
-              $full_sec_url = []
-            ?>
-          @foreach ($secondary_imgs as $img)
-            <div class="p-0.5 box-border border-1 rounded shadow-md">
-              <img src="{{ url($img->url) }}" class="object-cover h-28 w-full rounded" style=""></img>    
-            </div>
-            <?php 
-              array_push($full_sec_url, url($img->url));
-            ?>
-          @endforeach
-        </div>
-        
-        <product-images-component :image_url="'{{ url($main_img->url) }}'" :second_imgs="{{ json_encode($full_sec_url) }}"/>
-        
+      <div id="images">
+        <product-images-component :imgs_url="{{ json_encode($images_url) }}"/>
       </div> 
+
       <!-- Product Information -->
       <div class="px-5">
         <div class="">
