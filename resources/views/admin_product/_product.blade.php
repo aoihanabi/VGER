@@ -201,10 +201,26 @@
       
       <!-- Product Images -->
       <div id="product_images" class="col-span-6 sm:col-span-4">
+          
           {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
+          <div class="flex flex-row">
+            <div class="my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full">
+                <img src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
+            </div>
+            <div class="my-1 p-0.5 h-full w-full"></div>
+          </div>
           {{ Form::file('main_image') }}
+
           <br><br>
+          
           {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
+          <div class="grid grid-cols-3 my-2 h-1/4">
+            @foreach ($second_imgs as $img)
+              <div class="my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full">
+                <img src="{{ url($img->url) }}" class="h-full w-full object-cover rounded"></img>
+              </div>
+            @endforeach
+          </div>
           {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
       </div>
     </div>

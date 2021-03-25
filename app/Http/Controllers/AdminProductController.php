@@ -172,6 +172,8 @@ class AdminProductController extends Controller
         $sizes = Option::get_options_by_attribute(2);
         $styles = Option::get_options_by_attribute(3);
         $categories = Category::get_all_categories();
+        $main_img = $product->main_image->first();
+        $second_imgs = $product->secondary_images;
 
         #Specific product attributes
         $prod_attributes = array();
@@ -206,7 +208,9 @@ class AdminProductController extends Controller
                                      'prod_options' => $prod_options,
                                      'prod_options_amount' => $prod_options_amount,
                                      'categories' => $categories,
-                                     'prod_categs' => $prod_categs
+                                     'prod_categs' => $prod_categs,
+                                     'main_img' => $main_img,
+                                     'second_imgs' => $second_imgs
                                      ]);
     }
 
