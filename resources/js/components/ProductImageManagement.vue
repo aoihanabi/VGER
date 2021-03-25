@@ -1,6 +1,6 @@
 <template>
     <div class="h-full md:mx-6 mx-auto">
-        <div class="h-2/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md">
+        <div class="h-2/3 mb-2 p-0.5 box-border border-1 rounded shadow-md">
             <img v-if="product_image" 
                 :src=product_image alt="" 
                 class="relative object-cover h-full w-full rounded">

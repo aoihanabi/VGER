@@ -33628,10 +33628,7 @@ var render = function() {
   return _c("div", { staticClass: "h-full md:mx-6 mx-auto" }, [
     _c(
       "div",
-      {
-        staticClass:
-          "h-2/3 md:h-1/2 sm:h-1/2 mb-2 p-0.5 box-border border-1 rounded shadow-md"
-      },
+      { staticClass: "h-2/3 mb-2 p-0.5 box-border border-1 rounded shadow-md" },
       [
         _vm.product_image
           ? _c("img", {
