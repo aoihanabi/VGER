@@ -204,8 +204,13 @@
           
           {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
           <div class="flex flex-row">
-            <div class="my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full">
+            <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full
+                        cursor-pointer hover:opacity-75">
+                
+                <i class="fas fa-trash h-full w-full 
+                        absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-800"></i>
                 <img src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
+            
             </div>
             <div class="my-1 p-0.5 h-full w-full"></div>
           </div>
@@ -214,11 +219,16 @@
           <br><br>
           
           {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
-          <div class="grid grid-cols-3 my-2 h-1/4">
+          <div class="grid grid-cols-3 my-2 h-1/4 place-content-center">
             @foreach ($second_imgs as $img)
-              <div class="my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full">
-                <img src="{{ url($img->url) }}" class="h-full w-full object-cover rounded"></img>
-              </div>
+                <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full 
+                          cursor-pointer hover:opacity-75">
+                
+                    <i class="fas fa-trash h-full w-full 
+                            absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-700"></i>
+                    <img src="{{ url($img->url) }}" class="h-full w-full object-cover rounded"></img>
+
+                </div>
             @endforeach
           </div>
           {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
