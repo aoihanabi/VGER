@@ -1,19 +1,28 @@
 <template>
     <div class="h-full md:mx-6 mx-auto">
-        <div class="h-2/3 mb-2 p-0.5 box-border border-1 rounded shadow-md">
-            <img v-if="product_image" 
-                :src=product_image alt="" 
-                class="relative object-cover h-full w-full rounded">
-        </div>
+        
+        <transition name="fade" mode="out-in">
+            <div class="h-2/3 mb-2 p-0.5 box-border border-1 rounded shadow-md"
+                v-if="product_image"
+                :key="product_image">
+                
+                <img class="relative object-cover h-full w-full rounded"
+                    :src=product_image alt="" 
+                >
+
+            </div>
+        </transition>
+
         <div class="grid grid-cols-4 gap-2">
           
             <div v-for="(img, index) in imgs_url" 
                 :key="index" 
-                class="p-0.5 box-border border-1 rounded shadow-md">
+                class="p-0.5 box-border border-1 rounded shadow-md cursor-pointer">
                 <a @click="showProductImage(img)">
                     <img :src="img" class="object-cover h-28 w-full rounded">
                 </a> 
             </div>
+
         </div>
     </div>
 </template>
@@ -37,3 +46,13 @@ export default {
     }
 }
 </script>
+<style scoped>
+    .fade-enter-active, 
+    .fade-leave-active {
+        transition: all 0.3s;
+    }
+    .fade-enter,
+    .fade-leave-to {
+        opacity: 0;
+    }
+</style>
