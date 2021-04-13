@@ -484,4 +484,23 @@ $(function() {
         //     " - $" + $( "#slider-range" ).slider( "values", 1 ) );
     });
 
+    
+    // ******************* Confirm box for image deletion **********************
+    $(".deletable_image").on('click', function(){
+        
+        $( "#dialog-confirm" ).dialog({
+            resizable: false,
+            height: "auto",
+            width: 400,
+            modal: true,
+            buttons: {
+                "Si": function() {
+                    $( this ).dialog( "close" );
+                },
+                "No": function() {
+                    $( this ).dialog( "close" );
+                }
+            }
+        });
+    });
 });

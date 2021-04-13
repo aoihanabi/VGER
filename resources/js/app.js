@@ -4,6 +4,8 @@ window.Vue = require('vue');
 window.Vuex = require('vuex');
 
 import 'jquery-ui/ui/widgets/slider.js';
+import 'jquery-ui/ui/widgets/dialog.js';
+
 import store from './store/calculation.js'
 import axios from 'axios';
 

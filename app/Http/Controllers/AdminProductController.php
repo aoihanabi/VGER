@@ -197,7 +197,12 @@ class AdminProductController extends Controller
         foreach ($product->categories as $key => $category) {
             array_push($prod_categs, $category->id);
         }
-
+        // A way to have main and secondary images together in one array
+        // $imgs_full_url = [];
+        // array_push($imgs_full_url, url($main_img->url));
+        // foreach ($secondary_imgs as $img) {
+        //     array_push($imgs_full_url, url($img->url));
+        // }
         return view('admin_product.edit', ['product' => $product, 
                                      'attrs' => $attrs,
                                      'prod_attributes' => $prod_attributes,
