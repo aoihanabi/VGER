@@ -222,7 +222,8 @@
                         
                             <i class="fas fa-trash h-full w-full 
                                     absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-700"></i>
-                            <img src="{{ url($img->url) }}" class="h-full w-full object-cover rounded"></img>
+                            <img class="h-full w-full object-cover rounded"
+                                 id="img_{{$img->id}}" src="{{ url($img->url) }}"></img>
 
                         </div>
                     @endforeach

@@ -486,8 +486,8 @@ $(function() {
 
     
     // ******************* Confirm box for image deletion **********************
-    $(".deletable_image").on('click', function(){
-        
+    $(".deletable_image").on('click', function() {
+        var deletable_image = $(this).children('img');
         $( "#dialog-confirm" ).dialog({
             resizable: false,
             height: "auto",
@@ -495,6 +495,16 @@ $(function() {
             modal: true,
             buttons: {
                 "Si": function() {
+                    var imgToDelete_id = deletable_image.attr('id').slice(4);
+                    var imgs_json = JSON.parse($("#secondary_images_json").val());
+                    
+                    let result_imgs = imgs_json.filter(
+                        function(item) {
+                            return item.id != imgToDelete_id;
+                        }
+                    )
+                    $("#secondary_images_json").attr('value', JSON.stringify(result_imgs));
+                    deletable_image.parent("div").remove();
                     $( this ).dialog( "close" );
                 },
                 "No": function() {
@@ -503,4 +513,14 @@ $(function() {
             }
         });
     });
+    // function parse_options_json() {
+    //     let div = document.getElementById("options_json");
+    //     let options_json = div.getAttribute('data-product-options');
+
+    //     options_json = JSON.parse(options_json);
+    //     for(var i = 0; i < options_json.length; i++) {
+    //         options_json[i].options_ids = JSON.parse(options_json[i].options_ids);
+    //     }
+    //     return options_json;
+    // }
 });
