@@ -199,38 +199,41 @@
             <!-- Product Images -->
             <div id="product_images" class="col-span-6 sm:col-span-4">
                 {{ Form::label('', "Cargar imagen principal", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
-                <div class="flex flex-row">
-                    <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full
-                                cursor-pointer hover:opacity-75 deletable_image">
+                @if ($main_img)
+                    <div class="flex flex-row">
+                        <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full
+                                    cursor-pointer hover:opacity-75 deletable_image">
+                            
+                            <i class="fas fa-trash h-full w-full 
+                                    absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-800"></i>
+                            <img src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
                         
-                        <i class="fas fa-trash h-full w-full 
-                                absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-800"></i>
-                        <img src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
-                    
+                        </div>
+                        <div class="my-1 p-0.5 h-full w-full"></div>
                     </div>
-                    <div class="my-1 p-0.5 h-full w-full"></div>
-                </div>
+                @endif
                 {{ Form::file('main_image') }}
 
                 <br><br>
             
                 {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
-                <div class="grid grid-cols-3 my-2 h-1/4 place-content-center">
-                    @foreach ($second_imgs as $img)
-                        <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full 
-                                    cursor-pointer hover:opacity-75 deletable_image">
-                        
-                            <i class="fas fa-trash h-full w-full 
-                                    absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-700"></i>
-                            <img class="h-full w-full object-cover rounded"
-                                 id="img_{{$img->id}}" src="{{ url($img->url) }}"></img>
+                @if ($second_imgs)
+                    <div class="grid grid-cols-3 my-2 h-1/4 place-content-center">
+                        @foreach ($second_imgs as $img)
+                            <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full 
+                                        cursor-pointer hover:opacity-75 deletable_image">
+                            
+                                <i class="fas fa-trash h-full w-full 
+                                        absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-700"></i>
+                                <img class="h-full w-full object-cover rounded"
+                                    id="img_{{$img->id}}" src="{{ url($img->url) }}"></img>
 
-                        </div>
-                    @endforeach
-                </div>
-                
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
                 {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
-                <input id="secondary_images_json" type="text" value="{{ json_encode($second_imgs) }}" hidden>
+                <input id="secondary_images_json" name="secondary_images_json" type="text" value="{{ json_encode($second_imgs) }}" hidden>
                 <div id="dialog-confirm" title="Eliminar imagen" hidden>
                     <p>
                         <i class="fas fa-exclamation-triangle" style="float:left; margin:0 7px 20px 0;"></i>
