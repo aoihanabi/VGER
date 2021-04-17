@@ -58,16 +58,18 @@ class AdminProductController extends Controller
             $styles = Option::get_options_by_attribute(3);
 
             return view('admin_product.create', ['product' => null, 
-                                           'attrs' => $attrs,
-                                           'prod_attributes' => null,
-                                           'colors' => $colors, 
-                                           'sizes' => $sizes,
-                                           'styles' => $styles,                                           
-                                           'options' => $options, 
-                                           'prod_options' => null, 
-                                           'prod_options_amount' => null,
-                                           'categories' => $categories,
-                                           'prod_categs' => null]);
+                                                'attrs' => $attrs,
+                                                'prod_attributes' => null,
+                                                'colors' => $colors, 
+                                                'sizes' => $sizes,
+                                                'styles' => $styles,                                           
+                                                'options' => $options, 
+                                                'prod_options' => null, 
+                                                'prod_options_amount' => null,
+                                                'categories' => $categories,
+                                                'prod_categs' => null,
+                                                'main_img' => null,
+                                                'second_imgs' => null]);
         } else {
             return "Not authorized";
         }
@@ -319,14 +321,40 @@ class AdminProductController extends Controller
             $product->images()->save($im_main);
         }
 
+        # When updating secondary images
+        $old_secondary = $product->secondary_images;
+        $new_secondary_imgs = json_decode($request->secondary_images_json);
+        $present = false;
+        $img_to_delete = array();
+
+        if(!empty($old_secondary)&& !empty($new_secondary_imgs)){
+            if($old_secondary->count() != count($new_secondary_imgs)) {
+                
+                foreach($old_secondary as $old) {
+                    foreach($new_secondary_imgs as $new) {
+                        //Check if the old image is still present in the array of images that'll be kept
+                        if($old->id == $new->id) {
+                            $present = true;
+                            break;
+                        }
+                    }
+                    if(!$present){
+                        array_push($img_to_delete, $old->id);
+                    }
+                    $present = false;
+                }
+                foreach($img_to_delete as $img_id) {
+                    Image::find($img_id)->delete();
+                }
+            }
+        }
         if($request->hasfile('sec_images')) {
             
-            $old_secondary = $product->secondary_images;
             foreach($request->file('sec_images') as $key => $file)
             {
-                if(isset($old_secondary[$key])) {
-                    $old_secondary[$key]->delete();
-                }
+                // if(isset($old_secondary[$key])) {
+                //     $old_secondary[$key]->delete();
+                // }
                 $path_sec = $file->store('images/products');
                 $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
                 $product->images()->save($im_sec);
