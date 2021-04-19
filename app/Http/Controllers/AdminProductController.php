@@ -321,15 +321,37 @@ class AdminProductController extends Controller
             $product->images()->save($im_main);
         }
 
+        if($request->hasfile('sec_images')) {
+            
+            foreach($request->file('sec_images') as $key => $file)
+            {
+                // if(isset($old_secondary[$key])) {
+                //     $old_secondary[$key]->delete();
+                // }
+                $path_sec = $file->store('images/products');
+                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
+                $product->images()->save($im_sec);
+            }
+        }
+    }
+
+    /**
+     * When a product its been edited user can delete the secondary images to add new ones or none at all.
+     * So this method compares the secondary images in the database to a json that contains
+     * the images the user didn't delete on the frontend. 
+     * This way the method can take the ids of the images the user deleted on the frontend, and proceeds to delete them from the database
+     */
+    public function delete_secondary_images($request, $product) {
+
         # When updating secondary images
         $old_secondary = $product->secondary_images;
         $new_secondary_imgs = json_decode($request->secondary_images_json);
-        $present = false;
-        $img_to_delete = array();
 
-        if(!empty($old_secondary)&& !empty($new_secondary_imgs)){
+        if(!empty($old_secondary) && !empty($new_secondary_imgs)){
             if($old_secondary->count() != count($new_secondary_imgs)) {
-                
+                $present = false;
+                $img_to_delete = array();
+
                 foreach($old_secondary as $old) {
                     foreach($new_secondary_imgs as $new) {
                         //Check if the old image is still present in the array of images that'll be kept
@@ -348,20 +370,7 @@ class AdminProductController extends Controller
                 }
             }
         }
-        if($request->hasfile('sec_images')) {
-            
-            foreach($request->file('sec_images') as $key => $file)
-            {
-                // if(isset($old_secondary[$key])) {
-                //     $old_secondary[$key]->delete();
-                // }
-                $path_sec = $file->store('images/products');
-                $im_sec = new Image(['url' => $path_sec, 'type' => 'SC']);
-                $product->images()->save($im_sec);
-            }
-        }
     }
-
     /**
      * Method to update product's quantity only from index page using ajax [NOT USED, LEFT IT FOR FUTURE REFERENCE]
      */
