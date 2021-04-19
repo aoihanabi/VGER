@@ -309,6 +309,7 @@ class AdminProductController extends Controller
      */
     public function upload_product_images($request, $product) {
 
+        
         if($request->hasfile('main_image'))
         {
             //When updating, Delete if a previous image exists.
@@ -319,6 +320,11 @@ class AdminProductController extends Controller
             $path_main = $request->file('main_image')->store('images/products');
             $im_main = new Image(['url' => $path_main, 'type' => 'MN']);
             $product->images()->save($im_main);
+        } 
+        else if(empty($request->main_image_present)) {
+            $validated = $request->validate([
+                'main_image' => 'required',
+            ]);
         }
 
         if($request->hasfile('sec_images')) {

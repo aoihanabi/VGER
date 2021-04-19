@@ -202,18 +202,20 @@
                 @if ($main_img)
                     <div class="flex flex-row">
                         <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full
-                                    cursor-pointer hover:opacity-75 deletable_image">
+                                    cursor-pointer hover:opacity-75 deletable_image"
+                             data-image-type='{{ $main_img->type }}'>
                             
                             <i class="fas fa-trash h-full w-full 
                                     absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-800"></i>
-                            <img src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
+                            <img id="img_{{$main_img->id}}" src="{{ url($main_img->url) }}" class="object-cover rounded"></img>
                         
                         </div>
                         <div class="my-1 p-0.5 h-full w-full"></div>
                     </div>
+                    <input id="main_image_present" name="main_image_present" type="text" value="{{ $main_img->url }}" hidden>
                 @endif
                 {{ Form::file('main_image') }}
-
+                
                 <br><br>
             
                 {{ Form::label('', "Cargar imagen(es) secundarias", ['class' => 'block font-medium text-sm text-gray-700 mb-2']) }}
@@ -221,19 +223,21 @@
                     <div class="grid grid-cols-3 my-2 h-1/4 place-content-center">
                         @foreach ($second_imgs as $img)
                             <div class="relative my-1 p-0.5 box-border border-1 rounded shadow-md h-full w-full 
-                                        cursor-pointer hover:opacity-75 deletable_image">
+                                        cursor-pointer hover:opacity-75 deletable_image"
+                                 data-image-type='{{ $img->type }}'>
                             
                                 <i class="fas fa-trash h-full w-full 
                                         absolute z-0 p-2 text-center text-transparent text-2xl hover:text-red-700"></i>
                                 <img class="h-full w-full object-cover rounded"
-                                    id="img_{{$img->id}}" src="{{ url($img->url) }}"></img>
+                                    id="img_{{ $img->id }}" src="{{ url($img->url) }}"></img>
 
                             </div>
                         @endforeach
                     </div>
+                    <input id="secondary_images_json" name="secondary_images_json" type="text" value="{{ json_encode($second_imgs) }}" hidden>
                 @endif
                 {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
-                <input id="secondary_images_json" name="secondary_images_json" type="text" value="{{ json_encode($second_imgs) }}" hidden>
+                
                 <div id="dialog-confirm" title="Eliminar imagen" hidden>
                     <p>
                         <i class="fas fa-exclamation-triangle" style="float:left; margin:0 7px 20px 0;"></i>

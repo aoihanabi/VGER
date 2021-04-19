@@ -488,6 +488,8 @@ $(function() {
     // ******************* Confirm box for image deletion **********************
     $(".deletable_image").on('click', function() {
         var deletable_image = $(this).children('img');
+        var img_type = $(this).attr('data-image-type');
+
         $( "#dialog-confirm" ).dialog({
             resizable: false,
             height: "auto",
@@ -495,16 +497,24 @@ $(function() {
             modal: true,
             buttons: {
                 "Si": function() {
-                    var imgToDelete_id = deletable_image.attr('id').slice(4);
-                    var imgs_json = JSON.parse($("#secondary_images_json").val());
                     
-                    let result_imgs = imgs_json.filter(
-                        function(item) {
-                            return item.id != imgToDelete_id;
-                        }
-                    )
-                    $("#secondary_images_json").attr('value', JSON.stringify(result_imgs));
-                    deletable_image.parent("div").remove();
+                    if (img_type === 'MN') {
+                        deletable_image.parent("div").remove();
+                        $('#main_image_present').attr('value', "");
+                    } else if (img_type === 'SC') {
+
+                        var imgToDelete_id = deletable_image.attr('id').slice(4);
+                        var imgs_json = JSON.parse($("#secondary_images_json").val());
+                        
+                        let result_imgs = imgs_json.filter(
+                            function(item) {
+                                return item.id != imgToDelete_id;
+                            }
+                        )
+                        $("#secondary_images_json").attr('value', JSON.stringify(result_imgs));
+                        deletable_image.parent("div").remove();
+                    }
+                    
                     $( this ).dialog( "close" );
                 },
                 "No": function() {
