@@ -309,7 +309,6 @@ class AdminProductController extends Controller
      */
     public function upload_product_images($request, $product) {
 
-        
         if($request->hasfile('main_image'))
         {
             //When updating, Delete if a previous image exists.
@@ -327,6 +326,8 @@ class AdminProductController extends Controller
             ]);
         }
 
+        #Check if there are secondary imgs to delete and add more if there is any
+        $this->delete_secondary_images($request->sec_images_to_delete);
         if($request->hasfile('sec_images')) {
             
             foreach($request->file('sec_images') as $key => $file)
@@ -343,37 +344,14 @@ class AdminProductController extends Controller
 
     /**
      * When a product its been edited user can delete the secondary images to add new ones or none at all.
-     * So this method compares the secondary images in the database to a json that contains
-     * the images the user didn't delete on the frontend. 
-     * This way the method can take the ids of the images the user deleted on the frontend, and proceeds to delete them from the database
+     * So this method takes from frontend the id of the images the user deleted, and proceeds to delete them in the database.
      */
-    public function delete_secondary_images($request, $product) {
-
-        # When updating secondary images
-        $old_secondary = $product->secondary_images;
-        $new_secondary_imgs = json_decode($request->secondary_images_json);
-
-        if(!empty($old_secondary) && !empty($new_secondary_imgs)){
-            if($old_secondary->count() != count($new_secondary_imgs)) {
-                $present = false;
-                $img_to_delete = array();
-
-                foreach($old_secondary as $old) {
-                    foreach($new_secondary_imgs as $new) {
-                        //Check if the old image is still present in the array of images that'll be kept
-                        if($old->id == $new->id) {
-                            $present = true;
-                            break;
-                        }
-                    }
-                    if(!$present){
-                        array_push($img_to_delete, $old->id);
-                    }
-                    $present = false;
-                }
-                foreach($img_to_delete as $img_id) {
-                    Image::find($img_id)->delete();
-                }
+    public function delete_secondary_images($imgs_ids) {
+        
+        if(!empty($imgs_ids)){
+            $imgs_ids_array = explode(",", $imgs_ids);
+            foreach($imgs_ids_array as $id) {
+                Image::find($id)->delete();
             }
         }
     }

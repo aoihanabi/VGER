@@ -486,10 +486,11 @@ $(function() {
 
     
     // ******************* Confirm box for image deletion **********************
+    var imgsToDelete = [];
     $(".deletable_image").on('click', function() {
         var deletable_image = $(this).children('img');
         var img_type = $(this).attr('data-image-type');
-
+        
         $( "#dialog-confirm" ).dialog({
             resizable: false,
             height: "auto",
@@ -501,17 +502,12 @@ $(function() {
                     if (img_type === 'MN') {
                         deletable_image.parent("div").remove();
                         $('#main_image_present').attr('value', "");
-                    } else if (img_type === 'SC') {
-
-                        var imgToDelete_id = deletable_image.attr('id').slice(4);
-                        var imgs_json = JSON.parse($("#secondary_images_json").val());
                         
-                        let result_imgs = imgs_json.filter(
-                            function(item) {
-                                return item.id != imgToDelete_id;
-                            }
-                        )
-                        $("#secondary_images_json").attr('value', JSON.stringify(result_imgs));
+                    } else if (img_type === 'SC') {
+                        var imgToDelete_id = deletable_image.attr('id').slice(4);
+                        imgsToDelete.push(imgToDelete_id); 
+                        
+                        $("#sec_images_to_delete").attr('value', imgsToDelete.toString());
                         deletable_image.parent("div").remove();
                     }
                     
@@ -523,14 +519,4 @@ $(function() {
             }
         });
     });
-    // function parse_options_json() {
-    //     let div = document.getElementById("options_json");
-    //     let options_json = div.getAttribute('data-product-options');
-
-    //     options_json = JSON.parse(options_json);
-    //     for(var i = 0; i < options_json.length; i++) {
-    //         options_json[i].options_ids = JSON.parse(options_json[i].options_ids);
-    //     }
-    //     return options_json;
-    // }
 });

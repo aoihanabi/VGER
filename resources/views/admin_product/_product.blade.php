@@ -234,7 +234,7 @@
                             </div>
                         @endforeach
                     </div>
-                    <input id="secondary_images_json" name="secondary_images_json" type="text" value="{{ json_encode($second_imgs) }}" hidden>
+                    <input id="sec_images_to_delete" name="sec_images_to_delete" type="text" value="" hidden>
                 @endif
                 {{ Form::file('sec_images[]', ['multiple' => 'multiple']) }}
                 
