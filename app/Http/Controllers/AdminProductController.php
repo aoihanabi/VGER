@@ -241,6 +241,7 @@ class AdminProductController extends Controller
             'talla' => 'required_without_all:color,estilo',
             'estilo' => 'required_without_all:talla,color',
             'categ_checks' => 'required',
+            'keywords' => 'required',
         ]);
 
         $product = Product::find($id);

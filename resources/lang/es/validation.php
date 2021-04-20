@@ -171,6 +171,9 @@ return [
         'main_image' => [
             'required' => 'La imagen principal es requerida.'
         ],
+        'keywords' => [
+            'required' => 'Las palabras clave son requeridas.'
+        ],
         //Categoría
         'name' => [
             'required' => 'El nombre es requerido.',
