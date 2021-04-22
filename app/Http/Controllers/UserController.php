@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Helpers\ConstantsHelper;
+use Mail;
 
 
 class UserController extends Controller
@@ -60,14 +61,19 @@ class UserController extends Controller
         $user->address = $request->address;
         $pass = string_generator(10);
         $user->password = Hash::make($pass);
-        
         $user->save();
 
-        send_email('Usuario de Ventas Gerizim disponible',
-                    'Tu usuario para Ventas Gerizim está listo, puedes acceder usando la contraseña '. $pass .' 
-                    Asegúrate de cambiarla tras el primer ingreso para garantizar la seguridad de la cuenta.',
-                    $request->email);
+        // send_email('Usuario de Ventas Gerizim disponible',
+        //         "Tu cuenta en Ventas Gerizim se creó con éxito! <br><br>
+        //         Usa esta contraseña para acceder: <br> **".$pass."** <br><br>
+        //         Asegúrate de cambiarla tras ingresar a la página, para garantizar la seguridad de tu cuenta.",
+        //         $request->email);
         
+        $user_info = [
+            'name' => $user->name,
+            'pass' => $pass 
+        ];
+        Mail::to($request->email)->send(new \App\Mail\NewUserCreated($user_info));
         return redirect()->action([UserController::class, 'index']);
     }
 
