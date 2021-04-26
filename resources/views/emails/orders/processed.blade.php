@@ -14,7 +14,7 @@ Te contactaremos tan pronto esté listo para realizar la transacción y ajustar 
 
 ## El total de la compra es ₡{{ number_format($order->total, 2, ".", " ") }}
 
-@component('mail::button', ['url' => route('products')])
+@component('mail::button', ['url' => route('products.index')])
 Seguir Comprando
 @endcomponent
 
