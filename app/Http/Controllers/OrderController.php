@@ -13,6 +13,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\Order;
 use App\Models\Product;
+use App\Mail\OrderProcessed;
 
 class OrderController extends Controller
 {
@@ -72,23 +73,25 @@ class OrderController extends Controller
                     }
                     $total += $subtotal;
                     $product->orders()->attach($ord_id->id, ['subtotal' => $subtotal, 'purchased_quantity' => $purchased_quantity, 'description' => $description]);
-                    echo("Left: ".$prod->quantityLeft . PHP_EOL);
+                    # echo("Left: ".$prod->quantityLeft . PHP_EOL);
                     $product->quantity = $prod->quantityLeft;
                     $product->save();
                 }
                 $order->total = $total;
-                //print_r($order);
+                // //print_r($order);
                 $order->save();
 
                 // send_email('Su pedido se realizó con éxito!',
-                //         'El total de su compra es ' . $total . ' haha. Gracias',
-                //         Auth::user()->email);
+                //             'El total de su compra es ' . $total . ' haha. Gracias',
+                //             Auth::user()->email);
+                $details = Order::get_order_details($order->id);
+                Mail::to(Auth::user()->email)->send(new OrderProcessed($order, $details));
             }      
-            #return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
+            return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
             
         } else {
-            // session(['url.intended' => url()->previous()]);
-            // return response()->json(["url" => "/login"], 401);
+            session(['url.intended' => url()->previous()]);
+            return response()->json(["url" => "/login"], 401);
         }
         
     }
