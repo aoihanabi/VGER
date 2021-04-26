@@ -348,7 +348,7 @@ let store = {
                 
                 window.localStorage.setItem('order', []);
                 window.localStorage.setItem('allProdsCount', 0);
-                //window.location.href = response.request.responseURL;
+                window.location.href = response.request.responseURL;
               }
             })
             .catch(

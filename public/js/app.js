@@ -53593,7 +53593,8 @@ var store = {
         if (response.status === 200) {
           //Clean UP DROPDOWNS AND STUFF
           window.localStorage.setItem('order', []);
-          window.localStorage.setItem('allProdsCount', 0); //window.location.href = response.request.responseURL;
+          window.localStorage.setItem('allProdsCount', 0);
+          window.location.href = response.request.responseURL;
         }
       })["catch"](function (error) {
         //When user is not logged in
@@ -53601,7 +53602,6 @@ var store = {
           window.location.href = error.response.data.url; //response.request.responseURL;
         } else {
           console.log(error);
-          console.log(".....................................");
           console.log(error.response);
         }
       });
