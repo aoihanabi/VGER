@@ -27,6 +27,7 @@
     "dependencies": {
         "@fortawesome/fontawesome-free": "^5.15.1",
         "vue": "^2.6.12",
+        "vue-loading-overlay": "^3.4.2",
         "vuex": "^3.5.1"
     }
 }
