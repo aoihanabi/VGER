@@ -92,8 +92,8 @@ class OrderController extends Controller
             //return redirect()->action([OrderController::class, 'index'], 200)->with('order_notification', 'Pedido procesado con éxito');
             
         } else {
-            session(['url.intended' => url()->previous()]);
-            return response()->json(["url" => "/login"], 401);
+            //session(['url.intended' => url()->previous()]);
+            //return response()->json(["url" => "/login"], 401);
         }
         
     }

@@ -53684,7 +53684,7 @@ var store = {
       })["catch"](function (error) {
         //When user is not logged in
         if (error.response.status === 401) {
-          window.location.href = error.response.data.url; //response.request.responseURL;
+          window.location.href = '/login';
         } else {
           console.log(error);
           console.log(error.response);

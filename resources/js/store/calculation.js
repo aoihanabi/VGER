@@ -342,27 +342,26 @@ let store = {
       
       axios.post("/orders", data)
             .then(response => {
-              if (response.status === 200) {
+                if (response.status === 200) {
 
-                //Clean UP DROPDOWNS AND STUFF
-                
-                window.localStorage.setItem('order', []);
-                window.localStorage.setItem('allProdsCount', 0);
-                window.location.href = response.request.responseURL;
-              }
+                    //Clean UP DROPDOWNS AND STUFF
+                    
+                    window.localStorage.setItem('order', []);
+                    window.localStorage.setItem('allProdsCount', 0);
+                    window.location.href = response.request.responseURL;
+                }
             })
-            .catch(
-              error => {
+            .catch( error => {
                 //When user is not logged in
                 if(error.response.status === 401) {
 
-                  window.location.href = error.response.data.url;//response.request.responseURL;
+                    window.location.href = '/login';
                 } else {
-                  console.log(error);
-                  console.log(error.response);
+                    console.log(error);
+                    console.log(error.response);
                 }
-                
-              });
+            
+            });
     }
   }
 };
