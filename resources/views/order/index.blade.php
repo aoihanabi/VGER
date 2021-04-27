@@ -2,6 +2,11 @@
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        @if(session()->has('order_notification'))
+            <div class="p-3 m-3 bg-green-100 rounded-md border border-green-300">
+                <label> {{ session()->get('order_notification') }} </label>
+            </div>    
+        @endif
         <div id="orders_masthead" class="py-5 text-center">
             <h2 class="text-xl">Mis pedidos</h2>
         </div>

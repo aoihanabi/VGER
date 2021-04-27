@@ -78,7 +78,7 @@ class OrderController extends Controller
                     $product->save();
                 }
                 $order->total = $total;
-                // //print_r($order);
+                #print_r($order);
                 $order->save();
 
                 // send_email('Su pedido se realizó con éxito!',
@@ -86,8 +86,10 @@ class OrderController extends Controller
                 //             Auth::user()->email);
                 $details = Order::get_order_details($order->id);
                 Mail::to(Auth::user()->email)->send(new OrderProcessed($order, $details));
-            }      
-            return redirect()->action([ProductController::class, 'index'], 200); //not really reloading from this one, it's doing it from calculation.js after post
+                $request->session()->flash('order_notification', "¡Pedido procesado con éxito!");
+            }
+            
+            //return redirect()->action([OrderController::class, 'index'], 200)->with('order_notification', 'Pedido procesado con éxito');
             
         } else {
             session(['url.intended' => url()->previous()]);
