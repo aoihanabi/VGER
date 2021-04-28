@@ -19,6 +19,7 @@ class Order extends Model
         return DB::table('orders')
                     ->join('users', 'orders.user_id', '=', 'users.id')
                     ->select('orders.id', 'orders.total', 'orders.date', 'orders.status', 'orders.user_id', 'users.name')
+                    ->orderBy('orders.updated_at', 'desc')
                     ->get();
     }
 
@@ -31,7 +32,8 @@ class Order extends Model
         
         return Order::where([
             ['user_id', Auth::user()->id]
-        ])->get();
+        ])->orderBy('updated_at', 'desc')
+        ->paginate(7);
     }
 
     /**

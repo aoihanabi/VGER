@@ -24,6 +24,7 @@
                 </a>
                 <hr>
             @endforeach
+            {{ $p_orders->onEachSide(1)->links() }}
         </div>
     </div>
 @endsection
