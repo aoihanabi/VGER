@@ -3,9 +3,11 @@
 
 @section('content')
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div id="orders_admin_masthead" class="py-5 text-center">
-        <h2 class="text-xl">Órdenes</h2>
+    <div id="orders_admin_masthead" class="py-5 text-center bg-gray-200">
+        <h1 class="m-5 text-xl">Pedidos</h1>
+        @include ('shared.orders-search-masthead')
     </div>
+    
     <div class="py-10">
         <div x-data="{show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}:false}" class="py-2">
             <a x-on:click.prevent="show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}=!show_{{ConstantsHelper::ORDER_STATUS_IN_PROCESS}}" class="hover:bg-gray-100 cursor-pointer">
