@@ -81,11 +81,14 @@ class Order extends Model
                             ->get();
             
         } else {
-            # sumar un día a end_date
-
-            $orders = Order::select('id', 'name', 'total')
-                        ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
-                        ->get();
+            
+            $orders = Order::select('orders.id', 'orders.total', 'orders.status', 'users.name')
+                            ->join('users', 'orders.user_id', '=', 'users.id')
+                            ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
+                            ->where('orders.date', '>=', $start_date)
+                            ->where('orders.date', '<', $end_date)
+                            ->orderBy('orders.updated_at', 'desc')
+                            ->get();
             // SELECT * FROM `orders` 
             // WHERE (orders.user_id = IFNULL( NULLIF(9,0), orders.user_id))
             // AND (orders.date >= '2021-01-27')

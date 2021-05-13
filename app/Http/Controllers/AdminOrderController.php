@@ -51,7 +51,6 @@ class AdminOrderController extends Controller
         
         $user = $request->order_search_by_user == "none" ? 0 : $request->order_search_by_user;
         $start_date = $request->order_search_start_date;
-        //$start_date = DateTime::createFromFormat('Y-m-d', $request->order_search_start_date)->format('Y-m-d');
         
         $end_date = $request->order_search_end_date;
         empty($end_date) ? $end_date = date('Y-m-d') : $end_date;
@@ -62,7 +61,7 @@ class AdminOrderController extends Controller
         
         $orders_result = Order::search_orders($user, $start_date, $end_date);
 
-        // $users = User::get_all_users()->get();
-        // return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
+        $users = User::get_all_users()->get();
+        return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
     }
 }
