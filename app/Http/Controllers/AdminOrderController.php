@@ -45,4 +45,14 @@ class AdminOrderController extends Controller
     public function sort_orders(Request $request){
         return view('order.all-orders');
     }
+
+    public function search_orders(Request $request) {
+        $user = $request->order_search_by_user == "none" ? 0 : $request->order_search_by_user;
+
+        $orders_result = Order::search_orders($user, "", "");
+
+
+        $users = User::get_all_users()->get();
+        return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
+    }
 }

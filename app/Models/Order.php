@@ -70,15 +70,15 @@ class Order extends Model
         return $this->belongsToMany(Product::Class, 'orderdetails')->withPivot('subtotal')->withTimestamps();
     }
 
-    public function search_orders($user_id, $start_date, $end_date){
+    public static function search_orders($user_id, $start_date, $end_date){
         $orders;
         if(empty($start_date)) {
             
-            $orders = Order::select('id', 'name', 'total')
-                        ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
-                        ->get();
-            // SELECT * FROM `orders` 
-            // WHERE (orders.user_id = IFNULL( NULLIF(9,0), orders.user_id))
+            $orders = Order::select('orders.id', 'orders.total', 'orders.status', 'users.name')
+                            ->join('users', 'orders.user_id', '=', 'users.id')
+                            ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
+                            ->orderBy('orders.updated_at', 'desc')
+                            ->get();
             
         } else {
             empty($end_date) ? $end_date == "today" : $end_date;
