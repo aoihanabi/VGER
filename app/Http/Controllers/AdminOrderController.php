@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Order;
+use App\Models\User;
+use DateTime;
 
 class AdminOrderController extends Controller
 {
@@ -12,8 +14,9 @@ class AdminOrderController extends Controller
      */
     public function index() {
         $orders = Order::get_all_orders();
+        $users = User::get_all_users()->get();
         //echo($orders);
-        return view('admin_order.index', ['orders' => $orders]);
+        return view('admin_order.index', ['orders' => $orders, 'users' => $users]);
     }
     
     /**
