@@ -69,4 +69,29 @@ class Order extends Model
     {
         return $this->belongsToMany(Product::Class, 'orderdetails')->withPivot('subtotal')->withTimestamps();
     }
+
+    public function search_orders($user_id, $start_date, $end_date){
+        $orders;
+        if(empty($start_date)) {
+            
+            $orders = Order::select('id', 'name', 'total')
+                        ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
+                        ->get();
+            // SELECT * FROM `orders` 
+            // WHERE (orders.user_id = IFNULL( NULLIF(9,0), orders.user_id))
+            
+        } else {
+            empty($end_date) ? $end_date == "today" : $end_date;
+            # sumar un día a end_date
+
+            $orders = Order::select('id', 'name', 'total')
+                        ->whereRaw('orders.user_id = IFNULL( NULLIF('. $user_id .', 0), orders.user_id)')
+                        ->get();
+            // SELECT * FROM `orders` 
+            // WHERE (orders.user_id = IFNULL( NULLIF(9,0), orders.user_id))
+            // AND (orders.date >= '2021-01-27')
+            // AND (orders.date < '2021-04-24')
+        }
+        return $orders;
+    }
 }
