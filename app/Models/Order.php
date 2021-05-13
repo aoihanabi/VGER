@@ -81,7 +81,6 @@ class Order extends Model
                             ->get();
             
         } else {
-            empty($end_date) ? $end_date == "today" : $end_date;
             # sumar un día a end_date
 
             $orders = Order::select('id', 'name', 'total')

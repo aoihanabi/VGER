@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\User;
 use DateTime;
+use DateInterval;
 
 class AdminOrderController extends Controller
 {
@@ -47,12 +48,21 @@ class AdminOrderController extends Controller
     }
 
     public function search_orders(Request $request) {
+        
         $user = $request->order_search_by_user == "none" ? 0 : $request->order_search_by_user;
+        $start_date = $request->order_search_start_date;
+        //$start_date = DateTime::createFromFormat('Y-m-d', $request->order_search_start_date)->format('Y-m-d');
+        
+        $end_date = $request->order_search_end_date;
+        empty($end_date) ? $end_date = date('Y-m-d') : $end_date;
+        $end_date = DateTime::createFromFormat('Y-m-d', $end_date);
+        $end_date->add(new DateInterval('P1D')); // Add one day so the query results include the selected day
+        $end_date = $end_date->format('Y-m-d'); // Remove the time and return a simple date string
+        print_r($end_date);
+        
+        $orders_result = Order::search_orders($user, $start_date, $end_date);
 
-        $orders_result = Order::search_orders($user, "", "");
-
-
-        $users = User::get_all_users()->get();
-        return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
+        // $users = User::get_all_users()->get();
+        // return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
     }
 }

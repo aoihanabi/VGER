@@ -33,8 +33,8 @@
                 <div class="col-span-2 grid grid-cols-2 gap-3">
                     <label class="text-gray-700 justify-self-start">Fecha de inicio</label>
                     <label class="text-gray-700 justify-self-start">Fecha de final</label>
-                    <input type="date" class="py-2">
-                    <input type="date" class="py-2">
+                    <input type="date" class="py-2" name="order_search_start_date">
+                    <input type="date" class="py-2" name="order_search_end_date">
                 </div>
             </div>
             
