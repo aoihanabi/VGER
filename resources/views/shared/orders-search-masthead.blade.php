@@ -1,5 +1,5 @@
 <div id="search-masthead">
-    {{ Form::open(['route' => ('products.search'), 'method' => 'GET']) }}
+    {{ Form::open(['route' => ('orders.search'), 'method' => 'GET']) }}
         
         <div x-data="{ show_order_search:false }">
         
