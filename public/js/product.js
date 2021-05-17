@@ -519,4 +519,28 @@ $(function() {
             }
         });
     });
+    
+    // ******************* Button to fire order status changes **********************
+    
+    var order_current_status = ($('#order_status_changer').attr("data-status") == 'true');
+    style_order_status(order_current_status);
+    
+    $('#order_status_changer').on('click', function() {
+        
+        var current_status = ($(this).attr("data-status") == 'true');
+        
+        current_status = !current_status;
+        style_order_status(current_status);    
+    });
+
+    function style_order_status( status ) {
+        if(status) {
+            $('#order_status_changer').attr('class', 'bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded');
+            $('#order_status_changer').text('Completado');
+        } else {
+            $('#order_status_changer').attr('class', 'bg-orange-400 hover:bg-orange-500 text-white font-bold py-2 px-4 rounded');
+            $('#order_status_changer').text('En Proceso');
+        }
+        $('#order_status_changer').attr("data-status", status)
+    }
 });

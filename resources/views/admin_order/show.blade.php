@@ -10,8 +10,13 @@
                     <label class="font-semibold">Fecha:  </label>
                     <label>{{date("d/m/Y", strtotime($order->date))  }}</label>
                     <br>
-                    <label class="font-semibold">Estado:  </label>
-                    <label>{{ ConstantsHelper::get_order_status_label($order->status) }}</label>
+                    <label class="font-semibold mr-2">Estado:  </label>
+                    <!-- <label>{{ ConstantsHelper::get_order_status_label($order->status)}}</label> -->
+                    <button id="order_status_changer" 
+                            data-status = "{{ ConstantsHelper::get_order_status_label($order->status) == 'En Proceso' ? 'false' : 'true'  }}"
+                            class="">
+                        Estado
+                    </button>
                 </div>
                 <label class="col-span-1 justify-self-end self-center text-2xl">₡{{ number_format($order->total, 2, ".", " ") }}</label>
             </div>
