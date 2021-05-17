@@ -27,18 +27,18 @@
             @yield('content')    
             
             <!-- Show cart modal button -->
-            <button  
+            <!-- <button  
                 class="rounded-full bg-white border-2 h-24 w-24 flex items-center justify-center"
                 @click="modal_showing = true"
             >
                 <order-counter />
-            </button>
+            </button> -->
             <div class="">
                 <order-component :showing="modal_showing" @close="modal_showing = false"/>
             </div>
 
 
-            <div class="rounded-full fixed right-6 bottom-6 z-10 inline-flex items-center justify-center p-2     h-16 w-16 bg-gray-800 shadow-md text-2xl text-white 
+            <div class="fixed right-6 bottom-6 p-2 h-16 w-16 z-10 inline-flex items-center justify-center rounded-full shadow-md text-2xl bg-gray-800 text-white 
                         hover:bg-gray-600 hover:border-gray-300 
                         focus:outline-none focus:text-gray-700 focus:border-gray-300 
                         transition duration-150 ease-in-out" 
@@ -50,7 +50,7 @@
                         </svg> -->
                         <i class="fas fa-shopping-cart flex-1 w-8 h-8 fill-current mt-2"></i>
                         <span class="absolute right-0 top-0 rounded-full bg-red-600 w-4 h-4 top right p-0 m-0 text-white font-mono text-sm  leading-tight text-center">
-                            5
+                            <order-counter />
                         </span>
                     </a>
                 <!-- </li> -->
