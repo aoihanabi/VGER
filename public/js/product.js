@@ -527,10 +527,25 @@ $(function() {
     
     $('#order_status_changer').on('click', function() {
         
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         var current_status = ($(this).attr("data-status") == 'true');
+        var id = $(this).attr("order-id");
         
         current_status = !current_status;
-        style_order_status(current_status);    
+        
+        jQuery.post("status-update", 
+        {
+            _token: CSRF_TOKEN,
+            new_status: current_status,
+            order_id: id
+        })
+            .done(function(data) {
+                alert(data.message);
+            })
+            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            });
+        style_order_status(current_status);
     });
 
     function style_order_status( status ) {

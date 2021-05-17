@@ -64,4 +64,13 @@ class AdminOrderController extends Controller
         $users = User::get_all_users()->get();
         return view('admin_order.index', ['orders' => $orders_result, 'users' => $users]);
     }
+
+    public function order_update_status(Request $request)
+    {
+        $response = array(
+            'status' => 'success',
+            'message' => $request->new_status, //change to a success/error message
+        );
+        return response()->json($response);
+    }
 }

@@ -47,6 +47,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth.vip'], function()
     Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('admin.orders.show');
     Route::post('orders/sort', [AdminOrderController::class, 'sort_orders']);//add params
     Route::get('orders-search', [AdminOrderController::class, 'search_orders'])->name('orders.search');
+    Route::post('orders/status-update', [AdminOrderController::class, 'order_update_status'])->name('admin.orders.status-update');
 });
 
 Route::get('products-search', [ProductController::class, 'search_products'])->name('products.search');
