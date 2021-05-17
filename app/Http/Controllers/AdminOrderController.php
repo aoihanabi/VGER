@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Helpers\ConstantsHelper;
 use App\Models\Order;
 use App\Models\User;
 use DateTime;
@@ -67,9 +68,19 @@ class AdminOrderController extends Controller
 
     public function order_update_status(Request $request)
     {
+        $order = Order::find($request->order_id);
+        $msg = "";
+        if(!empty($order)) {
+            $order->status = $request->new_status == "true" ? ConstantsHelper::ORDER_STATUS_READY : ConstantsHelper::ORDER_STATUS_IN_PROCESS;
+            $order->save();
+            $msg = "Estado actualizado con éxito.";
+        } else {
+            $msg = "Ocurrió un error, no se pudo actualizar.";
+        }
+
         $response = array(
             'status' => 'success',
-            'message' => $request->new_status, //change to a success/error message
+            'message' => $msg, //change to a success/error message
         );
         return response()->json($response);
     }

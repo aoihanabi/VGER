@@ -542,8 +542,8 @@ $(function() {
             .done(function(data) {
                 alert(data.message);
             })
-            .fail(function(XMLHttpRequest, textStatus, errorThrown) {
-                alert(errorThrown);
+            .fail(function(data, XMLHttpRequest, textStatus, errorThrown) {
+                alert(data.message + "\n" + errorThrown);
             });
         style_order_status(current_status);
     });
