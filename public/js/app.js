@@ -39341,9 +39341,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", {}, [
     _c("span", [
-      _vm._v(
-        "\n    Pedido (" + _vm._s(_vm.$store.state.allProdsCount) + ")\n  "
-      )
+      _vm._v("\n    " + _vm._s(_vm.$store.state.allProdsCount) + "\n  ")
     ])
   ])
 }

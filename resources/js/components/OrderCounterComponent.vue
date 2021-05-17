@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <span>
-      Pedido ({{ $store.state.allProdsCount }})
+      {{ $store.state.allProdsCount }}
     </span>
   </div>
 </template>
