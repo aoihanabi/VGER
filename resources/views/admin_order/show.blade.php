@@ -12,10 +12,11 @@
                     <br>
                     <label class="font-semibold mr-2">Estado:  </label>
                     <!-- <label>{{ ConstantsHelper::get_order_status_label($order->status)}}</label> -->
-                    <button id="order_status_changer" 
+                    <button id="order_status_changer"
+                            order-id = "{{ $order->id }}"
                             data-status = "{{ ConstantsHelper::get_order_status_label($order->status) == 'En Proceso' ? 'false' : 'true'  }}"
                             class="">
-                        Estado
+                        Estado Desconocido
                     </button>
                 </div>
                 <label class="col-span-1 justify-self-end self-center text-2xl">₡{{ number_format($order->total, 2, ".", " ") }}</label>
