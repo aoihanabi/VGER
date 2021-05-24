@@ -39035,7 +39035,7 @@ var render = function() {
           "div",
           {
             staticClass:
-              "fixed inset-0 w-full h-screen flex items-center justify-center bg-gray-700 bg-opacity-50",
+              "fixed inset-0 w-full h-screen z-30 flex items-center justify-center bg-gray-700 bg-opacity-50",
             on: {
               click: function($event) {
                 if ($event.target !== $event.currentTarget) {
@@ -39174,7 +39174,7 @@ var render = function() {
                                     _vm._v(" "),
                                     _c("input", {
                                       staticClass:
-                                        "w-15 p-2 outline-none focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
+                                        "w-15 p-2 focus:outline-none text-center bg-gray-300 font-semibold text-md hover:text-black focus:text-black md:text-basecursor-default flex items-center text-gray-700 outline-none text-sm md:text-base",
                                       attrs: {
                                         type: "number",
                                         min: "1",
