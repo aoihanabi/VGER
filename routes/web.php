@@ -27,7 +27,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/nosotros', function () {
-    return view('about-us');
+    return view('shared.about-us');
 })->name('about-us');
 
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
