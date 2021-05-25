@@ -16,7 +16,9 @@
                     <x-jet-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Inicio') }}
                     </x-jet-nav-link>
-
+                    <x-jet-nav-link href="{{ route('home') }}" :active="request()->routeIs('home')">
+                        {{ __('Sobre nosotros') }}
+                    </x-jet-nav-link>
                     @php
                         if (Auth::check()) {
                             $url = route('products.index');

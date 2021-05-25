@@ -26,6 +26,10 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('/nosotros', function () {
+    return view('about-us');
+})->name('about-us');
+
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
