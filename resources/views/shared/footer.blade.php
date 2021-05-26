@@ -8,11 +8,11 @@
         </a>
         <div class="grid grid-cols-2 items-center h-full px-2 md:px-8">
             <!-- Nav-links -->
-            <div class="col-start-1 text-sm md:text-base text-white font-title 
+            <div class="my-3 col-start-1 col-span-2 text-sm md:text-base text-white font-title 
                         flex md:space-x-4 flex-col md:flex-row">
                 
-                <a href="/"> {{ __('Inicio') }} </a>
-
+                <a href="{{ route('home') }}" class="hover:underline"> {{ __('Inicio') }} </a>
+                <a href="{{ route('about-us') }}" class="hover:underline"> {{ __('Sobre nosotros') }} </a>
                 @php
                     if (Auth::check()) {
                         $url = route('products.index');
@@ -23,7 +23,7 @@
                         $url = route('products.index');
                     }
                 @endphp
-                <a href="{{ $url }}"> {{ __('Productos') }} </a>
+                <a href="{{ $url }}" class="hover:underline"> {{ __('Productos') }} </a>
                 <!-- <x-jet-nav-link href="{{ $url }}" :active="request()->routeIs('products.index')">
                     {{ __('Productos') }}
                 </x-jet-nav-link> -->
@@ -31,11 +31,11 @@
                     <!-- <x-jet-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
                         {{ __('Iniciar Sesión') }}
                     </x-jet-nav-link> -->
-                    <a href="{{ route('login') }}"> {{ __('Iniciar Sesión') }} </a>
+                    <a href="{{ route('login') }}" class="hover:underline"> {{ __('Iniciar Sesión') }} </a>
                     <!-- <x-jet-nav-link href="{{ route('register') }}" :active="request()->routeIs('register')">
                         {{ __('Registrarme') }}
                     </x-jet-nav-link> -->
-                    <a href="{{ route('register') }}">{{ __('Registrarme') }}</a>
+                    <a href="{{ route('register') }}" class="hover:underline">{{ __('Registrarme') }}</a>
                 @endif
             </div>
             <!-- Socials -->
