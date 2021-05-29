@@ -18,7 +18,16 @@
     </head>
     <body class="relative">
         @livewire('navigation-dropdown')
-        <div id="app" class="w-full h-screen bg-cover bg-fixed" style="background-image: url(images/page/masthead-bg.jpg);">
+        @if(Request::url() == route('home'))
+            <?php 
+                $style = 'background-image: url(images/page/masthead-bg.jpg);'
+            ?>
+        @else
+            <?php 
+                $style = ""
+            ?>
+        @endif
+        <div id="app" class="w-full h-screen bg-cover bg-fixed" style="{{$style}}">
         
             @if($errors->any())
                 @include('error-message')
