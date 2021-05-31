@@ -21,7 +21,7 @@ class Product extends Model
    */
   public static function get_all_products() 
   {
-    return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->paginate(5);//->get();
+    return Product::select('id', 'name', 'description', 'quantity', 'price', 'status')->paginate(12);//->get();
   }
 
   public static function search_products($name_or_keyword, $categ_id, $min_price, $max_price)
