@@ -14,15 +14,14 @@ class CreateProductOptionTable extends Migration
     public function up()
     {
         Schema::create('product_options', function (Blueprint $table) {
+            $table->charset = 'utf8';
+            $table->collation = 'utf8_unicode_ci';
             $table->id();
             $table->foreignId('product_id');
-            // $table->foreign('product_id')->references('id')->on('products');
-            $table->json('options_ids');
+            $table->foreign('product_id')->references('id')->on('products');
+            $table->json('options_ids')->collation;
             $table->integer('amount');
         });
-        Schema::table('product_options', function($table){
-            $table->foreign('product_id')->references('id')->on('products');
-         });
     }
 
     /**
