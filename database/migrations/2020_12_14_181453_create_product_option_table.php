@@ -16,10 +16,13 @@ class CreateProductOptionTable extends Migration
         Schema::create('product_options', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+            // $table->foreign('product_id')->references('id')->on('products');
             $table->json('options_ids');
             $table->integer('amount');
         });
+        Schema::table('product_options', function($table){
+            $table->foreign('product_id')->references('id')->on('products');
+         });
     }
 
     /**
