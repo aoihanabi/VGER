@@ -17,7 +17,7 @@ class CreateProductOptionTable extends Migration
             $table->id();
             $table->foreignId('product_id');
             $table->foreign('product_id')->references('id')->on('products');
-            $table->varchar('options_ids');
+            $table->string('options_ids');
             $table->integer('amount');
         });
     }
