@@ -4,6 +4,7 @@
     
     <!--opts_div_id, color_name, talla_name, estilo_name, $colors, $sizes, $styles, selected_option, option_select_id, option_select_hidden?, 
     amount_div_id, selected_amount, amount_select_id, amount_select_name, amount_select_hidden?, remove_btn_hidden?, divider_id-->
+    <label>{{ $all_colors }}</label>
     {{ Form::select($color_name, 
                     $all_colors->pluck('option', 'id'), 
                     $color_selected, 
