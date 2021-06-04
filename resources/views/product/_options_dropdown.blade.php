@@ -1,5 +1,6 @@
 @foreach ($attrs as $attr)
     <label>{{ $attr->name }}</label>
+    <label> {{ $options_db }}</label>
     <select id="{{ strtolower($attr->name) }}_selected" name="drop_option" class="buy_dropdown col-span-3 form-input rounded-md shadow-sm mt-1 block w-full" >
         <option value="none">Seleccione una opción</option>
         @php
