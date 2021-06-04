@@ -42,6 +42,7 @@
                     {{ Form::button('', ['id' => 'btn_add_options', 'class' => 'fas fa-plus my-2 p-2 col-end-3 text-white bg-blue-700 hover:bg-blue-800 rounded']) }}
                 </div>
                 <div id="option_dropdowns" class="grid grid-cols-3">
+                    <label>$colors</label>
                     <!-- WHEN EDIT -->
                     @if ($prod_options != null)
                         @foreach ($prod_options as $k => $options)

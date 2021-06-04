@@ -56,7 +56,7 @@ class AdminProductController extends Controller
             $colors = Option::get_options_by_attribute(1);
             $sizes = Option::get_options_by_attribute(2);
             $styles = Option::get_options_by_attribute(3);
-
+            print_r($colors);
             return view('admin_product.create', ['product' => null, 
                                                 'attrs' => $attrs,
                                                 'prod_attributes' => null,
